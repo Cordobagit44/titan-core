@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from enum import Enum
 
 
@@ -5,8 +6,9 @@ class InvestigationStatus(Enum):
     DRAFT = "draft"
 
 
+@dataclass(frozen=True)
 class InvestigationCreated:
-    pass
+    title: str
 
 
 class Investigation:
@@ -14,7 +16,7 @@ class Investigation:
         self.title = title
         self.purpose = purpose
         self.status = InvestigationStatus.DRAFT
-        self._events = [InvestigationCreated()]
+        self._events = [InvestigationCreated(title=title)]
 
     @classmethod
     def create(cls, title: str, purpose: str) -> "Investigation":

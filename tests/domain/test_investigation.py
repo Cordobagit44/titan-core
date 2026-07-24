@@ -28,3 +28,14 @@ def test_create_investigation_rejects_empty_title(invalid_title: str) -> None:
             title=invalid_title,
             purpose="Evaluate NVIDIA as a long-term investment.",
         )
+
+
+def test_investigation_created_event_contains_title() -> None:
+    investigation = Investigation.create(
+        title="NVIDIA Long-Term",
+        purpose="Investment thesis",
+    )
+
+    event = investigation.pull_events()[0]
+
+    assert event.title == "NVIDIA Long-Term"
