@@ -39,3 +39,17 @@ def test_investigation_created_event_contains_title() -> None:
     event = investigation.pull_events()[0]
 
     assert event.title == "NVIDIA Long-Term"
+
+
+def test_new_investigations_have_different_ids() -> None:
+    first = Investigation.create(
+        title="NVIDIA Long-Term",
+        purpose="Investment thesis",
+    )
+
+    second = Investigation.create(
+        title="Apple Long-Term",
+        purpose="Investment thesis",
+    )
+
+    assert first.id != second.id
