@@ -1,0 +1,60 @@
+[project]
+name = "titan-core"
+version = "0.1.0"
+description = "Core domain for the TITAN Investigation Engine."
+readme = "README.md"
+requires-python = ">=3.13"
+license = "MIT"
+authors = [{ name = "TITAN Contributors" }]
+dependencies = []
+
+[dependency-groups]
+dev = [
+  "mypy>=1.18",
+  "pre-commit>=4.0",
+  "pytest>=8.4",
+  "pytest-cov>=6.0",
+  "ruff>=0.12",
+]
+
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/titan"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-ra --strict-markers --strict-config"
+
+[tool.coverage.run]
+branch = true
+source = ["titan"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+files = ["src", "tests"]
+warn_unused_configs = true
+warn_unused_ignores = true
+show_error_codes = true
+pretty = true
