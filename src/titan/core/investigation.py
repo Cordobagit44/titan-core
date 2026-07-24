@@ -5,6 +5,7 @@ from uuid import UUID, uuid4
 
 class InvestigationStatus(Enum):
     DRAFT = "draft"
+    ACTIVE = "active"
 
 
 @dataclass(frozen=True)
@@ -18,6 +19,7 @@ class InvestigationId:
 
 @dataclass(frozen=True)
 class InvestigationCreated:
+    investigation_id: InvestigationId
     title: str
 
 
@@ -32,7 +34,12 @@ class Investigation:
         self.title = title
         self.purpose = purpose
         self.status = InvestigationStatus.DRAFT
-        self._events = [InvestigationCreated(title=title)]
+        self._events = [
+            InvestigationCreated(
+                investigation_id=self.id,
+                title=title,
+            )
+        ]
 
     @classmethod
     def create(cls, title: str, purpose: str) -> "Investigation":
@@ -44,6 +51,12 @@ class Investigation:
             title=title,
             purpose=purpose,
         )
+
+    def activate(self) -> None:
+        if self.status is InvestigationStatus.ACTIVE:
+            raise ValueError("investigation is already active")
+
+        self.status = InvestigationStatus.ACTIVE
 
     def pull_events(self) -> list[InvestigationCreated]:
         events = self._events

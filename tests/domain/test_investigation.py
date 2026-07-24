@@ -53,3 +53,37 @@ def test_new_investigations_have_different_ids() -> None:
     )
 
     assert first.id != second.id
+
+
+def test_investigation_created_event_contains_investigation_id() -> None:
+    investigation = Investigation.create(
+        title="NVIDIA Long-Term",
+        purpose="Investment thesis",
+    )
+
+    event = investigation.pull_events()[0]
+
+    assert event.investigation_id == investigation.id
+
+
+def test_activate_investigation_changes_status_to_active() -> None:
+    investigation = Investigation.create(
+        title="Acme Corp",
+        purpose="Evaluate acquisition",
+    )
+
+    investigation.activate()
+
+    assert investigation.status is InvestigationStatus.ACTIVE
+
+
+def test_cannot_activate_an_active_investigation() -> None:
+    investigation = Investigation.create(
+        title="Acme Corp",
+        purpose="Evaluate acquisition",
+    )
+
+    investigation.activate()
+
+    with pytest.raises(ValueError, match="investigation is already active"):
+        investigation.activate()
