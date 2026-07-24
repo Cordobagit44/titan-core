@@ -18,6 +18,9 @@ class Investigation:
 
     @classmethod
     def create(cls, title: str, purpose: str) -> "Investigation":
+        if not title.strip():
+            raise ValueError("title must not be empty")
+
         return cls(title=title, purpose=purpose)
 
     def pull_events(self) -> list[InvestigationCreated]:
