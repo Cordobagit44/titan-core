@@ -1,6 +1,7 @@
 import pytest
 
 from titan.core.investigation import (
+    HypothesisAdded,
     Investigation,
     InvestigationActivated,
     InvestigationCreated,
@@ -121,3 +122,24 @@ def test_add_hypothesis_to_investigation() -> None:
     assert (
         investigation.hypotheses[0].statement == "NVIDIA will maintain 20% annual revenue growth."
     )
+
+
+def test_add_hypothesis_emits_hypothesis_added_event() -> None:
+    investigation = Investigation.create(
+        title="Network Intrusion",
+        purpose="Determine attack vector",
+    )
+
+    investigation.pull_events()
+
+    investigation.add_hypothesis("Credentials were compromised")
+
+    events = investigation.pull_events()
+
+    assert len(events) == 1
+
+    event = events[0]
+
+    assert isinstance(event, HypothesisAdded)
+    assert event.investigation_id == investigation.id
+    assert event.hypothesis_statement == "Credentials were compromised"

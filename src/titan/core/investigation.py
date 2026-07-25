@@ -30,6 +30,15 @@ class InvestigationActivated:
     investigation_id: InvestigationId
 
 
+@dataclass(frozen=True)
+class HypothesisAdded:
+    investigation_id: InvestigationId
+    hypothesis_statement: str
+
+
+type DomainEvent = InvestigationCreated | InvestigationActivated | HypothesisAdded
+
+
 class Investigation:
     def __init__(
         self,
@@ -42,7 +51,7 @@ class Investigation:
         self.purpose = purpose
         self.status = InvestigationStatus.DRAFT
         self._hypotheses: list[Hypothesis] = []
-        self._events: list[InvestigationCreated | InvestigationActivated] = [
+        self._events: list[DomainEvent] = [
             InvestigationCreated(
                 investigation_id=self.id,
                 title=title,
@@ -67,6 +76,12 @@ class Investigation:
     def add_hypothesis(self, statement: str) -> None:
         hypothesis = Hypothesis(statement=statement)
         self._hypotheses.append(hypothesis)
+        self._events.append(
+            HypothesisAdded(
+                investigation_id=self.id,
+                hypothesis_statement=hypothesis.statement,
+            )
+        )
 
     def activate(self) -> None:
         if self.status is InvestigationStatus.ACTIVE:
@@ -79,9 +94,7 @@ class Investigation:
             )
         )
 
-    def pull_events(
-        self,
-    ) -> list[InvestigationCreated | InvestigationActivated]:
+    def pull_events(self) -> list[DomainEvent]:
         events = self._events
         self._events = []
         return events
