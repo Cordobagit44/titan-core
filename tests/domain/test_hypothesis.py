@@ -2,6 +2,10 @@ from uuid import UUID
 
 import pytest
 
+from titan.core.events import (
+    HypothesisConfirmed,
+    HypothesisRejected,
+)
 from titan.core.evidence import Evidence
 from titan.core.hypothesis import Hypothesis, HypothesisStatus
 
@@ -111,3 +115,29 @@ def test_cannot_reject_confirmed_hypothesis() -> None:
         match="confirmed hypothesis cannot be rejected",
     ):
         hypothesis.reject()
+
+
+def test_confirm_emits_domain_event() -> None:
+    hypothesis = Hypothesis(
+        statement="Credentials were compromised",
+    )
+
+    hypothesis.confirm()
+
+    events = hypothesis.pull_events()
+
+    assert len(events) == 1
+    assert isinstance(events[0], HypothesisConfirmed)
+
+
+def test_reject_emits_hypothesis_rejected_event() -> None:
+    hypothesis = Hypothesis(
+        statement="Credentials were compromised",
+    )
+
+    hypothesis.reject()
+
+    events = hypothesis.pull_events()
+
+    assert len(events) == 1
+    assert isinstance(events[0], HypothesisRejected)
