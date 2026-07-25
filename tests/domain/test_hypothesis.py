@@ -3,7 +3,7 @@ from uuid import UUID
 import pytest
 
 from titan.core.evidence import Evidence
-from titan.core.hypothesis import Hypothesis
+from titan.core.hypothesis import Hypothesis, HypothesisStatus
 
 
 def test_create_hypothesis() -> None:
@@ -18,7 +18,10 @@ def test_create_hypothesis() -> None:
 def test_hypothesis_rejects_empty_statement(
     invalid_statement: str,
 ) -> None:
-    with pytest.raises(ValueError, match="statement must not be empty"):
+    with pytest.raises(
+        ValueError,
+        match="statement must not be empty",
+    ):
         Hypothesis(statement=invalid_statement)
 
 
@@ -45,7 +48,6 @@ def test_add_evidence_to_hypothesis() -> None:
     hypothesis = Hypothesis(
         statement="Credentials were compromised",
     )
-
     evidence = Evidence(
         description="Firewall logs show repeated failed logins.",
     )
@@ -53,3 +55,59 @@ def test_add_evidence_to_hypothesis() -> None:
     hypothesis.add_evidence(evidence)
 
     assert hypothesis.evidences == (evidence,)
+
+
+def test_hypothesis_starts_pending() -> None:
+    hypothesis = Hypothesis(
+        statement="Credentials were compromised",
+    )
+
+    assert hypothesis.status is HypothesisStatus.PENDING
+
+
+def test_confirm_hypothesis() -> None:
+    hypothesis = Hypothesis(
+        statement="Credentials were compromised",
+    )
+
+    hypothesis.confirm()
+
+    assert hypothesis.status is HypothesisStatus.CONFIRMED
+
+
+def test_reject_hypothesis() -> None:
+    hypothesis = Hypothesis(
+        statement="Credentials were compromised",
+    )
+
+    hypothesis.reject()
+
+    assert hypothesis.status is HypothesisStatus.REJECTED
+
+
+def test_cannot_confirm_rejected_hypothesis() -> None:
+    hypothesis = Hypothesis(
+        statement="Credentials were compromised",
+    )
+
+    hypothesis.reject()
+
+    with pytest.raises(
+        ValueError,
+        match="rejected hypothesis cannot be confirmed",
+    ):
+        hypothesis.confirm()
+
+
+def test_cannot_reject_confirmed_hypothesis() -> None:
+    hypothesis = Hypothesis(
+        statement="Credentials were compromised",
+    )
+
+    hypothesis.confirm()
+
+    with pytest.raises(
+        ValueError,
+        match="confirmed hypothesis cannot be rejected",
+    ):
+        hypothesis.reject()
