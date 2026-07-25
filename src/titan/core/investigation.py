@@ -23,6 +23,11 @@ class InvestigationCreated:
     title: str
 
 
+@dataclass(frozen=True)
+class InvestigationActivated:
+    investigation_id: InvestigationId
+
+
 class Investigation:
     def __init__(
         self,
@@ -34,7 +39,7 @@ class Investigation:
         self.title = title
         self.purpose = purpose
         self.status = InvestigationStatus.DRAFT
-        self._events = [
+        self._events: list[InvestigationCreated | InvestigationActivated] = [
             InvestigationCreated(
                 investigation_id=self.id,
                 title=title,
@@ -57,8 +62,15 @@ class Investigation:
             raise ValueError("investigation is already active")
 
         self.status = InvestigationStatus.ACTIVE
+        self._events.append(
+            InvestigationActivated(
+                investigation_id=self.id,
+            )
+        )
 
-    def pull_events(self) -> list[InvestigationCreated]:
+    def pull_events(
+        self,
+    ) -> list[InvestigationCreated | InvestigationActivated]:
         events = self._events
         self._events = []
         return events

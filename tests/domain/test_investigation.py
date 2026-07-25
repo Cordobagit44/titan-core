@@ -2,6 +2,7 @@ import pytest
 
 from titan.core.investigation import (
     Investigation,
+    InvestigationActivated,
     InvestigationCreated,
     InvestigationStatus,
 )
@@ -87,3 +88,19 @@ def test_cannot_activate_an_active_investigation() -> None:
 
     with pytest.raises(ValueError, match="investigation is already active"):
         investigation.activate()
+
+
+def test_activate_investigation_emits_domain_event() -> None:
+    investigation = Investigation.create(
+        title="Acme Corp",
+        purpose="Evaluate acquisition",
+    )
+
+    investigation.pull_events()  # descartamos el evento de creación
+
+    investigation.activate()
+
+    events = investigation.pull_events()
+
+    assert len(events) == 1
+    assert isinstance(events[0], InvestigationActivated)
