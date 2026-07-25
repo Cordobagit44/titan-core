@@ -143,3 +143,23 @@ def test_add_hypothesis_emits_hypothesis_added_event() -> None:
     assert isinstance(event, HypothesisAdded)
     assert event.investigation_id == investigation.id
     assert event.hypothesis_statement == "Credentials were compromised"
+
+
+def test_add_hypothesis_rejects_duplicate_statement() -> None:
+    investigation = Investigation.create(
+        title="Network Intrusion",
+        purpose="Determine attack vector",
+    )
+    investigation.pull_events()
+
+    investigation.add_hypothesis("Credentials were compromised")
+    investigation.pull_events()
+
+    with pytest.raises(
+        ValueError,
+        match="hypothesis already exists",
+    ):
+        investigation.add_hypothesis("Credentials were compromised")
+
+    assert len(investigation.hypotheses) == 1
+    assert investigation.pull_events() == []

@@ -75,6 +75,10 @@ class Investigation:
 
     def add_hypothesis(self, statement: str) -> None:
         hypothesis = Hypothesis(statement=statement)
+
+        if any(existing.statement == hypothesis.statement for existing in self._hypotheses):
+            raise ValueError("hypothesis already exists")
+
         self._hypotheses.append(hypothesis)
         self._events.append(
             HypothesisAdded(
