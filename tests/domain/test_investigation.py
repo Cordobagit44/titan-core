@@ -39,6 +39,7 @@ def test_investigation_created_event_contains_title() -> None:
 
     event = investigation.pull_events()[0]
 
+    assert isinstance(event, InvestigationCreated)
     assert event.title == "NVIDIA Long-Term"
 
 
