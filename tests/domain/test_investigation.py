@@ -105,3 +105,19 @@ def test_activate_investigation_emits_domain_event() -> None:
 
     assert len(events) == 1
     assert isinstance(events[0], InvestigationActivated)
+
+
+def test_add_hypothesis_to_investigation() -> None:
+    investigation = Investigation.create(
+        title="NVIDIA Long-Term",
+        purpose="Investment thesis",
+    )
+
+    investigation.add_hypothesis(
+        statement="NVIDIA will maintain 20% annual revenue growth.",
+    )
+
+    assert len(investigation.hypotheses) == 1
+    assert (
+        investigation.hypotheses[0].statement == "NVIDIA will maintain 20% annual revenue growth."
+    )

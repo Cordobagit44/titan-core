@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from enum import Enum
 from uuid import UUID, uuid4
 
+from titan.core.hypothesis import Hypothesis
+
 
 class InvestigationStatus(Enum):
     DRAFT = "draft"
@@ -39,6 +41,7 @@ class Investigation:
         self.title = title
         self.purpose = purpose
         self.status = InvestigationStatus.DRAFT
+        self._hypotheses: list[Hypothesis] = []
         self._events: list[InvestigationCreated | InvestigationActivated] = [
             InvestigationCreated(
                 investigation_id=self.id,
@@ -56,6 +59,14 @@ class Investigation:
             title=title,
             purpose=purpose,
         )
+
+    @property
+    def hypotheses(self) -> tuple[Hypothesis, ...]:
+        return tuple(self._hypotheses)
+
+    def add_hypothesis(self, statement: str) -> None:
+        hypothesis = Hypothesis(statement=statement)
+        self._hypotheses.append(hypothesis)
 
     def activate(self) -> None:
         if self.status is InvestigationStatus.ACTIVE:
