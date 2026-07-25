@@ -2,6 +2,7 @@ from uuid import UUID
 
 import pytest
 
+from titan.core.evidence import Evidence
 from titan.core.hypothesis import Hypothesis
 
 
@@ -38,3 +39,17 @@ def test_hypotheses_receive_different_identifiers() -> None:
     )
 
     assert first.id != second.id
+
+
+def test_add_evidence_to_hypothesis() -> None:
+    hypothesis = Hypothesis(
+        statement="Credentials were compromised",
+    )
+
+    evidence = Evidence(
+        description="Firewall logs show repeated failed logins.",
+    )
+
+    hypothesis.add_evidence(evidence)
+
+    assert hypothesis.evidences == (evidence,)
