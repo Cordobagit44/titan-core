@@ -2,11 +2,14 @@ from dataclasses import dataclass, field
 from enum import Enum
 from uuid import UUID, uuid4
 
+from titan.core.entity import Entity
 from titan.core.events import (
     HypothesisConfirmed,
     HypothesisRejected,
 )
 from titan.core.evidence import Evidence
+
+type HypothesisEvent = HypothesisConfirmed | HypothesisRejected
 
 
 class HypothesisStatus(Enum):
@@ -25,7 +28,7 @@ class HypothesisId:
 
 
 @dataclass
-class Hypothesis:
+class Hypothesis(Entity[HypothesisEvent]):
     statement: str
     id: HypothesisId = field(default_factory=HypothesisId.new)
     status: HypothesisStatus = field(
@@ -37,13 +40,10 @@ class Hypothesis:
         init=False,
         repr=False,
     )
-    _events: list[object] = field(
-        default_factory=list,
-        init=False,
-        repr=False,
-    )
 
     def __post_init__(self) -> None:
+        super().__init__()
+
         if not self.statement.strip():
             raise ValueError("statement must not be empty")
 
@@ -79,11 +79,3 @@ class Hypothesis:
                 hypothesis_id=self.id,
             )
         )
-
-    def pull_events(self) -> list[object]:
-        events = self._events.copy()
-        self._events.clear()
-        return events
-
-    def _record_event(self, event: object) -> None:
-        self._events.append(event)

@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 from uuid import UUID, uuid4
 
+from titan.core.entity import Entity
 from titan.core.hypothesis import Hypothesis
 
 
@@ -39,24 +40,27 @@ class HypothesisAdded:
 type DomainEvent = InvestigationCreated | InvestigationActivated | HypothesisAdded
 
 
-class Investigation:
+class Investigation(Entity[DomainEvent]):
     def __init__(
         self,
         investigation_id: InvestigationId,
         title: str,
         purpose: str,
     ) -> None:
+        super().__init__()
+
         self.id = investigation_id
         self.title = title
         self.purpose = purpose
         self.status = InvestigationStatus.DRAFT
         self._hypotheses: list[Hypothesis] = []
-        self._events: list[DomainEvent] = [
+
+        self._record_event(
             InvestigationCreated(
                 investigation_id=self.id,
                 title=title,
             )
-        ]
+        )
 
     @classmethod
     def create(cls, title: str, purpose: str) -> "Investigation":
@@ -80,7 +84,7 @@ class Investigation:
             raise ValueError("hypothesis already exists")
 
         self._hypotheses.append(hypothesis)
-        self._events.append(
+        self._record_event(
             HypothesisAdded(
                 investigation_id=self.id,
                 hypothesis_statement=hypothesis.statement,
@@ -92,13 +96,8 @@ class Investigation:
             raise ValueError("investigation is already active")
 
         self.status = InvestigationStatus.ACTIVE
-        self._events.append(
+        self._record_event(
             InvestigationActivated(
                 investigation_id=self.id,
             )
         )
-
-    def pull_events(self) -> list[DomainEvent]:
-        events = self._events
-        self._events = []
-        return events
