@@ -1,8 +1,8 @@
 import pytest
+
 from titan.application.confirm_hypothesis import (
     ConfirmHypothesis,
 )
-
 from titan.application.in_memory_investigation_repository import (
     InMemoryInvestigationRepository,
 )

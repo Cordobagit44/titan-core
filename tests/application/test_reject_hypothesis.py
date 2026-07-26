@@ -1,10 +1,10 @@
 import pytest
-from titan.application.reject_hypothesis import (
-    RejectHypothesis,
-)
 
 from titan.application.in_memory_investigation_repository import (
     InMemoryInvestigationRepository,
+)
+from titan.application.reject_hypothesis import (
+    RejectHypothesis,
 )
 from titan.core.hypothesis import (
     Hypothesis,

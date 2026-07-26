@@ -1,5 +1,4 @@
 from titan.application.add_hypothesis import AddHypothesis
-
 from titan.application.in_memory_investigation_repository import (
     InMemoryInvestigationRepository,
 )

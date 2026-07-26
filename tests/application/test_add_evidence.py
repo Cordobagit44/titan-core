@@ -1,6 +1,6 @@
 import pytest
-from titan.application.add_evidence import AddEvidence
 
+from titan.application.add_evidence import AddEvidence
 from titan.application.in_memory_investigation_repository import (
     InMemoryInvestigationRepository,
 )

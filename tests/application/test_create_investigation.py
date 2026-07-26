@@ -1,5 +1,4 @@
 from titan.application.create_investigation import CreateInvestigation
-
 from titan.application.in_memory_investigation_repository import (
     InMemoryInvestigationRepository,
 )

@@ -1,7 +1,6 @@
 from titan.application.in_memory_investigation_repository import (
     InMemoryInvestigationRepository,
 )
-
 from titan.core.investigation import Investigation
 
 
