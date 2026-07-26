@@ -26,4 +26,11 @@ class InMemoryInvestigationRepository(
         self,
         investigation_id: InvestigationId,
     ) -> Investigation | None:
-        return self._investigations.get(investigation_id)
+        return self._investigations.get(
+            investigation_id,
+        )
+
+    def list(self) -> tuple[Investigation, ...]:
+        return tuple(
+            self._investigations.values(),
+        )

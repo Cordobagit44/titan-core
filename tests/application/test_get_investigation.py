@@ -1,8 +1,8 @@
 import pytest
+
 from titan.application.get_investigation import (
     GetInvestigation,
 )
-
 from titan.application.in_memory_investigation_repository import (
     InMemoryInvestigationRepository,
 )
