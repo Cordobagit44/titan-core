@@ -4,6 +4,10 @@ from uuid import UUID
 from titan.application.investigation_repository import (
     InvestigationRepository,
 )
+from titan.core.evidence import (
+    Evidence,
+    EvidenceId,
+)
 from titan.core.hypothesis import (
     Hypothesis,
     HypothesisId,
@@ -51,6 +55,18 @@ class SqliteInvestigationRepository(
             """
         )
 
+        self._connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS evidences (
+                id TEXT PRIMARY KEY,
+                hypothesis_id TEXT NOT NULL,
+                description TEXT NOT NULL,
+                FOREIGN KEY (hypothesis_id)
+                    REFERENCES hypotheses (id)
+            )
+            """
+        )
+
         self._connection.commit()
 
     def save(
@@ -61,7 +77,28 @@ class SqliteInvestigationRepository(
             investigation.id.value,
         )
 
+        hypothesis_ids = tuple(str(hypothesis.id.value) for hypothesis in investigation.hypotheses)
+
         with self._connection:
+            if hypothesis_ids:
+                placeholders = ", ".join("?" for _ in hypothesis_ids)
+
+                self._connection.execute(
+                    f"""
+                    DELETE FROM evidences
+                    WHERE hypothesis_id IN ({placeholders})
+                    """,
+                    hypothesis_ids,
+                )
+
+            self._connection.execute(
+                """
+                DELETE FROM hypotheses
+                WHERE investigation_id = ?
+                """,
+                (investigation_id,),
+            )
+
             self._connection.execute(
                 """
                 INSERT OR REPLACE INTO investigations (
@@ -78,14 +115,6 @@ class SqliteInvestigationRepository(
                     investigation.purpose,
                     investigation.status.value,
                 ),
-            )
-
-            self._connection.execute(
-                """
-                DELETE FROM hypotheses
-                WHERE investigation_id = ?
-                """,
-                (investigation_id,),
             )
 
             self._connection.executemany(
@@ -106,6 +135,26 @@ class SqliteInvestigationRepository(
                         hypothesis.status.value,
                     )
                     for hypothesis in investigation.hypotheses
+                ),
+            )
+
+            self._connection.executemany(
+                """
+                INSERT INTO evidences (
+                    id,
+                    hypothesis_id,
+                    description
+                )
+                VALUES (?, ?, ?)
+                """,
+                (
+                    (
+                        str(evidence.id.value),
+                        str(hypothesis.id.value),
+                        evidence.description,
+                    )
+                    for hypothesis in investigation.hypotheses
+                    for evidence in hypothesis.evidences
                 ),
             )
 
@@ -191,16 +240,51 @@ class SqliteInvestigationRepository(
 
         return tuple(self._to_hypothesis(row) for row in cursor.fetchall())
 
+    def _get_evidences(
+        self,
+        hypothesis_id: HypothesisId,
+    ) -> tuple[Evidence, ...]:
+        cursor = self._connection.execute(
+            """
+            SELECT
+                id,
+                description
+            FROM evidences
+            WHERE hypothesis_id = ?
+            ORDER BY rowid
+            """,
+            (str(hypothesis_id.value),),
+        )
+
+        return tuple(
+            Evidence(
+                id=EvidenceId(
+                    value=UUID(row[0]),
+                ),
+                description=row[1],
+            )
+            for row in cursor.fetchall()
+        )
+
     def _to_hypothesis(
         self,
         row: tuple[str, str, str],
     ) -> Hypothesis:
+        hypothesis_id = HypothesisId(
+            value=UUID(row[0]),
+        )
+
         hypothesis = Hypothesis(
-            id=HypothesisId(
-                value=UUID(row[0]),
-            ),
+            id=hypothesis_id,
             statement=row[1],
         )
+
+        for evidence in self._get_evidences(
+            hypothesis_id,
+        ):
+            hypothesis.add_evidence(
+                evidence,
+            )
 
         status = HypothesisStatus(
             row[2],

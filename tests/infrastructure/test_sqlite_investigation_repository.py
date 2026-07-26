@@ -1,3 +1,4 @@
+from titan.core.evidence import Evidence
 from titan.core.investigation import Investigation
 from titan.infrastructure.sqlite.sqlite_investigation_repository import (
     SqliteInvestigationRepository,
@@ -130,3 +131,39 @@ def test_list_restores_hypotheses() -> None:
     assert len(investigations) == 1
     assert len(investigations[0].hypotheses) == 1
     assert investigations[0].hypotheses[0].statement == "Artificial structure"
+
+
+def test_get_restores_hypothesis_evidences() -> None:
+    repository = SqliteInvestigationRepository(
+        ":memory:",
+    )
+
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+
+    investigation.add_hypothesis(
+        "Artificial structure",
+    )
+
+    hypothesis = investigation.hypotheses[0]
+
+    hypothesis.add_evidence(
+        Evidence(
+            description="High-resolution orbital imagery",
+        )
+    )
+
+    repository.save(
+        investigation,
+    )
+
+    found = repository.get(
+        investigation.id,
+    )
+
+    assert found is not None
+    assert len(found.hypotheses) == 1
+    assert len(found.hypotheses[0].evidences) == 1
+    assert found.hypotheses[0].evidences[0].description == "High-resolution orbital imagery"
