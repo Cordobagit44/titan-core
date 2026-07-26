@@ -37,7 +37,15 @@ class HypothesisAdded:
     hypothesis_statement: str
 
 
-type DomainEvent = InvestigationCreated | InvestigationActivated | HypothesisAdded
+@dataclass(frozen=True)
+class HypothesisRemoved:
+    investigation_id: InvestigationId
+    hypothesis_id: HypothesisId
+
+
+type DomainEvent = (
+    InvestigationCreated | InvestigationActivated | HypothesisAdded | HypothesisRemoved
+)
 
 
 class Investigation(Entity[DomainEvent]):
@@ -105,6 +113,30 @@ class Investigation(Entity[DomainEvent]):
             HypothesisAdded(
                 investigation_id=self.id,
                 hypothesis_statement=hypothesis.statement,
+            )
+        )
+
+    def remove_hypothesis(
+        self,
+        hypothesis_id: HypothesisId,
+    ) -> None:
+        hypothesis = self.find_hypothesis(
+            hypothesis_id,
+        )
+
+        if hypothesis is None:
+            raise LookupError(
+                "hypothesis not found",
+            )
+
+        self._hypotheses.remove(
+            hypothesis,
+        )
+
+        self._record_event(
+            HypothesisRemoved(
+                investigation_id=self.id,
+                hypothesis_id=hypothesis.id,
             )
         )
 
