@@ -1,5 +1,6 @@
 import pytest
 
+from titan.core.hypothesis import Hypothesis
 from titan.core.investigation import (
     HypothesisAdded,
     Investigation,
@@ -163,3 +164,39 @@ def test_add_hypothesis_rejects_duplicate_statement() -> None:
 
     assert len(investigation.hypotheses) == 1
     assert investigation.pull_events() == []
+
+
+def test_find_hypothesis_returns_matching_hypothesis() -> None:
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+
+    investigation.add_hypothesis(
+        "Methane indicates microbial life",
+    )
+
+    hypothesis = investigation.hypotheses[0]
+
+    found = investigation.find_hypothesis(
+        hypothesis.id,
+    )
+
+    assert found is hypothesis
+
+
+def test_find_hypothesis_returns_none_when_not_found() -> None:
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+
+    unknown_hypothesis = Hypothesis(
+        statement="Unknown hypothesis",
+    )
+
+    found = investigation.find_hypothesis(
+        unknown_hypothesis.id,
+    )
+
+    assert found is None

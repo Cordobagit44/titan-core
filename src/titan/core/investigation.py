@@ -3,7 +3,7 @@ from enum import Enum
 from uuid import UUID, uuid4
 
 from titan.core.entity import Entity
-from titan.core.hypothesis import Hypothesis
+from titan.core.hypothesis import Hypothesis, HypothesisId
 
 
 class InvestigationStatus(Enum):
@@ -63,7 +63,11 @@ class Investigation(Entity[DomainEvent]):
         )
 
     @classmethod
-    def create(cls, title: str, purpose: str) -> "Investigation":
+    def create(
+        cls,
+        title: str,
+        purpose: str,
+    ) -> "Investigation":
         if not title.strip():
             raise ValueError("title must not be empty")
 
@@ -77,13 +81,26 @@ class Investigation(Entity[DomainEvent]):
     def hypotheses(self) -> tuple[Hypothesis, ...]:
         return tuple(self._hypotheses)
 
-    def add_hypothesis(self, statement: str) -> None:
+    def find_hypothesis(
+        self,
+        hypothesis_id: HypothesisId,
+    ) -> Hypothesis | None:
+        return next(
+            (hypothesis for hypothesis in self._hypotheses if hypothesis.id == hypothesis_id),
+            None,
+        )
+
+    def add_hypothesis(
+        self,
+        statement: str,
+    ) -> None:
         hypothesis = Hypothesis(statement=statement)
 
         if any(existing.statement == hypothesis.statement for existing in self._hypotheses):
             raise ValueError("hypothesis already exists")
 
         self._hypotheses.append(hypothesis)
+
         self._record_event(
             HypothesisAdded(
                 investigation_id=self.id,
@@ -96,6 +113,7 @@ class Investigation(Entity[DomainEvent]):
             raise ValueError("investigation is already active")
 
         self.status = InvestigationStatus.ACTIVE
+
         self._record_event(
             InvestigationActivated(
                 investigation_id=self.id,
