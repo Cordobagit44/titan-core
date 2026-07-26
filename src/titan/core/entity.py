@@ -1,9 +1,4 @@
-from typing import Generic, TypeVar
-
-EventT = TypeVar("EventT")
-
-
-class Entity(Generic[EventT]):
+class Entity[EventT]:
     def __init__(self) -> None:
         self._events: list[EventT] = []
 
