@@ -4,6 +4,11 @@ from uuid import UUID
 from titan.application.investigation_repository import (
     InvestigationRepository,
 )
+from titan.core.hypothesis import (
+    Hypothesis,
+    HypothesisId,
+    HypothesisStatus,
+)
 from titan.core.investigation import (
     Investigation,
     InvestigationId,
@@ -33,31 +38,76 @@ class SqliteInvestigationRepository(
             """
         )
 
+        self._connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS hypotheses (
+                id TEXT PRIMARY KEY,
+                investigation_id TEXT NOT NULL,
+                statement TEXT NOT NULL,
+                status TEXT NOT NULL,
+                FOREIGN KEY (investigation_id)
+                    REFERENCES investigations (id)
+            )
+            """
+        )
+
         self._connection.commit()
 
     def save(
         self,
         investigation: Investigation,
     ) -> None:
-        self._connection.execute(
-            """
-            INSERT OR REPLACE INTO investigations (
-                id,
-                title,
-                purpose,
-                status
-            )
-            VALUES (?, ?, ?, ?)
-            """,
-            (
-                str(investigation.id.value),
-                investigation.title,
-                investigation.purpose,
-                investigation.status.value,
-            ),
+        investigation_id = str(
+            investigation.id.value,
         )
 
-        self._connection.commit()
+        with self._connection:
+            self._connection.execute(
+                """
+                INSERT OR REPLACE INTO investigations (
+                    id,
+                    title,
+                    purpose,
+                    status
+                )
+                VALUES (?, ?, ?, ?)
+                """,
+                (
+                    investigation_id,
+                    investigation.title,
+                    investigation.purpose,
+                    investigation.status.value,
+                ),
+            )
+
+            self._connection.execute(
+                """
+                DELETE FROM hypotheses
+                WHERE investigation_id = ?
+                """,
+                (investigation_id,),
+            )
+
+            self._connection.executemany(
+                """
+                INSERT INTO hypotheses (
+                    id,
+                    investigation_id,
+                    statement,
+                    status
+                )
+                VALUES (?, ?, ?, ?)
+                """,
+                (
+                    (
+                        str(hypothesis.id.value),
+                        investigation_id,
+                        hypothesis.statement,
+                        hypothesis.status.value,
+                    )
+                    for hypothesis in investigation.hypotheses
+                ),
+            )
 
     def get(
         self,
@@ -106,21 +156,61 @@ class SqliteInvestigationRepository(
         self,
         row: tuple[str, str, str, str],
     ) -> Investigation:
-        investigation = Investigation(
-            investigation_id=InvestigationId(
-                value=UUID(row[0]),
-            ),
+        investigation_id = InvestigationId(
+            value=UUID(row[0]),
+        )
+
+        hypotheses = self._get_hypotheses(
+            investigation_id,
+        )
+
+        return Investigation.restore(
+            investigation_id=investigation_id,
             title=row[1],
             purpose=row[2],
+            status=InvestigationStatus(row[3]),
+            hypotheses=hypotheses,
         )
 
-        status = InvestigationStatus(
-            row[3],
+    def _get_hypotheses(
+        self,
+        investigation_id: InvestigationId,
+    ) -> tuple[Hypothesis, ...]:
+        cursor = self._connection.execute(
+            """
+            SELECT
+                id,
+                statement,
+                status
+            FROM hypotheses
+            WHERE investigation_id = ?
+            ORDER BY rowid
+            """,
+            (str(investigation_id.value),),
         )
 
-        if status == InvestigationStatus.ACTIVE:
-            investigation.activate()
+        return tuple(self._to_hypothesis(row) for row in cursor.fetchall())
 
-        investigation.pull_events()
+    def _to_hypothesis(
+        self,
+        row: tuple[str, str, str],
+    ) -> Hypothesis:
+        hypothesis = Hypothesis(
+            id=HypothesisId(
+                value=UUID(row[0]),
+            ),
+            statement=row[1],
+        )
 
-        return investigation
+        status = HypothesisStatus(
+            row[2],
+        )
+
+        if status is HypothesisStatus.CONFIRMED:
+            hypothesis.confirm()
+        elif status is HypothesisStatus.REJECTED:
+            hypothesis.reject()
+
+        hypothesis.pull_events()
+
+        return hypothesis

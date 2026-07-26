@@ -78,3 +78,55 @@ def test_get_restores_investigation_status() -> None:
 
     assert found is not None
     assert found.status == investigation.status
+
+
+def test_get_restores_hypotheses() -> None:
+    repository = SqliteInvestigationRepository(
+        ":memory:",
+    )
+
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+
+    investigation.add_hypothesis(
+        "Artificial structure",
+    )
+
+    repository.save(
+        investigation,
+    )
+
+    found = repository.get(
+        investigation.id,
+    )
+
+    assert found is not None
+    assert len(found.hypotheses) == 1
+    assert found.hypotheses[0].statement == "Artificial structure"
+
+
+def test_list_restores_hypotheses() -> None:
+    repository = SqliteInvestigationRepository(
+        ":memory:",
+    )
+
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+
+    investigation.add_hypothesis(
+        "Artificial structure",
+    )
+
+    repository.save(
+        investigation,
+    )
+
+    investigations = repository.list()
+
+    assert len(investigations) == 1
+    assert len(investigations[0].hypotheses) == 1
+    assert investigations[0].hypotheses[0].statement == "Artificial structure"

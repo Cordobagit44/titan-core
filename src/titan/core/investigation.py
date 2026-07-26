@@ -85,6 +85,29 @@ class Investigation(Entity[DomainEvent]):
             purpose=purpose,
         )
 
+    @classmethod
+    def restore(
+        cls,
+        investigation_id: InvestigationId,
+        title: str,
+        purpose: str,
+        status: InvestigationStatus,
+        hypotheses: tuple[Hypothesis, ...],
+    ) -> "Investigation":
+        investigation = cls(
+            investigation_id=investigation_id,
+            title=title,
+            purpose=purpose,
+        )
+
+        investigation.status = status
+        investigation._hypotheses.extend(
+            hypotheses,
+        )
+        investigation.pull_events()
+
+        return investigation
+
     @property
     def hypotheses(self) -> tuple[Hypothesis, ...]:
         return tuple(self._hypotheses)
