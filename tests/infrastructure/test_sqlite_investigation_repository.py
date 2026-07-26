@@ -54,3 +54,27 @@ def test_list_investigations() -> None:
     assert len(investigations) == 2
     assert investigations[0].id == first_investigation.id
     assert investigations[1].id == second_investigation.id
+
+
+def test_get_restores_investigation_status() -> None:
+    repository = SqliteInvestigationRepository(
+        ":memory:",
+    )
+
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+
+    investigation.activate()
+
+    repository.save(
+        investigation,
+    )
+
+    found = repository.get(
+        investigation.id,
+    )
+
+    assert found is not None
+    assert found.status == investigation.status

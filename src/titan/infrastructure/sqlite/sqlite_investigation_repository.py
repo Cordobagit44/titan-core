@@ -7,6 +7,7 @@ from titan.application.investigation_repository import (
 from titan.core.investigation import (
     Investigation,
     InvestigationId,
+    InvestigationStatus,
 )
 
 
@@ -26,7 +27,8 @@ class SqliteInvestigationRepository(
             CREATE TABLE IF NOT EXISTS investigations (
                 id TEXT PRIMARY KEY,
                 title TEXT NOT NULL,
-                purpose TEXT NOT NULL
+                purpose TEXT NOT NULL,
+                status TEXT NOT NULL
             )
             """
         )
@@ -42,14 +44,16 @@ class SqliteInvestigationRepository(
             INSERT OR REPLACE INTO investigations (
                 id,
                 title,
-                purpose
+                purpose,
+                status
             )
-            VALUES (?, ?, ?)
+            VALUES (?, ?, ?, ?)
             """,
             (
                 str(investigation.id.value),
                 investigation.title,
                 investigation.purpose,
+                investigation.status.value,
             ),
         )
 
@@ -64,7 +68,8 @@ class SqliteInvestigationRepository(
             SELECT
                 id,
                 title,
-                purpose
+                purpose,
+                status
             FROM investigations
             WHERE id = ?
             """,
@@ -88,7 +93,8 @@ class SqliteInvestigationRepository(
             SELECT
                 id,
                 title,
-                purpose
+                purpose,
+                status
             FROM investigations
             ORDER BY rowid
             """
@@ -98,7 +104,7 @@ class SqliteInvestigationRepository(
 
     def _to_investigation(
         self,
-        row: tuple[str, str, str],
+        row: tuple[str, str, str, str],
     ) -> Investigation:
         investigation = Investigation(
             investigation_id=InvestigationId(
@@ -107,6 +113,13 @@ class SqliteInvestigationRepository(
             title=row[1],
             purpose=row[2],
         )
+
+        status = InvestigationStatus(
+            row[3],
+        )
+
+        if status == InvestigationStatus.ACTIVE:
+            investigation.activate()
 
         investigation.pull_events()
 
