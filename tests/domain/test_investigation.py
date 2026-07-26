@@ -238,3 +238,57 @@ def test_can_close_an_active_investigation() -> None:
     investigation.close()
 
     assert investigation.status is InvestigationStatus.CLOSED
+
+
+def test_cannot_add_hypothesis_to_closed_investigation() -> None:
+    investigation = Investigation.create(
+        title="Acme Corp",
+        purpose="Evaluate acquisition",
+    )
+
+    investigation.close()
+
+    with pytest.raises(
+        ValueError,
+        match="investigation is closed",
+    ):
+        investigation.add_hypothesis(
+            "Revenue will grow 20% annually",
+        )
+
+
+def test_cannot_remove_hypothesis_from_closed_investigation() -> None:
+    investigation = Investigation.create(
+        title="Acme Corp",
+        purpose="Evaluate acquisition",
+    )
+
+    investigation.add_hypothesis(
+        "Revenue will grow 20% annually",
+    )
+    hypothesis = investigation.hypotheses[0]
+
+    investigation.close()
+
+    with pytest.raises(
+        ValueError,
+        match="investigation is closed",
+    ):
+        investigation.remove_hypothesis(
+            hypothesis.id,
+        )
+
+
+def test_cannot_activate_closed_investigation() -> None:
+    investigation = Investigation.create(
+        title="Acme Corp",
+        purpose="Evaluate acquisition",
+    )
+
+    investigation.close()
+
+    with pytest.raises(
+        ValueError,
+        match="investigation is closed",
+    ):
+        investigation.activate()

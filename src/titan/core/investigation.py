@@ -102,9 +102,7 @@ class Investigation(Entity[DomainEvent]):
         )
 
         investigation.status = status
-        investigation._hypotheses.extend(
-            hypotheses,
-        )
+        investigation._hypotheses.extend(hypotheses)
         investigation.pull_events()
 
         return investigation
@@ -126,6 +124,9 @@ class Investigation(Entity[DomainEvent]):
         self,
         statement: str,
     ) -> None:
+        if self.status is InvestigationStatus.CLOSED:
+            raise ValueError("investigation is closed")
+
         hypothesis = Hypothesis(statement=statement)
 
         if any(existing.statement == hypothesis.statement for existing in self._hypotheses):
@@ -144,6 +145,9 @@ class Investigation(Entity[DomainEvent]):
         self,
         hypothesis_id: HypothesisId,
     ) -> None:
+        if self.status is InvestigationStatus.CLOSED:
+            raise ValueError("investigation is closed")
+
         hypothesis = self.find_hypothesis(
             hypothesis_id,
         )
@@ -165,6 +169,9 @@ class Investigation(Entity[DomainEvent]):
         )
 
     def activate(self) -> None:
+        if self.status is InvestigationStatus.CLOSED:
+            raise ValueError("investigation is closed")
+
         if self.status is InvestigationStatus.ACTIVE:
             raise ValueError("investigation is already active")
 
