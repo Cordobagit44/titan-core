@@ -9,6 +9,7 @@ from titan.core.hypothesis import Hypothesis, HypothesisId
 class InvestigationStatus(Enum):
     DRAFT = "draft"
     ACTIVE = "active"
+    CLOSED = "closed"
 
 
 @dataclass(frozen=True)
@@ -174,3 +175,9 @@ class Investigation(Entity[DomainEvent]):
                 investigation_id=self.id,
             )
         )
+
+    def close(self) -> None:
+        if self.status is InvestigationStatus.CLOSED:
+            raise ValueError("investigation is already closed")
+
+        self.status = InvestigationStatus.CLOSED

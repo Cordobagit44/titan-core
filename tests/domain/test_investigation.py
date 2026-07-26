@@ -200,3 +200,41 @@ def test_find_hypothesis_returns_none_when_not_found() -> None:
     )
 
     assert found is None
+
+
+def test_close_investigation_changes_status_to_closed() -> None:
+    investigation = Investigation.create(
+        title="Acme Corp",
+        purpose="Evaluate acquisition",
+    )
+
+    investigation.close()
+
+    assert investigation.status is InvestigationStatus.CLOSED
+
+
+def test_cannot_close_an_already_closed_investigation() -> None:
+    investigation = Investigation.create(
+        title="Acme Corp",
+        purpose="Evaluate acquisition",
+    )
+
+    investigation.close()
+
+    with pytest.raises(
+        ValueError,
+        match="investigation is already closed",
+    ):
+        investigation.close()
+
+
+def test_can_close_an_active_investigation() -> None:
+    investigation = Investigation.create(
+        title="Acme Corp",
+        purpose="Evaluate acquisition",
+    )
+
+    investigation.activate()
+    investigation.close()
+
+    assert investigation.status is InvestigationStatus.CLOSED
