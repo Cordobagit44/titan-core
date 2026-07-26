@@ -167,3 +167,27 @@ def test_get_restores_hypothesis_evidences() -> None:
     assert len(found.hypotheses) == 1
     assert len(found.hypotheses[0].evidences) == 1
     assert found.hypotheses[0].evidences[0].description == "High-resolution orbital imagery"
+
+
+def test_get_restores_closed_investigation_status() -> None:
+    repository = SqliteInvestigationRepository(
+        ":memory:",
+    )
+
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+
+    investigation.close()
+
+    repository.save(
+        investigation,
+    )
+
+    found = repository.get(
+        investigation.id,
+    )
+
+    assert found is not None
+    assert found.status == investigation.status
