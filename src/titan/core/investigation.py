@@ -188,3 +188,9 @@ class Investigation(Entity[DomainEvent]):
             raise ValueError("investigation is already closed")
 
         self.status = InvestigationStatus.CLOSED
+
+    def reopen(self) -> None:
+        if self.status is not InvestigationStatus.CLOSED:
+            raise ValueError("investigation is not closed")
+
+        self.status = InvestigationStatus.ACTIVE

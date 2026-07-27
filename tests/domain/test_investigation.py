@@ -292,3 +292,49 @@ def test_cannot_activate_closed_investigation() -> None:
         match="investigation is closed",
     ):
         investigation.activate()
+
+
+def test_reopen_closed_investigation_changes_status_to_active() -> None:
+    investigation = Investigation.create(
+        title="Acme Corp",
+        purpose="Evaluate acquisition",
+    )
+
+    investigation.close()
+    investigation.reopen()
+
+    assert investigation.status is InvestigationStatus.ACTIVE
+
+
+def test_cannot_reopen_investigation_that_is_not_closed() -> None:
+    investigation = Investigation.create(
+        title="Acme Corp",
+        purpose="Evaluate acquisition",
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="investigation is not closed",
+    ):
+        investigation.reopen()
+
+
+def test_reopened_investigation_allows_hypothesis_modifications() -> None:
+    investigation = Investigation.create(
+        title="Acme Corp",
+        purpose="Evaluate acquisition",
+    )
+
+    investigation.close()
+    investigation.reopen()
+
+    investigation.add_hypothesis(
+        "Revenue will grow 20% annually",
+    )
+    hypothesis = investigation.hypotheses[0]
+
+    investigation.remove_hypothesis(
+        hypothesis.id,
+    )
+
+    assert investigation.hypotheses == ()
