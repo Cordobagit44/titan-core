@@ -1,3 +1,5 @@
+from datetime import UTC, datetime
+
 import pytest
 
 from titan.core.hypothesis import Hypothesis
@@ -5,7 +7,9 @@ from titan.core.investigation import (
     HypothesisAdded,
     Investigation,
     InvestigationActivated,
+    InvestigationClosed,
     InvestigationCreated,
+    InvestigationId,
     InvestigationStatus,
 )
 
@@ -338,3 +342,69 @@ def test_reopened_investigation_allows_hypothesis_modifications() -> None:
     )
 
     assert investigation.hypotheses == ()
+
+
+def test_close_investigation_records_closure_timestamp() -> None:
+    investigation = Investigation.create(
+        title="Acme Corp",
+        purpose="Evaluate acquisition",
+    )
+
+    assert investigation.closed_at is None
+
+    investigation.close()
+
+    assert investigation.closed_at is not None
+    assert isinstance(investigation.closed_at, datetime)
+    assert investigation.closed_at.tzinfo is UTC
+
+
+def test_reopen_investigation_clears_closure_timestamp() -> None:
+    investigation = Investigation.create(
+        title="Acme Corp",
+        purpose="Evaluate acquisition",
+    )
+
+    investigation.close()
+
+    assert investigation.closed_at is not None
+
+    investigation.reopen()
+
+    assert investigation.closed_at is None
+
+
+def test_close_investigation_emits_closure_event() -> None:
+    investigation = Investigation.create(
+        title="Acme Corp",
+        purpose="Evaluate acquisition",
+    )
+    investigation.pull_events()
+
+    investigation.close()
+
+    events = investigation.pull_events()
+
+    assert len(events) == 1
+
+    event = events[0]
+
+    assert isinstance(event, InvestigationClosed)
+    assert event.investigation_id == investigation.id
+    assert event.closed_at == investigation.closed_at
+
+
+def test_restore_closed_investigation_preserves_closure_timestamp() -> None:
+    closed_at = datetime.now(UTC)
+
+    investigation = Investigation.restore(
+        investigation_id=InvestigationId.new(),
+        title="Acme Corp",
+        purpose="Evaluate acquisition",
+        status=InvestigationStatus.CLOSED,
+        hypotheses=(),
+        closed_at=closed_at,
+    )
+
+    assert investigation.status is InvestigationStatus.CLOSED
+    assert investigation.closed_at == closed_at

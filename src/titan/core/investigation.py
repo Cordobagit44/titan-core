@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import UTC, datetime
 from enum import Enum
 from uuid import UUID, uuid4
 
@@ -33,6 +34,12 @@ class InvestigationActivated:
 
 
 @dataclass(frozen=True)
+class InvestigationClosed:
+    investigation_id: InvestigationId
+    closed_at: datetime
+
+
+@dataclass(frozen=True)
 class HypothesisAdded:
     investigation_id: InvestigationId
     hypothesis_statement: str
@@ -45,7 +52,11 @@ class HypothesisRemoved:
 
 
 type DomainEvent = (
-    InvestigationCreated | InvestigationActivated | HypothesisAdded | HypothesisRemoved
+    InvestigationCreated
+    | InvestigationActivated
+    | InvestigationClosed
+    | HypothesisAdded
+    | HypothesisRemoved
 )
 
 
@@ -62,6 +73,7 @@ class Investigation(Entity[DomainEvent]):
         self.title = title
         self.purpose = purpose
         self.status = InvestigationStatus.DRAFT
+        self.closed_at: datetime | None = None
         self._hypotheses: list[Hypothesis] = []
 
         self._record_event(
@@ -94,6 +106,7 @@ class Investigation(Entity[DomainEvent]):
         purpose: str,
         status: InvestigationStatus,
         hypotheses: tuple[Hypothesis, ...],
+        closed_at: datetime | None = None,
     ) -> "Investigation":
         investigation = cls(
             investigation_id=investigation_id,
@@ -102,6 +115,7 @@ class Investigation(Entity[DomainEvent]):
         )
 
         investigation.status = status
+        investigation.closed_at = closed_at
         investigation._hypotheses.extend(hypotheses)
         investigation.pull_events()
 
@@ -187,10 +201,21 @@ class Investigation(Entity[DomainEvent]):
         if self.status is InvestigationStatus.CLOSED:
             raise ValueError("investigation is already closed")
 
+        closed_at = datetime.now(UTC)
+
         self.status = InvestigationStatus.CLOSED
+        self.closed_at = closed_at
+
+        self._record_event(
+            InvestigationClosed(
+                investigation_id=self.id,
+                closed_at=closed_at,
+            )
+        )
 
     def reopen(self) -> None:
         if self.status is not InvestigationStatus.CLOSED:
             raise ValueError("investigation is not closed")
 
         self.status = InvestigationStatus.ACTIVE
+        self.closed_at = None

@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 from uuid import UUID
 
 from titan.application.investigation_repository import (
@@ -37,7 +38,8 @@ class SqliteInvestigationRepository(
                 id TEXT PRIMARY KEY,
                 title TEXT NOT NULL,
                 purpose TEXT NOT NULL,
-                status TEXT NOT NULL
+                status TEXT NOT NULL,
+                closed_at TEXT
             )
             """
         )
@@ -105,15 +107,21 @@ class SqliteInvestigationRepository(
                     id,
                     title,
                     purpose,
-                    status
+                    status,
+                    closed_at
                 )
-                VALUES (?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?)
                 """,
                 (
                     investigation_id,
                     investigation.title,
                     investigation.purpose,
                     investigation.status.value,
+                    (
+                        investigation.closed_at.isoformat()
+                        if investigation.closed_at is not None
+                        else None
+                    ),
                 ),
             )
 
@@ -168,7 +176,8 @@ class SqliteInvestigationRepository(
                 id,
                 title,
                 purpose,
-                status
+                status,
+                closed_at
             FROM investigations
             WHERE id = ?
             """,
@@ -193,7 +202,8 @@ class SqliteInvestigationRepository(
                 id,
                 title,
                 purpose,
-                status
+                status,
+                closed_at
             FROM investigations
             ORDER BY rowid
             """
@@ -203,7 +213,7 @@ class SqliteInvestigationRepository(
 
     def _to_investigation(
         self,
-        row: tuple[str, str, str, str],
+        row: tuple[str, str, str, str, str | None],
     ) -> Investigation:
         investigation_id = InvestigationId(
             value=UUID(row[0]),
@@ -213,12 +223,15 @@ class SqliteInvestigationRepository(
             investigation_id,
         )
 
+        closed_at = datetime.fromisoformat(row[4]) if row[4] is not None else None
+
         return Investigation.restore(
             investigation_id=investigation_id,
             title=row[1],
             purpose=row[2],
             status=InvestigationStatus(row[3]),
             hypotheses=hypotheses,
+            closed_at=closed_at,
         )
 
     def _get_hypotheses(

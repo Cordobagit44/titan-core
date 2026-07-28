@@ -191,3 +191,27 @@ def test_get_restores_closed_investigation_status() -> None:
 
     assert found is not None
     assert found.status == investigation.status
+
+
+def test_get_restores_closed_at() -> None:
+    repository = SqliteInvestigationRepository(
+        ":memory:",
+    )
+
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+
+    investigation.close()
+
+    repository.save(
+        investigation,
+    )
+
+    found = repository.get(
+        investigation.id,
+    )
+
+    assert found is not None
+    assert found.closed_at == investigation.closed_at
