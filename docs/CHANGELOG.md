@@ -6,6 +6,23 @@ It complements the Git history and the functional specifications by providing a 
 
 ---
 
+## CORE-039 — Reopen Investigation Use Case
+
+### Added
+
+- `ReopenInvestigation` application use case
+- Application orchestration for reopening investigations
+- Persistence of reopened investigations through the repository
+- Lookup validation for missing investigations
+
+### Validation
+
+- pytest ✅
+- Ruff ✅
+- mypy ✅
+
+---
+
 ## CORE-038 — Close Investigation Use Case
 
 ### Added
