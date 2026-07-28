@@ -20,31 +20,61 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 ---
 
-## Epic 2 — Hypotheses
+## Epic 2 — Hypotheses and Evidence
 
 | ID | Story | Status |
 |----|-------|--------|
-| CORE-008 | Create Hypothesis Entity | Planned |
-| CORE-009 | Add Hypothesis to Investigation | Planned |
-| CORE-010 | Prevent Duplicate Hypotheses | Planned |
-| CORE-011 | Emit HypothesisAdded Event | Planned |
+| CORE-008 | Create Hypothesis Entity | Done |
+| CORE-009 | Add Hypothesis to Investigation | Done |
+| CORE-010 | Emit HypothesisAdded Event | Done |
+| CORE-011 | Prevent Duplicate Hypotheses | Done |
+| CORE-012 | Introduce HypothesisId | Done |
+| CORE-013 | Add Evidence to Hypothesis | Done |
+| CORE-014 | Introduce Hypothesis Status | Done |
+| CORE-015 | Emit Hypothesis Status Events | Done |
+| CORE-016 | Extract Entity Base Class | Done |
 
 ---
 
-## Epic 3 — Evidence
+## Epic 3 — Application and Persistence
 
 | ID | Story | Status |
 |----|-------|--------|
-| CORE-012 | Create Evidence | Planned |
-| CORE-013 | Link Evidence to Hypothesis | Planned |
-| CORE-014 | Emit EvidenceAdded Event | Planned |
+| CORE-017 | Introduce Investigation Repository | Done |
+| CORE-018 | Add In-Memory Investigation Repository | Done |
+| CORE-019 | Create Investigation Use Case | Done |
+| CORE-020 | Add Hypothesis Use Case | Done |
+| CORE-021 | Add Hypothesis Lookup | Done |
+| CORE-022 | Confirm Hypothesis Use Case | Done |
+| CORE-023 | Reject Hypothesis Use Case | Done |
+| CORE-024 | Add Evidence Use Case | Done |
+| CORE-025 | Activate Investigation Use Case | Done |
+| CORE-026 | Get Investigation Use Case | Done |
+| CORE-027 | List Investigations Use Case | Done |
+| CORE-028 | Remove Hypothesis Use Case | Done |
+| CORE-029 | Add SQLite Investigation Repository | Done |
+| CORE-030 | Persist Investigation Status | Done |
+| CORE-031 | Persist Investigation Hypotheses | Done |
+| CORE-032 | Persist Hypothesis Evidences | Done |
 
 ---
 
-## Epic 4 — Closing Investigations
+## Epic 4 — Investigation Closing
 
 | ID | Story | Status |
 |----|-------|--------|
-| CORE-015 | Close Investigation | Planned |
-| CORE-016 | Prevent Changes After Close | Planned |
-| CORE-017 | Emit InvestigationClosed Event | Planned |
+| CORE-033 | Close Investigation | Done |
+| CORE-034 | Prevent Modifications on Closed Investigations | Done |
+| CORE-035 | Persist Closed Investigation Status | Done |
+| CORE-036 | Reopen Investigation | Done |
+| CORE-037 | Record Investigation Closure | Done |
+| CORE-038 | Add Close Investigation Use Case | In Progress |
+| CORE-039 | Add Reopen Investigation Use Case | Planned |
+
+---
+
+## Current Story
+
+### CORE-038 — Add Close Investigation Use Case
+
+Expose investigation closing through the application layer while preserving domain rules and repository abstraction.

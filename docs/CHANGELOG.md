@@ -6,6 +6,23 @@ It complements the Git history and the functional specifications by providing a 
 
 ---
 
+## CORE-038 — Close Investigation Use Case
+
+### Added
+
+- `CloseInvestigation` application use case
+- Application orchestration for closing investigations
+- Persistence of closed investigations through the repository
+- Lookup validation for missing investigations
+
+### Validation
+
+- pytest ✅
+- Ruff ✅
+- mypy ✅
+
+---
+
 ## CORE-037 — Record Investigation Closure
 
 ### Added
