@@ -40,6 +40,11 @@ class InvestigationClosed:
 
 
 @dataclass(frozen=True)
+class InvestigationReopened:
+    investigation_id: InvestigationId
+
+
+@dataclass(frozen=True)
 class HypothesisAdded:
     investigation_id: InvestigationId
     hypothesis_statement: str
@@ -55,6 +60,7 @@ type DomainEvent = (
     InvestigationCreated
     | InvestigationActivated
     | InvestigationClosed
+    | InvestigationReopened
     | HypothesisAdded
     | HypothesisRemoved
 )
@@ -219,3 +225,9 @@ class Investigation(Entity[DomainEvent]):
 
         self.status = InvestigationStatus.ACTIVE
         self.closed_at = None
+
+        self._record_event(
+            InvestigationReopened(
+                investigation_id=self.id,
+            )
+        )

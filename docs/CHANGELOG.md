@@ -6,6 +6,23 @@ It complements the Git history and the functional specifications by providing a 
 
 ---
 
+## CORE-040 — Emit InvestigationReopened Event
+
+### Added
+
+- `InvestigationReopened` domain event
+- `reopen()` now publishes the `InvestigationReopened` domain event
+- Domain event registration for investigation reopening
+- Domain test validating the emitted event
+
+### Validation
+
+- pytest ✅
+- Ruff ✅
+- mypy ✅
+
+---
+
 ## CORE-039 — Reopen Investigation Use Case
 
 ### Added

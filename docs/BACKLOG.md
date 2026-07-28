@@ -68,13 +68,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-035 | Persist Closed Investigation Status | Done |
 | CORE-036 | Reopen Investigation | Done |
 | CORE-037 | Record Investigation Closure | Done |
-| CORE-038 | Add Close Investigation Use Case | In Progress |
-| CORE-039 | Add Reopen Investigation Use Case | Planned |
+| CORE-038 | Add Close Investigation Use Case | Done |
+| CORE-039 | Add Reopen Investigation Use Case | Done |
+| CORE-040 | Emit InvestigationReopened Event | Done |
+| CORE-041 | Persist Investigation Domain Events | Planned |
 
 ---
 
 ## Current Story
 
-### CORE-038 — Add Close Investigation Use Case
+### CORE-041 — Persist Investigation Domain Events
 
-Expose investigation closing through the application layer while preserving domain rules and repository abstraction.
+Introduce infrastructure support for persisting emitted domain events so they can be published reliably by external consumers while keeping the domain model independent of infrastructure concerns.
