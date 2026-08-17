@@ -6,6 +6,25 @@ It complements the Git history and the functional specifications by providing a 
 
 ---
 
+## CORE-041 — Persist Investigation Domain Events
+
+### Added
+
+- `DomainEventRepository` application-level abstraction
+- `InMemoryDomainEventRepository` implementation
+- In-memory persistence of investigation domain events
+- Ordered retrieval of persisted domain events
+- Support for persisting multiple events without overwriting previous events
+- Tests for the domain event repository abstraction and in-memory implementation
+
+### Validation
+
+- pytest ✅ — 88 passed
+- Ruff ✅
+- mypy ✅
+
+---
+
 ## CORE-040 — Emit InvestigationReopened Event
 
 ### Added
