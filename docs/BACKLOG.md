@@ -85,6 +85,6 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 ## Current Story
 
-### CORE-042 — Add SQLite Domain Event Repository
+| CORE-042 | Add SQLite Domain Event Repository  | Done    |
 
 Provide a durable SQLite implementation of `DomainEventRepository` so investigation domain events can survive process restarts while keeping persistence concerns outside the domain model.

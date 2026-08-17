@@ -4,6 +4,31 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-042 — Add SQLite Domain Event Repository
+
+### Added
+
+- `SqliteDomainEventRepository` infrastructure implementation
+- Durable SQLite persistence of investigation domain events
+- Ordered retrieval of persisted domain events
+- Persistence across repository reinstantiation
+- Support for `InvestigationCreated`
+- Support for `InvestigationActivated`
+- Support for `InvestigationClosed`
+- Preservation of `InvestigationClosed.closed_at`
+- Support for `InvestigationReopened`
+- Support for `HypothesisAdded`
+- Preservation of `HypothesisAdded.hypothesis_statement`
+- Support for `HypothesisRemoved`
+- Preservation of `HypothesisRemoved.hypothesis_id`
+- Tests covering all current investigation domain event types
+
+### Validation
+
+- pytest ✅ — 95 passed
+- Ruff ✅
+- mypy ✅
+
 ---
 
 ## CORE-041 — Persist Investigation Domain Events
