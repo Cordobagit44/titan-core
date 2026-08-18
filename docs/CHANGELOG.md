@@ -6,6 +6,34 @@ It complements the Git history and the functional specifications by providing a 
 
 ---
 
+## CORE-044 — Persist Activated Investigation Domain Event
+
+### Added
+
+- `ActivateInvestigation` now receives a `DomainEventRepository`
+- Persistence of the `InvestigationActivated` event produced during investigation activation
+- Coordination between investigation persistence and domain event persistence at the application use-case level
+- Existing lookup validation for missing investigations remains unchanged
+- Tests verifying that activation still changes and persists the investigation
+- Tests verifying that the generated `InvestigationActivated` event is persisted
+
+### Architectural Notes
+
+- No Unit of Work introduced
+- No Event Bus introduced
+- No Outbox introduced
+- No generalized event dispatch abstraction introduced
+- `CreateInvestigation` was not refactored as part of this story
+- CORE-043 and CORE-044 now provide two concrete examples of explicit domain event persistence from application use cases
+
+### Validation
+
+- pytest ✅ — 96 passed
+- Ruff ✅
+- mypy ✅ — 26 source files checked
+
+---
+
 ## CORE-043 — Persist Created Investigation Domain Event
 
 ### Added
