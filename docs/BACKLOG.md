@@ -76,14 +76,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 ## Epic 5 — Domain Event Persistence
 
-| ID       | Story                                        | Status |
-| -------- | -------------------------------------------- | ------ |
-| CORE-041 | Persist Investigation Domain Events          | Done   |
-| CORE-042 | Add SQLite Domain Event Repository           | Done   |
-| CORE-043 | Persist Created Investigation Domain Event   | Done   |
-| CORE-044 | Persist Activated Investigation Domain Event | Done   |
-| CORE-045 | Centralize Domain Event Persistence           | Done   |
-| CORE-046 | Persist Closed Investigation Domain Event    | Done   |
+| ID       | Story                                          | Status |
+| -------- | ---------------------------------------------- | ------ |
+| CORE-041 | Persist Investigation Domain Events            | Done   |
+| CORE-042 | Add SQLite Domain Event Repository             | Done   |
+| CORE-043 | Persist Created Investigation Domain Event     | Done   |
+| CORE-044 | Persist Activated Investigation Domain Event   | Done   |
+| CORE-045 | Centralize Domain Event Persistence             | Done   |
+| CORE-046 | Persist Closed Investigation Domain Event      | Done   |
+| CORE-047 | Persist Reopened Investigation Domain Event    | Done   |
 
 ---
 
@@ -91,14 +92,13 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 No CORE story is currently active.
 
-CORE-046 — Persist Closed Investigation Domain Event is complete.
+CORE-047 — Persist Reopened Investigation Domain Event is complete.
 
-`CloseInvestigation` now persists the `InvestigationClosed` event through the
-shared `persist_domain_events()` application mechanism after saving the
+`ReopenInvestigation` now persists the `InvestigationReopened` event through
+the shared `persist_domain_events()` application mechanism after saving the
 investigation.
 
-The persisted event preserves the same `closed_at` timestamp recorded by the
-domain aggregate.
+Reopening still restores the investigation to `ACTIVE` and clears `closed_at`.
 
 The implementation reuses the application-level event persistence abstraction
 introduced in CORE-045 and does not introduce additional infrastructure or

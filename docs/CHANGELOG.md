@@ -6,6 +6,39 @@ It complements the Git history and the functional specifications by providing a 
 
 ---
 
+## CORE-047 — Persist Reopened Investigation Domain Event
+
+### Added
+
+- `ReopenInvestigation` now receives a `DomainEventRepository`
+- Persistence of the `InvestigationReopened` event produced during investigation reopening
+- Tests verifying that reopening still returns the investigation in `ACTIVE` status
+- Tests verifying that reopening still clears `closed_at`
+- Tests verifying that the generated `InvestigationReopened` event is persisted
+
+### Changed
+
+- `ReopenInvestigation` now delegates pending domain event persistence to the shared `persist_domain_events()` application mechanism
+- Investigation persistence still occurs before pending domain events are persisted
+
+### Architectural Notes
+
+- Reuses the shared application-level event persistence mechanism introduced in CORE-045
+- `ReopenInvestigation` does not implement its own event-persistence loop
+- Domain behavior remains independent from persistence infrastructure
+- No Unit of Work introduced
+- No Event Bus introduced
+- No Outbox introduced
+- No transaction coordination introduced
+
+### Validation
+
+- pytest ✅ — 100 passed
+- Ruff ✅
+- mypy ✅ — 27 source files checked
+
+---
+
 ## CORE-046 — Persist Closed Investigation Domain Event
 
 ### Added
