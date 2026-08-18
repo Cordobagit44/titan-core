@@ -83,6 +83,7 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-043 | Persist Created Investigation Domain Event   | Done   |
 | CORE-044 | Persist Activated Investigation Domain Event | Done   |
 | CORE-045 | Centralize Domain Event Persistence           | Done   |
+| CORE-046 | Persist Closed Investigation Domain Event    | Done   |
 
 ---
 
@@ -90,18 +91,18 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 No CORE story is currently active.
 
-CORE-045 — Centralize Domain Event Persistence is complete.
+CORE-046 — Persist Closed Investigation Domain Event is complete.
 
-A shared application-level `persist_domain_events()` mechanism now persists
-all pending events produced by an entity through `DomainEventRepository`.
+`CloseInvestigation` now persists the `InvestigationClosed` event through the
+shared `persist_domain_events()` application mechanism after saving the
+investigation.
 
-`CreateInvestigation` and `ActivateInvestigation` delegate event persistence
-to this shared mechanism instead of duplicating event-persistence loops.
+The persisted event preserves the same `closed_at` timestamp recorded by the
+domain aggregate.
 
-The domain remains unaware of persistence infrastructure.
+The implementation reuses the application-level event persistence abstraction
+introduced in CORE-045 and does not introduce additional infrastructure or
+transaction coordination.
 
-The implementation intentionally does not introduce a Unit of Work, Event Bus,
-Outbox, or transaction coordination.
-
-Future stories can now use the shared mechanism when additional mutating
-application use cases need to persist their domain events.
+Future stories can continue applying the shared mechanism to other mutating
+application use cases that produce domain events.

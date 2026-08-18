@@ -6,6 +6,39 @@ It complements the Git history and the functional specifications by providing a 
 
 ---
 
+## CORE-046 — Persist Closed Investigation Domain Event
+
+### Added
+
+- `CloseInvestigation` now receives a `DomainEventRepository`
+- Persistence of the `InvestigationClosed` event produced during investigation closing
+- Tests verifying that closing still changes and returns the investigation
+- Tests verifying that the generated `InvestigationClosed` event is persisted
+- Verification that the persisted event preserves the investigation's `closed_at` timestamp
+
+### Changed
+
+- `CloseInvestigation` now delegates pending domain event persistence to the shared `persist_domain_events()` application mechanism
+- Investigation persistence still occurs before pending domain events are persisted
+
+### Architectural Notes
+
+- Reuses the shared application-level event persistence mechanism introduced in CORE-045
+- `CloseInvestigation` does not implement its own event-persistence loop
+- Domain behavior remains independent from persistence infrastructure
+- No Unit of Work introduced
+- No Event Bus introduced
+- No Outbox introduced
+- No transaction coordination introduced
+
+### Validation
+
+- pytest ✅ — 99 passed
+- Ruff ✅
+- mypy ✅ — 27 source files checked
+
+---
+
 ## CORE-045 — Centralize Domain Event Persistence
 
 ### Added
