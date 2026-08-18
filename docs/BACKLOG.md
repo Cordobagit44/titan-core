@@ -82,6 +82,7 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-042 | Add SQLite Domain Event Repository           | Done   |
 | CORE-043 | Persist Created Investigation Domain Event   | Done   |
 | CORE-044 | Persist Activated Investigation Domain Event | Done   |
+| CORE-045 | Centralize Domain Event Persistence           | Done   |
 
 ---
 
@@ -89,17 +90,18 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 No CORE story is currently active.
 
-CORE-044 — Persist Activated Investigation Domain Event is complete.
+CORE-045 — Centralize Domain Event Persistence is complete.
 
-`ActivateInvestigation` now persists the `InvestigationActivated` event through
-`DomainEventRepository` after saving the investigation.
+A shared application-level `persist_domain_events()` mechanism now persists
+all pending events produced by an entity through `DomainEventRepository`.
+
+`CreateInvestigation` and `ActivateInvestigation` delegate event persistence
+to this shared mechanism instead of duplicating event-persistence loops.
+
+The domain remains unaware of persistence infrastructure.
 
 The implementation intentionally does not introduce a Unit of Work, Event Bus,
-Outbox, or generalized event dispatch mechanism.
+Outbox, or transaction coordination.
 
-CORE-043 and CORE-044 now provide two concrete examples of application use cases
-coordinating aggregate persistence with domain event persistence.
-
-Future stories should determine whether this repeated coordination justifies a
-shared application-level abstraction or whether additional explicit examples
-are still needed before refactoring.
+Future stories can now use the shared mechanism when additional mutating
+application use cases need to persist their domain events.

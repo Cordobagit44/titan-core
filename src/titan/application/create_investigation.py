@@ -4,6 +4,9 @@ from titan.application.domain_event_repository import (
 from titan.application.investigation_repository import (
     InvestigationRepository,
 )
+from titan.application.persist_domain_events import (
+    persist_domain_events,
+)
 from titan.core.investigation import Investigation
 
 
@@ -30,9 +33,9 @@ class CreateInvestigation:
             investigation,
         )
 
-        for event in investigation.pull_events():
-            self._event_repository.save(
-                event,
-            )
+        persist_domain_events(
+            investigation,
+            self._event_repository,
+        )
 
         return investigation

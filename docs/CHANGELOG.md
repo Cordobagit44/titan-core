@@ -6,6 +6,40 @@ It complements the Git history and the functional specifications by providing a 
 
 ---
 
+## CORE-045 — Centralize Domain Event Persistence
+
+### Added
+
+- Shared application-level `persist_domain_events()` mechanism
+- Generic support for persisting pending events from `Entity[EventT]`
+- Tests verifying that all pending domain events are persisted
+- Tests verifying that persisted events are removed from the entity's pending event collection
+
+### Changed
+
+- `CreateInvestigation` now delegates pending domain event persistence to `persist_domain_events()`
+- `ActivateInvestigation` now delegates pending domain event persistence to `persist_domain_events()`
+- Duplicated domain event persistence loops were removed from both application use cases
+
+### Architectural Notes
+
+- Domain event persistence coordination remains in the application layer
+- `Entity` remains independent from persistence infrastructure
+- `DomainEventRepository` remains unchanged
+- No Unit of Work introduced
+- No Event Bus introduced
+- No Outbox introduced
+- No transaction coordination introduced
+- The shared mechanism was introduced only after repeated event-persistence coordination appeared in CORE-043 and CORE-044
+
+### Validation
+
+- pytest ✅ — 98 passed
+- Ruff ✅
+- mypy ✅ — 27 source files checked
+
+---
+
 ## CORE-044 — Persist Activated Investigation Domain Event
 
 ### Added
@@ -24,7 +58,7 @@ It complements the Git history and the functional specifications by providing a 
 - No Outbox introduced
 - No generalized event dispatch abstraction introduced
 - `CreateInvestigation` was not refactored as part of this story
-- CORE-043 and CORE-044 now provide two concrete examples of explicit domain event persistence from application use cases
+- CORE-043 and CORE-044 provide two concrete examples of explicit domain event persistence from application use cases
 
 ### Validation
 
