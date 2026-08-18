@@ -6,6 +6,40 @@ It complements the Git history and the functional specifications by providing a 
 
 ---
 
+## CORE-048 — Persist Hypothesis Added Domain Event
+
+### Added
+
+- `AddHypothesis` now receives a `DomainEventRepository`
+- Persistence of the `HypothesisAdded` event produced when adding a hypothesis
+- Tests verifying that adding a hypothesis still returns the created hypothesis
+- Tests verifying that the created hypothesis remains attached to the investigation
+- Tests verifying that the generated `HypothesisAdded` event is persisted
+- Verification that the persisted event preserves the hypothesis statement
+
+### Changed
+
+- `AddHypothesis` now delegates pending domain event persistence to the shared `persist_domain_events()` application mechanism
+- Investigation persistence still occurs before pending domain events are persisted
+
+### Architectural Notes
+
+- Reuses the shared application-level event persistence mechanism introduced in CORE-045
+- `AddHypothesis` does not implement its own event-persistence loop
+- Domain behavior remains independent from persistence infrastructure
+- No Unit of Work introduced
+- No Event Bus introduced
+- No Outbox introduced
+- No transaction coordination introduced
+
+### Validation
+
+- pytest ✅ — 101 passed
+- Ruff ✅
+- mypy ✅ — 27 source files checked
+
+---
+
 ## CORE-047 — Persist Reopened Investigation Domain Event
 
 ### Added

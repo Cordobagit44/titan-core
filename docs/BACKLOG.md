@@ -85,6 +85,7 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-045 | Centralize Domain Event Persistence             | Done   |
 | CORE-046 | Persist Closed Investigation Domain Event      | Done   |
 | CORE-047 | Persist Reopened Investigation Domain Event    | Done   |
+| CORE-048 | Persist Hypothesis Added Domain Event          | Done   |
 
 ---
 
@@ -92,13 +93,13 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 No CORE story is currently active.
 
-CORE-047 — Persist Reopened Investigation Domain Event is complete.
+CORE-048 — Persist Hypothesis Added Domain Event is complete.
 
-`ReopenInvestigation` now persists the `InvestigationReopened` event through
-the shared `persist_domain_events()` application mechanism after saving the
-investigation.
+`AddHypothesis` now persists the `HypothesisAdded` event through the shared
+`persist_domain_events()` application mechanism after saving the investigation.
 
-Reopening still restores the investigation to `ACTIVE` and clears `closed_at`.
+The persisted event preserves the hypothesis statement produced by the
+domain aggregate.
 
 The implementation reuses the application-level event persistence abstraction
 introduced in CORE-045 and does not introduce additional infrastructure or
