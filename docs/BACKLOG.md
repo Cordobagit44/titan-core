@@ -76,15 +76,26 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 ## Epic 5 — Domain Event Persistence
 
-| ID       | Story                               | Status  |
-| -------- | ----------------------------------- | ------- |
-| CORE-041 | Persist Investigation Domain Events | Done    |
-| CORE-042 | Add SQLite Domain Event Repository  | Planned |
+| ID       | Story                                      | Status |
+| -------- | ------------------------------------------ | ------ |
+| CORE-041 | Persist Investigation Domain Events        | Done   |
+| CORE-042 | Add SQLite Domain Event Repository         | Done   |
+| CORE-043 | Persist Created Investigation Domain Event | Done   |
 
 ---
 
 ## Current Story
 
-| CORE-042 | Add SQLite Domain Event Repository  | Done    |
+No CORE story is currently active.
 
-Provide a durable SQLite implementation of `DomainEventRepository` so investigation domain events can survive process restarts while keeping persistence concerns outside the domain model.
+CORE-043 — Persist Created Investigation Domain Event is complete.
+
+`CreateInvestigation` now persists the `InvestigationCreated` event through
+`DomainEventRepository` after saving the investigation.
+
+The implementation intentionally does not introduce a Unit of Work, Event Bus,
+Outbox, or generalized event dispatch mechanism.
+
+Future stories should determine whether additional application use cases need
+the same behavior and whether repeated coordination justifies a new
+abstraction.

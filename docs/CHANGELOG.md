@@ -4,6 +4,34 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+---
+
+## CORE-043 — Persist Created Investigation Domain Event
+
+### Added
+
+- `CreateInvestigation` now receives a `DomainEventRepository`
+- Persistence of the `InvestigationCreated` event produced during investigation creation
+- Coordination between investigation persistence and domain event persistence at the application use-case level
+- Tests verifying that investigation creation still saves and returns the investigation
+- Tests verifying that the generated `InvestigationCreated` event is persisted
+
+### Architectural Notes
+
+- No Unit of Work introduced
+- No Event Bus introduced
+- No Outbox introduced
+- No generalized event dispatch abstraction introduced
+- Event persistence remains explicit and limited to `CreateInvestigation` in this story
+
+### Validation
+
+- pytest ✅ — 96 passed
+- Ruff ✅
+- mypy ✅ — 26 source files checked
+
+---
+
 ## CORE-042 — Add SQLite Domain Event Repository
 
 ### Added
