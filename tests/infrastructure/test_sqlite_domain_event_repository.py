@@ -1,9 +1,11 @@
 from pathlib import Path
 
 from titan.core.events import (
+    EvidenceAdded,
     HypothesisConfirmed,
     HypothesisRejected,
 )
+from titan.core.evidence import Evidence
 from titan.core.hypothesis import Hypothesis
 from titan.core.investigation import Investigation
 from titan.infrastructure.sqlite.sqlite_domain_event_repository import (
@@ -241,5 +243,34 @@ def test_hypothesis_rejected_event_is_persisted() -> None:
     assert repository.list_all() == [
         HypothesisRejected(
             hypothesis_id=hypothesis.id,
+        )
+    ]
+
+
+def test_evidence_added_event_is_persisted() -> None:
+    repository = SqliteDomainEventRepository(
+        ":memory:",
+    )
+
+    hypothesis = Hypothesis(
+        statement="Methane indicates microbial life",
+    )
+    evidence = Evidence(
+        description="Methane levels vary seasonally",
+    )
+
+    hypothesis.add_evidence(
+        evidence,
+    )
+    evidence_added_event = hypothesis.pull_events()[0]
+
+    repository.save(
+        evidence_added_event,
+    )
+
+    assert repository.list_all() == [
+        EvidenceAdded(
+            hypothesis_id=hypothesis.id,
+            evidence_id=evidence.id,
         )
     ]

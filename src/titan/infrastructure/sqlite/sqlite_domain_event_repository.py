@@ -6,9 +6,11 @@ from titan.application.domain_event_repository import (
     DomainEventRepository,
 )
 from titan.core.events import (
+    EvidenceAdded,
     HypothesisConfirmed,
     HypothesisRejected,
 )
+from titan.core.evidence import EvidenceId
 from titan.core.hypothesis import HypothesisId
 from titan.core.investigation import (
     HypothesisAdded,
@@ -41,7 +43,8 @@ class SqliteDomainEventRepository(
                 title TEXT,
                 closed_at TEXT,
                 hypothesis_statement TEXT,
-                hypothesis_id TEXT
+                hypothesis_id TEXT,
+                evidence_id TEXT
             )
             """
         )
@@ -61,7 +64,8 @@ class SqliteDomainEventRepository(
             | HypothesisAdded
             | HypothesisRemoved
             | HypothesisConfirmed
-            | HypothesisRejected,
+            | HypothesisRejected
+            | EvidenceAdded,
         ):
             raise ValueError(
                 "unsupported domain event",
@@ -93,10 +97,12 @@ class SqliteDomainEventRepository(
             str(event.hypothesis_id.value)
             if isinstance(
                 event,
-                HypothesisRemoved | HypothesisConfirmed | HypothesisRejected,
+                HypothesisRemoved | HypothesisConfirmed | HypothesisRejected | EvidenceAdded,
             )
             else None
         )
+
+        evidence_id = str(event.evidence_id.value) if isinstance(event, EvidenceAdded) else None
 
         with self._connection:
             self._connection.execute(
@@ -107,9 +113,10 @@ class SqliteDomainEventRepository(
                     title,
                     closed_at,
                     hypothesis_statement,
-                    hypothesis_id
+                    hypothesis_id,
+                    evidence_id
                 )
-                VALUES (?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     type(event).__name__,
@@ -118,6 +125,7 @@ class SqliteDomainEventRepository(
                     closed_at,
                     hypothesis_statement,
                     hypothesis_id,
+                    evidence_id,
                 ),
             )
 
@@ -132,7 +140,8 @@ class SqliteDomainEventRepository(
                 title,
                 closed_at,
                 hypothesis_statement,
-                hypothesis_id
+                hypothesis_id,
+                evidence_id
             FROM domain_events
             ORDER BY id
             """
@@ -212,6 +221,17 @@ class SqliteDomainEventRepository(
                     HypothesisRejected(
                         hypothesis_id=HypothesisId(
                             value=UUID(row[5]),
+                        ),
+                    )
+                )
+            elif event_type == "EvidenceAdded":
+                events.append(
+                    EvidenceAdded(
+                        hypothesis_id=HypothesisId(
+                            value=UUID(row[5]),
+                        ),
+                        evidence_id=EvidenceId(
+                            value=UUID(row[6]),
                         ),
                     )
                 )

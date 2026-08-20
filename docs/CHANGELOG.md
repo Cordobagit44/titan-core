@@ -6,6 +6,46 @@ It complements the Git history and the functional specifications by providing a 
 
 ---
 
+## CORE-054 — Add SQLite Support for Evidence Added Event
+
+### Added
+
+- SQLite persistence support for `EvidenceAdded`
+- Restoration of `EvidenceAdded` events through `list_all()`
+- Preservation of the original `HypothesisId`
+- Preservation of the original `EvidenceId`
+- `evidence_id` storage in the SQLite domain event representation
+- Infrastructure test covering persistence and restoration of `EvidenceAdded`
+
+### Changed
+
+- `SqliteDomainEventRepository` now accepts `EvidenceAdded`
+- `SqliteDomainEventRepository` now serializes and restores `EvidenceId`
+- `hypothesis_id` serialization now also supports `EvidenceAdded`
+- The SQLite `domain_events` representation now includes an `evidence_id` column
+
+### Architectural Notes
+
+- `EvidenceAdded` is persisted without inventing an `InvestigationId`
+- The `EvidenceAdded` domain event definition remains unchanged
+- Existing investigation event persistence remains unchanged
+- Existing hypothesis event persistence remains unchanged
+- `AddEvidence` was not modified
+- No Unit of Work introduced
+- No Event Bus introduced
+- No Outbox introduced
+- No transaction coordination introduced
+- Database migration support remains outside the scope of this story
+- Application-level persistence of `EvidenceAdded` remains available for a subsequent story
+
+### Validation
+
+- pytest ✅ — 108 passed
+- Ruff ✅
+- mypy ✅ — 27 source files checked
+
+---
+
 ## CORE-053 — Emit Evidence Added Domain Event
 
 ### Added

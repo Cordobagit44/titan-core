@@ -91,6 +91,7 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-051 | Persist Confirmed Hypothesis Domain Event       | Done   |
 | CORE-052 | Persist Rejected Hypothesis Domain Event        | Done   |
 | CORE-053 | Emit Evidence Added Domain Event                | Done   |
+| CORE-054 | Add SQLite Support for Evidence Added Event     | Done   |
 
 ---
 
@@ -98,18 +99,19 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 No CORE story is currently active.
 
-CORE-053 — Emit Evidence Added Domain Event is complete.
+CORE-054 — Add SQLite Support for Evidence Added Event is complete.
 
-`Hypothesis.add_evidence()` now records an `EvidenceAdded` domain event after
-adding evidence to the hypothesis.
+`SqliteDomainEventRepository` now supports durable persistence and restoration
+of `EvidenceAdded` domain events.
 
-The event preserves the `HypothesisId` and the `EvidenceId`.
+The persisted event preserves both the original `HypothesisId` and the original
+`EvidenceId`.
 
-`Evidence` remains an immutable value-like domain object and does not become an
-`Entity`.
+The SQLite domain event representation now includes an `evidence_id` column,
+while `EvidenceAdded` remains independent from `InvestigationId`.
 
-`Hypothesis` remains responsible for recording the event because it owns the
-evidence collection mutation.
+Existing investigation and hypothesis domain event persistence remains
+unchanged.
 
-Future stories can add durable SQLite support for `EvidenceAdded` and then
-persist that event from the `AddEvidence` application use case.
+Future stories can now connect the `AddEvidence` application use case to
+`DomainEventRepository` through the shared `persist_domain_events()` mechanism.
