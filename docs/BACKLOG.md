@@ -93,6 +93,7 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-053 | Emit Evidence Added Domain Event                | Done   |
 | CORE-054 | Add SQLite Support for Evidence Added Event     | Done   |
 | CORE-055 | Persist Evidence Added Domain Event             | Done   |
+| CORE-056 | Migrate SQLite Domain Event Schema              | Done   |
 
 ---
 
@@ -100,23 +101,18 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 No CORE story is currently active.
 
-CORE-055 — Persist Evidence Added Domain Event is complete.
+CORE-056 — Migrate SQLite Domain Event Schema is complete.
 
-`AddEvidence` now receives a `DomainEventRepository` and persists the
-`EvidenceAdded` event through the shared `persist_domain_events()` application
-mechanism.
+`SqliteDomainEventRepository` now migrates legacy `domain_events` schemas
+created before support for current hypothesis and evidence events.
 
-Pending events are persisted from the `Hypothesis` entity, which is the entity
-that records `EvidenceAdded`.
+Repository initialization detects incompatible legacy schemas and rebuilds the
+table using the current representation while preserving existing persisted
+domain events.
 
-The persisted event preserves both the original `HypothesisId` and the original
-`EvidenceId`.
+The migration adds support for `evidence_id` and allows `investigation_id` to
+be nullable, so current hypothesis-level and evidence-level events can be
+persisted without inventing investigation data.
 
-The investigation continues to be saved before pending hypothesis domain events
-are persisted.
-
-The implementation reuses the shared application-level persistence mechanism
-introduced in CORE-045 and the SQLite support introduced in CORE-054.
-
-Evidence addition is now covered from domain event emission through durable
-event persistence.
+Schema migration remains an infrastructure concern and does not affect the
+domain or application layers.

@@ -1,3 +1,4 @@
+import sqlite3
 from pathlib import Path
 
 from titan.core.events import (
@@ -7,7 +8,11 @@ from titan.core.events import (
 )
 from titan.core.evidence import Evidence
 from titan.core.hypothesis import Hypothesis
-from titan.core.investigation import Investigation
+from titan.core.investigation import (
+    Investigation,
+    InvestigationCreated,
+    InvestigationId,
+)
 from titan.infrastructure.sqlite.sqlite_domain_event_repository import (
     SqliteDomainEventRepository,
 )
@@ -273,4 +278,98 @@ def test_evidence_added_event_is_persisted() -> None:
             hypothesis_id=hypothesis.id,
             evidence_id=evidence.id,
         )
+    ]
+
+
+def test_legacy_domain_event_schema_is_migrated(
+    tmp_path: Path,
+) -> None:
+    database = str(
+        tmp_path / "legacy_domain_events.db",
+    )
+
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+    created_event = investigation.pull_events()[0]
+
+    connection = sqlite3.connect(
+        database,
+    )
+
+    connection.execute(
+        """
+        CREATE TABLE domain_events (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            event_type TEXT NOT NULL,
+            investigation_id TEXT NOT NULL,
+            title TEXT,
+            closed_at TEXT,
+            hypothesis_statement TEXT,
+            hypothesis_id TEXT
+        )
+        """
+    )
+
+    connection.execute(
+        """
+        INSERT INTO domain_events (
+            event_type,
+            investigation_id,
+            title,
+            closed_at,
+            hypothesis_statement,
+            hypothesis_id
+        )
+        VALUES (?, ?, ?, ?, ?, ?)
+        """,
+        (
+            type(created_event).__name__,
+            str(created_event.investigation_id.value),
+            created_event.title,
+            None,
+            None,
+            None,
+        ),
+    )
+
+    connection.commit()
+    connection.close()
+
+    repository = SqliteDomainEventRepository(
+        database,
+    )
+
+    assert repository.list_all() == [
+        InvestigationCreated(
+            investigation_id=InvestigationId(
+                value=created_event.investigation_id.value,
+            ),
+            title=created_event.title,
+        )
+    ]
+
+    hypothesis = Hypothesis(
+        statement="Methane indicates microbial life",
+    )
+    evidence = Evidence(
+        description="Methane levels vary seasonally",
+    )
+
+    hypothesis.add_evidence(
+        evidence,
+    )
+    evidence_added_event = hypothesis.pull_events()[0]
+
+    repository.save(
+        evidence_added_event,
+    )
+
+    assert repository.list_all() == [
+        created_event,
+        EvidenceAdded(
+            hypothesis_id=hypothesis.id,
+            evidence_id=evidence.id,
+        ),
     ]

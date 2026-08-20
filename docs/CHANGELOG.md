@@ -3,6 +3,46 @@
 This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
+## CORE-056 — Migrate SQLite Domain Event Schema
+
+### Added
+
+- Automatic migration support for legacy SQLite `domain_events` schemas
+- Detection of legacy schemas without `evidence_id`
+- Detection of legacy schemas where `investigation_id` is still `NOT NULL`
+- Preservation of existing domain event rows during migration
+- Infrastructure test covering migration from a legacy domain event schema
+- Verification that migrated databases can persist current `EvidenceAdded` events
+
+### Changed
+
+- `SqliteDomainEventRepository` now initializes the current schema through a dedicated schema initialization path
+- Legacy `domain_events` tables are rebuilt using the current representation when migration is required
+- Existing event identifiers and event ordering are preserved during migration
+- `investigation_id` becomes nullable in migrated schemas
+- `evidence_id` is added to migrated schemas
+
+### Architectural Notes
+
+- Schema migration remains inside the SQLite infrastructure layer
+- Domain event definitions remain unchanged
+- Application use cases remain unchanged
+- `DomainEventRepository` remains unchanged
+- Existing persisted event data is preserved
+- No external migration framework introduced
+- No Unit of Work introduced
+- No Event Bus introduced
+- No Outbox introduced
+- No transaction coordination introduced
+
+### Validation
+
+- pytest — 110 passed
+- Ruff — passed
+- mypy — 27 source files checked
+
+---
+
 ## CORE-055 — Persist Evidence Added Domain Event
 
 ### Added

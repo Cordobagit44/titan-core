@@ -34,9 +34,61 @@ class SqliteDomainEventRepository(
             database,
         )
 
-        self._connection.execute(
+        self._initialize_schema()
+
+    def _initialize_schema(
+        self,
+    ) -> None:
+        if not self._domain_events_table_exists():
+            self._create_domain_events_table(
+                "domain_events",
+            )
+            self._connection.commit()
+            return
+
+        if self._domain_events_schema_requires_migration():
+            self._migrate_domain_events_schema()
+
+    def _domain_events_table_exists(
+        self,
+    ) -> bool:
+        cursor = self._connection.execute(
             """
-            CREATE TABLE IF NOT EXISTS domain_events (
+            SELECT name
+            FROM sqlite_master
+            WHERE type = 'table'
+              AND name = 'domain_events'
+            """
+        )
+
+        return cursor.fetchone() is not None
+
+    def _domain_events_schema_requires_migration(
+        self,
+    ) -> bool:
+        cursor = self._connection.execute(
+            """
+            PRAGMA table_info(domain_events)
+            """
+        )
+
+        columns = {row[1]: row for row in cursor.fetchall()}
+
+        evidence_id_missing = "evidence_id" not in columns
+
+        investigation_id_not_nullable = (
+            "investigation_id" in columns and columns["investigation_id"][3] == 1
+        )
+
+        return evidence_id_missing or investigation_id_not_nullable
+
+    def _create_domain_events_table(
+        self,
+        table_name: str,
+    ) -> None:
+        self._connection.execute(
+            f"""
+            CREATE TABLE {table_name} (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 event_type TEXT NOT NULL,
                 investigation_id TEXT,
@@ -49,7 +101,68 @@ class SqliteDomainEventRepository(
             """
         )
 
-        self._connection.commit()
+    def _migrate_domain_events_schema(
+        self,
+    ) -> None:
+        cursor = self._connection.execute(
+            """
+            PRAGMA table_info(domain_events)
+            """
+        )
+
+        existing_columns = {row[1] for row in cursor.fetchall()}
+
+        evidence_id_expression = "evidence_id" if "evidence_id" in existing_columns else "NULL"
+
+        with self._connection:
+            self._connection.execute(
+                """
+                DROP TABLE IF EXISTS domain_events_new
+                """
+            )
+
+            self._create_domain_events_table(
+                "domain_events_new",
+            )
+
+            self._connection.execute(
+                f"""
+                INSERT INTO domain_events_new (
+                    id,
+                    event_type,
+                    investigation_id,
+                    title,
+                    closed_at,
+                    hypothesis_statement,
+                    hypothesis_id,
+                    evidence_id
+                )
+                SELECT
+                    id,
+                    event_type,
+                    investigation_id,
+                    title,
+                    closed_at,
+                    hypothesis_statement,
+                    hypothesis_id,
+                    {evidence_id_expression}
+                FROM domain_events
+                ORDER BY id
+                """
+            )
+
+            self._connection.execute(
+                """
+                DROP TABLE domain_events
+                """
+            )
+
+            self._connection.execute(
+                """
+                ALTER TABLE domain_events_new
+                RENAME TO domain_events
+                """
+            )
 
     def save(
         self,
@@ -85,12 +198,31 @@ class SqliteDomainEventRepository(
             else None
         )
 
-        title = event.title if isinstance(event, InvestigationCreated) else None
+        title = (
+            event.title
+            if isinstance(
+                event,
+                InvestigationCreated,
+            )
+            else None
+        )
 
-        closed_at = event.closed_at.isoformat() if isinstance(event, InvestigationClosed) else None
+        closed_at = (
+            event.closed_at.isoformat()
+            if isinstance(
+                event,
+                InvestigationClosed,
+            )
+            else None
+        )
 
         hypothesis_statement = (
-            event.hypothesis_statement if isinstance(event, HypothesisAdded) else None
+            event.hypothesis_statement
+            if isinstance(
+                event,
+                HypothesisAdded,
+            )
+            else None
         )
 
         hypothesis_id = (
@@ -102,7 +234,14 @@ class SqliteDomainEventRepository(
             else None
         )
 
-        evidence_id = str(event.evidence_id.value) if isinstance(event, EvidenceAdded) else None
+        evidence_id = (
+            str(event.evidence_id.value)
+            if isinstance(
+                event,
+                EvidenceAdded,
+            )
+            else None
+        )
 
         with self._connection:
             self._connection.execute(
