@@ -87,6 +87,7 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-047 | Persist Reopened Investigation Domain Event    | Done   |
 | CORE-048 | Persist Hypothesis Added Domain Event          | Done   |
 | CORE-049 | Persist Hypothesis Removed Domain Event        | Done   |
+| CORE-050 | Add SQLite Support for Hypothesis Status Events | Done  |
 
 ---
 
@@ -94,17 +95,19 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 No CORE story is currently active.
 
-CORE-049 — Persist Hypothesis Removed Domain Event is complete.
+CORE-050 — Add SQLite Support for Hypothesis Status Events is complete.
 
-`RemoveHypothesis` now persists the `HypothesisRemoved` event through the
-shared `persist_domain_events()` application mechanism after saving the
-investigation.
+`SqliteDomainEventRepository` now supports durable persistence and restoration
+of `HypothesisConfirmed` and `HypothesisRejected` events.
 
-The persisted event preserves the removed `HypothesisId`.
+The persisted events preserve their original `HypothesisId`.
 
-The implementation reuses the application-level event persistence abstraction
-introduced in CORE-045 and does not introduce additional infrastructure or
-transaction coordination.
+The SQLite event representation now allows domain events without an
+`investigation_id`, so hypothesis status events can be represented without
+inventing domain data that does not exist.
 
-Future stories can continue applying the shared mechanism to other mutating
-application use cases that produce domain events.
+Existing investigation, hypothesis-added, and hypothesis-removed event
+persistence remains unchanged.
+
+Future stories can now safely connect hypothesis status application use cases
+to `DomainEventRepository`.

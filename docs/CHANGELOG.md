@@ -6,6 +6,44 @@ It complements the Git history and the functional specifications by providing a 
 
 ---
 
+## CORE-050 — Add SQLite Support for Hypothesis Status Events
+
+### Added
+
+- SQLite persistence support for `HypothesisConfirmed`
+- SQLite persistence support for `HypothesisRejected`
+- Restoration of `HypothesisConfirmed` events through `list_all()`
+- Restoration of `HypothesisRejected` events through `list_all()`
+- Preservation of the original `HypothesisId` for both hypothesis status event types
+- Tests covering persistence and restoration of both hypothesis status events
+
+### Changed
+
+- The SQLite `domain_events.investigation_id` column now allows `NULL`
+- `SqliteDomainEventRepository` now supports domain events that contain a `HypothesisId` without an `InvestigationId`
+- `hypothesis_id` serialization now supports `HypothesisRemoved`, `HypothesisConfirmed`, and `HypothesisRejected`
+
+### Architectural Notes
+
+- Hypothesis status events are persisted without inventing an `InvestigationId`
+- Domain event definitions remain unchanged
+- Existing investigation event persistence remains unchanged
+- Existing `HypothesisAdded` and `HypothesisRemoved` persistence remains unchanged
+- No application use cases were modified
+- No Unit of Work introduced
+- No Event Bus introduced
+- No Outbox introduced
+- No transaction coordination introduced
+- Database migration support remains outside the scope of this story
+
+### Validation
+
+- pytest ✅ — 104 passed
+- Ruff ✅
+- mypy ✅ — 27 source files checked
+
+---
+
 ## CORE-049 — Persist Hypothesis Removed Domain Event
 
 ### Added

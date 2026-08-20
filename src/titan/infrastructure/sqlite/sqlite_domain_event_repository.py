@@ -5,6 +5,10 @@ from uuid import UUID
 from titan.application.domain_event_repository import (
     DomainEventRepository,
 )
+from titan.core.events import (
+    HypothesisConfirmed,
+    HypothesisRejected,
+)
 from titan.core.hypothesis import HypothesisId
 from titan.core.investigation import (
     HypothesisAdded,
@@ -33,7 +37,7 @@ class SqliteDomainEventRepository(
             CREATE TABLE IF NOT EXISTS domain_events (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 event_type TEXT NOT NULL,
-                investigation_id TEXT NOT NULL,
+                investigation_id TEXT,
                 title TEXT,
                 closed_at TEXT,
                 hypothesis_statement TEXT,
@@ -55,11 +59,27 @@ class SqliteDomainEventRepository(
             | InvestigationClosed
             | InvestigationReopened
             | HypothesisAdded
-            | HypothesisRemoved,
+            | HypothesisRemoved
+            | HypothesisConfirmed
+            | HypothesisRejected,
         ):
             raise ValueError(
                 "unsupported domain event",
             )
+
+        investigation_id = (
+            str(event.investigation_id.value)
+            if isinstance(
+                event,
+                InvestigationCreated
+                | InvestigationActivated
+                | InvestigationClosed
+                | InvestigationReopened
+                | HypothesisAdded
+                | HypothesisRemoved,
+            )
+            else None
+        )
 
         title = event.title if isinstance(event, InvestigationCreated) else None
 
@@ -70,7 +90,12 @@ class SqliteDomainEventRepository(
         )
 
         hypothesis_id = (
-            str(event.hypothesis_id.value) if isinstance(event, HypothesisRemoved) else None
+            str(event.hypothesis_id.value)
+            if isinstance(
+                event,
+                HypothesisRemoved | HypothesisConfirmed | HypothesisRejected,
+            )
+            else None
         )
 
         with self._connection:
@@ -88,7 +113,7 @@ class SqliteDomainEventRepository(
                 """,
                 (
                     type(event).__name__,
-                    str(event.investigation_id.value),
+                    investigation_id,
                     title,
                     closed_at,
                     hypothesis_statement,
@@ -116,49 +141,75 @@ class SqliteDomainEventRepository(
         events: list[object] = []
 
         for row in cursor.fetchall():
-            investigation_id = InvestigationId(
-                value=UUID(row[1]),
-            )
+            event_type = row[0]
 
-            if row[0] == "InvestigationCreated":
+            if event_type == "InvestigationCreated":
                 events.append(
                     InvestigationCreated(
-                        investigation_id=investigation_id,
+                        investigation_id=InvestigationId(
+                            value=UUID(row[1]),
+                        ),
                         title=row[2],
                     )
                 )
-            elif row[0] == "InvestigationActivated":
+            elif event_type == "InvestigationActivated":
                 events.append(
                     InvestigationActivated(
-                        investigation_id=investigation_id,
+                        investigation_id=InvestigationId(
+                            value=UUID(row[1]),
+                        ),
                     )
                 )
-            elif row[0] == "InvestigationClosed":
+            elif event_type == "InvestigationClosed":
                 events.append(
                     InvestigationClosed(
-                        investigation_id=investigation_id,
+                        investigation_id=InvestigationId(
+                            value=UUID(row[1]),
+                        ),
                         closed_at=datetime.fromisoformat(
                             row[3],
                         ),
                     )
                 )
-            elif row[0] == "InvestigationReopened":
+            elif event_type == "InvestigationReopened":
                 events.append(
                     InvestigationReopened(
-                        investigation_id=investigation_id,
+                        investigation_id=InvestigationId(
+                            value=UUID(row[1]),
+                        ),
                     )
                 )
-            elif row[0] == "HypothesisAdded":
+            elif event_type == "HypothesisAdded":
                 events.append(
                     HypothesisAdded(
-                        investigation_id=investigation_id,
+                        investigation_id=InvestigationId(
+                            value=UUID(row[1]),
+                        ),
                         hypothesis_statement=row[4],
                     )
                 )
-            elif row[0] == "HypothesisRemoved":
+            elif event_type == "HypothesisRemoved":
                 events.append(
                     HypothesisRemoved(
-                        investigation_id=investigation_id,
+                        investigation_id=InvestigationId(
+                            value=UUID(row[1]),
+                        ),
+                        hypothesis_id=HypothesisId(
+                            value=UUID(row[5]),
+                        ),
+                    )
+                )
+            elif event_type == "HypothesisConfirmed":
+                events.append(
+                    HypothesisConfirmed(
+                        hypothesis_id=HypothesisId(
+                            value=UUID(row[5]),
+                        ),
+                    )
+                )
+            elif event_type == "HypothesisRejected":
+                events.append(
+                    HypothesisRejected(
                         hypothesis_id=HypothesisId(
                             value=UUID(row[5]),
                         ),
