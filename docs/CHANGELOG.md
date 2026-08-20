@@ -3,7 +3,45 @@
 This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
+## CORE-055 — Persist Evidence Added Domain Event
 
+### Added
+
+- `AddEvidence` now receives a `DomainEventRepository`
+- Persistence of the `EvidenceAdded` event produced when adding evidence to a hypothesis
+- Tests verifying that adding evidence still returns the created evidence
+- Tests verifying that the evidence remains attached to the selected hypothesis
+- Tests verifying that the generated `EvidenceAdded` event is persisted
+- Verification that the persisted event preserves the original `HypothesisId`
+- Verification that the persisted event preserves the original `EvidenceId`
+- Existing lookup behavior for missing investigations and hypotheses remains unchanged
+- Existing evidence description validation remains unchanged
+
+### Changed
+
+- `AddEvidence` now delegates pending domain event persistence to the shared `persist_domain_events()` application mechanism
+- Pending domain events are persisted from the `Hypothesis` entity
+- Investigation persistence still occurs before pending hypothesis domain events are persisted
+
+### Architectural Notes
+
+- Reuses the shared application-level event persistence mechanism introduced in CORE-045
+- Reuses `EvidenceAdded` introduced in CORE-053
+- Reuses SQLite support for `EvidenceAdded` introduced in CORE-054
+- `AddEvidence` does not implement its own event-persistence loop
+- Domain behavior remains independent from persistence infrastructure
+- No Unit of Work introduced
+- No Event Bus introduced
+- No Outbox introduced
+- No transaction coordination introduced
+
+### Validation
+
+- pytest ✅ — 109 passed
+- Ruff ✅
+- mypy ✅ — 27 source files checked
+
+---
 ---
 
 ## CORE-054 — Add SQLite Support for Evidence Added Event
