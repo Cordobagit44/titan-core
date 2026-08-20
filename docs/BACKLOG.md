@@ -89,6 +89,7 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-049 | Persist Hypothesis Removed Domain Event         | Done   |
 | CORE-050 | Add SQLite Support for Hypothesis Status Events | Done   |
 | CORE-051 | Persist Confirmed Hypothesis Domain Event       | Done   |
+| CORE-052 | Persist Rejected Hypothesis Domain Event        | Done   |
 
 ---
 
@@ -96,18 +97,19 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 No CORE story is currently active.
 
-CORE-051 — Persist Confirmed Hypothesis Domain Event is complete.
+CORE-052 — Persist Rejected Hypothesis Domain Event is complete.
 
-`ConfirmHypothesis` now persists the `HypothesisConfirmed` event through the
+`RejectHypothesis` now persists the `HypothesisRejected` event through the
 shared `persist_domain_events()` application mechanism after saving the
 investigation.
 
 Pending events are persisted from the `Hypothesis` entity, which is the entity
-that records `HypothesisConfirmed`.
+that records `HypothesisRejected`.
 
 The persisted event preserves the original `HypothesisId`.
 
 The implementation reuses the application-level event persistence abstraction
 introduced in CORE-045 and the SQLite support introduced in CORE-050.
 
-Future stories can apply the same mechanism to hypothesis rejection.
+Hypothesis confirmation and rejection now both persist their status events
+through the same application mechanism.
