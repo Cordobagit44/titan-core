@@ -3,6 +3,39 @@
 This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
+## CORE-057 — Introduce Unit of Work
+
+### Added
+
+- Application-level `UnitOfWork` abstraction
+- Access to an `InvestigationRepository` through the Unit of Work
+- Access to a `DomainEventRepository` through the Unit of Work
+- Explicit `commit()` operation
+- Explicit `rollback()` operation
+- Tests verifying that `UnitOfWork` is abstract
+- Tests verifying the required Unit of Work contract
+
+### Architectural Notes
+
+- `UnitOfWork` belongs to the application layer
+- The abstraction contains no SQLite-specific behavior
+- Existing repository abstractions remain unchanged
+- Existing application use cases remain unchanged
+- Existing persistence behavior remains unchanged
+- No SQLite Unit of Work implementation introduced
+- No shared SQLite connection introduced
+- No transaction coordination introduced yet
+- No Event Bus introduced
+- No Outbox introduced
+
+### Validation
+
+- pytest — 112 passed
+- Ruff — passed
+- mypy — 28 source files checked
+
+---
+
 ## CORE-056 — Migrate SQLite Domain Event Schema
 
 ### Added

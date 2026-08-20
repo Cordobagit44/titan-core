@@ -97,22 +97,28 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 ---
 
+## Epic 6 — Transaction Coordination
+
+| ID       | Story                         | Status |
+| -------- | ----------------------------- | ------ |
+| CORE-057 | Introduce Unit of Work        | Done   |
+
+---
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-056 — Migrate SQLite Domain Event Schema is complete.
+CORE-057 — Introduce Unit of Work is complete.
 
-`SqliteDomainEventRepository` now migrates legacy `domain_events` schemas
-created before support for current hypothesis and evidence events.
+The application layer now defines a `UnitOfWork` abstraction representing a
+persistence transaction boundary.
 
-Repository initialization detects incompatible legacy schemas and rebuilds the
-table using the current representation while preserving existing persisted
-domain events.
+A Unit of Work exposes both an `InvestigationRepository` and a
+`DomainEventRepository` and defines explicit `commit()` and `rollback()`
+operations.
 
-The migration adds support for `evidence_id` and allows `investigation_id` to
-be nullable, so current hypothesis-level and evidence-level events can be
-persisted without inventing investigation data.
+The abstraction remains independent from SQLite and does not modify existing
+application use cases or repository behavior.
 
-Schema migration remains an infrastructure concern and does not affect the
-domain or application layers.
+Transactional SQLite coordination remains available for a subsequent story.
