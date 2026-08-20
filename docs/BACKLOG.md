@@ -82,10 +82,11 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-042 | Add SQLite Domain Event Repository             | Done   |
 | CORE-043 | Persist Created Investigation Domain Event     | Done   |
 | CORE-044 | Persist Activated Investigation Domain Event   | Done   |
-| CORE-045 | Centralize Domain Event Persistence             | Done   |
+| CORE-045 | Centralize Domain Event Persistence            | Done   |
 | CORE-046 | Persist Closed Investigation Domain Event      | Done   |
 | CORE-047 | Persist Reopened Investigation Domain Event    | Done   |
 | CORE-048 | Persist Hypothesis Added Domain Event          | Done   |
+| CORE-049 | Persist Hypothesis Removed Domain Event        | Done   |
 
 ---
 
@@ -93,13 +94,13 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 No CORE story is currently active.
 
-CORE-048 — Persist Hypothesis Added Domain Event is complete.
+CORE-049 — Persist Hypothesis Removed Domain Event is complete.
 
-`AddHypothesis` now persists the `HypothesisAdded` event through the shared
-`persist_domain_events()` application mechanism after saving the investigation.
+`RemoveHypothesis` now persists the `HypothesisRemoved` event through the
+shared `persist_domain_events()` application mechanism after saving the
+investigation.
 
-The persisted event preserves the hypothesis statement produced by the
-domain aggregate.
+The persisted event preserves the removed `HypothesisId`.
 
 The implementation reuses the application-level event persistence abstraction
 introduced in CORE-045 and does not introduce additional infrastructure or

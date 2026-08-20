@@ -6,6 +6,40 @@ It complements the Git history and the functional specifications by providing a 
 
 ---
 
+## CORE-049 — Persist Hypothesis Removed Domain Event
+
+### Added
+
+- `RemoveHypothesis` now receives a `DomainEventRepository`
+- Persistence of the `HypothesisRemoved` event produced when removing a hypothesis
+- Tests verifying that removing a hypothesis still removes it from the investigation
+- Tests verifying that the generated `HypothesisRemoved` event is persisted
+- Verification that the persisted event preserves the removed `HypothesisId`
+- Existing lookup behavior for missing investigations and hypotheses remains unchanged
+
+### Changed
+
+- `RemoveHypothesis` now delegates pending domain event persistence to the shared `persist_domain_events()` application mechanism
+- Investigation persistence still occurs before pending domain events are persisted
+
+### Architectural Notes
+
+- Reuses the shared application-level event persistence mechanism introduced in CORE-045
+- `RemoveHypothesis` does not implement its own event-persistence loop
+- Domain behavior remains independent from persistence infrastructure
+- No Unit of Work introduced
+- No Event Bus introduced
+- No Outbox introduced
+- No transaction coordination introduced
+
+### Validation
+
+- pytest ✅ — 102 passed
+- Ruff ✅
+- mypy ✅ — 27 source files checked
+
+---
+
 ## CORE-048 — Persist Hypothesis Added Domain Event
 
 ### Added
