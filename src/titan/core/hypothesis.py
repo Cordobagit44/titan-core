@@ -4,12 +4,13 @@ from uuid import UUID, uuid4
 
 from titan.core.entity import Entity
 from titan.core.events import (
+    EvidenceAdded,
     HypothesisConfirmed,
     HypothesisRejected,
 )
 from titan.core.evidence import Evidence
 
-type HypothesisEvent = HypothesisConfirmed | HypothesisRejected
+type HypothesisEvent = EvidenceAdded | HypothesisConfirmed | HypothesisRejected
 
 
 class HypothesisStatus(Enum):
@@ -45,14 +46,28 @@ class Hypothesis(Entity[HypothesisEvent]):
         super().__init__()
 
         if not self.statement.strip():
-            raise ValueError("statement must not be empty")
+            raise ValueError(
+                "statement must not be empty",
+            )
 
     @property
     def evidences(self) -> tuple[Evidence, ...]:
         return tuple(self._evidences)
 
-    def add_evidence(self, evidence: Evidence) -> None:
-        self._evidences.append(evidence)
+    def add_evidence(
+        self,
+        evidence: Evidence,
+    ) -> None:
+        self._evidences.append(
+            evidence,
+        )
+
+        self._record_event(
+            EvidenceAdded(
+                hypothesis_id=self.id,
+                evidence_id=evidence.id,
+            )
+        )
 
     def confirm(self) -> None:
         if self.status is HypothesisStatus.REJECTED:

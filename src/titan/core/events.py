@@ -2,7 +2,14 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from titan.core.evidence import EvidenceId
     from titan.core.hypothesis import HypothesisId
+
+
+@dataclass(frozen=True)
+class EvidenceAdded:
+    hypothesis_id: "HypothesisId"
+    evidence_id: "EvidenceId"
 
 
 @dataclass(frozen=True)

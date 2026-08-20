@@ -3,6 +3,7 @@ from uuid import UUID
 import pytest
 
 from titan.core.events import (
+    EvidenceAdded,
     HypothesisConfirmed,
     HypothesisRejected,
 )
@@ -59,6 +60,24 @@ def test_add_evidence_to_hypothesis() -> None:
     hypothesis.add_evidence(evidence)
 
     assert hypothesis.evidences == (evidence,)
+
+
+def test_add_evidence_emits_domain_event() -> None:
+    hypothesis = Hypothesis(
+        statement="Credentials were compromised",
+    )
+    evidence = Evidence(
+        description="Firewall logs show repeated failed logins.",
+    )
+
+    hypothesis.add_evidence(evidence)
+
+    events = hypothesis.pull_events()
+
+    assert len(events) == 1
+    assert isinstance(events[0], EvidenceAdded)
+    assert events[0].hypothesis_id == hypothesis.id
+    assert events[0].evidence_id == evidence.id
 
 
 def test_hypothesis_starts_pending() -> None:

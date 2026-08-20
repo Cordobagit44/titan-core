@@ -90,6 +90,7 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-050 | Add SQLite Support for Hypothesis Status Events | Done   |
 | CORE-051 | Persist Confirmed Hypothesis Domain Event       | Done   |
 | CORE-052 | Persist Rejected Hypothesis Domain Event        | Done   |
+| CORE-053 | Emit Evidence Added Domain Event                | Done   |
 
 ---
 
@@ -97,19 +98,18 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 No CORE story is currently active.
 
-CORE-052 — Persist Rejected Hypothesis Domain Event is complete.
+CORE-053 — Emit Evidence Added Domain Event is complete.
 
-`RejectHypothesis` now persists the `HypothesisRejected` event through the
-shared `persist_domain_events()` application mechanism after saving the
-investigation.
+`Hypothesis.add_evidence()` now records an `EvidenceAdded` domain event after
+adding evidence to the hypothesis.
 
-Pending events are persisted from the `Hypothesis` entity, which is the entity
-that records `HypothesisRejected`.
+The event preserves the `HypothesisId` and the `EvidenceId`.
 
-The persisted event preserves the original `HypothesisId`.
+`Evidence` remains an immutable value-like domain object and does not become an
+`Entity`.
 
-The implementation reuses the application-level event persistence abstraction
-introduced in CORE-045 and the SQLite support introduced in CORE-050.
+`Hypothesis` remains responsible for recording the event because it owns the
+evidence collection mutation.
 
-Hypothesis confirmation and rejection now both persist their status events
-through the same application mechanism.
+Future stories can add durable SQLite support for `EvidenceAdded` and then
+persist that event from the `AddEvidence` application use case.

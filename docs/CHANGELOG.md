@@ -6,6 +6,45 @@ It complements the Git history and the functional specifications by providing a 
 
 ---
 
+## CORE-053 — Emit Evidence Added Domain Event
+
+### Added
+
+- `EvidenceAdded` domain event
+- `EvidenceAdded` preserves the `HypothesisId` of the hypothesis receiving the evidence
+- `EvidenceAdded` preserves the `EvidenceId` of the evidence that was added
+- `Hypothesis.add_evidence()` now records an `EvidenceAdded` event
+- Domain test verifying that adding evidence emits exactly one `EvidenceAdded` event
+- Domain test verifying that the emitted event preserves the original `HypothesisId`
+- Domain test verifying that the emitted event preserves the original `EvidenceId`
+
+### Changed
+
+- `HypothesisEvent` now includes `EvidenceAdded`
+- Evidence collection mutation and event recording remain coordinated by `Hypothesis`
+
+### Architectural Notes
+
+- `Hypothesis` records `EvidenceAdded` because it owns the evidence collection mutation
+- `Evidence` remains an immutable domain object and does not become an `Entity`
+- `EvidenceAdded` does not introduce persistence concerns into the domain layer
+- No application use case was modified
+- No repository was modified
+- No SQLite persistence was introduced for `EvidenceAdded`
+- No Unit of Work introduced
+- No Event Bus introduced
+- No Outbox introduced
+- No transaction coordination introduced
+- Durable persistence of `EvidenceAdded` remains available for a subsequent story
+
+### Validation
+
+- pytest ✅ — 107 passed
+- Ruff ✅
+- mypy ✅ — 27 source files checked
+
+---
+
 ## CORE-052 — Persist Rejected Hypothesis Domain Event
 
 ### Added
