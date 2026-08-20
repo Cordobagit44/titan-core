@@ -76,18 +76,19 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 ## Epic 5 — Domain Event Persistence
 
-| ID       | Story                                          | Status |
-| -------- | ---------------------------------------------- | ------ |
-| CORE-041 | Persist Investigation Domain Events            | Done   |
-| CORE-042 | Add SQLite Domain Event Repository             | Done   |
-| CORE-043 | Persist Created Investigation Domain Event     | Done   |
-| CORE-044 | Persist Activated Investigation Domain Event   | Done   |
-| CORE-045 | Centralize Domain Event Persistence            | Done   |
-| CORE-046 | Persist Closed Investigation Domain Event      | Done   |
-| CORE-047 | Persist Reopened Investigation Domain Event    | Done   |
-| CORE-048 | Persist Hypothesis Added Domain Event          | Done   |
-| CORE-049 | Persist Hypothesis Removed Domain Event        | Done   |
-| CORE-050 | Add SQLite Support for Hypothesis Status Events | Done  |
+| ID       | Story                                           | Status |
+| -------- | ----------------------------------------------- | ------ |
+| CORE-041 | Persist Investigation Domain Events             | Done   |
+| CORE-042 | Add SQLite Domain Event Repository              | Done   |
+| CORE-043 | Persist Created Investigation Domain Event      | Done   |
+| CORE-044 | Persist Activated Investigation Domain Event    | Done   |
+| CORE-045 | Centralize Domain Event Persistence             | Done   |
+| CORE-046 | Persist Closed Investigation Domain Event       | Done   |
+| CORE-047 | Persist Reopened Investigation Domain Event     | Done   |
+| CORE-048 | Persist Hypothesis Added Domain Event           | Done   |
+| CORE-049 | Persist Hypothesis Removed Domain Event         | Done   |
+| CORE-050 | Add SQLite Support for Hypothesis Status Events | Done   |
+| CORE-051 | Persist Confirmed Hypothesis Domain Event       | Done   |
 
 ---
 
@@ -95,19 +96,18 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 No CORE story is currently active.
 
-CORE-050 — Add SQLite Support for Hypothesis Status Events is complete.
+CORE-051 — Persist Confirmed Hypothesis Domain Event is complete.
 
-`SqliteDomainEventRepository` now supports durable persistence and restoration
-of `HypothesisConfirmed` and `HypothesisRejected` events.
+`ConfirmHypothesis` now persists the `HypothesisConfirmed` event through the
+shared `persist_domain_events()` application mechanism after saving the
+investigation.
 
-The persisted events preserve their original `HypothesisId`.
+Pending events are persisted from the `Hypothesis` entity, which is the entity
+that records `HypothesisConfirmed`.
 
-The SQLite event representation now allows domain events without an
-`investigation_id`, so hypothesis status events can be represented without
-inventing domain data that does not exist.
+The persisted event preserves the original `HypothesisId`.
 
-Existing investigation, hypothesis-added, and hypothesis-removed event
-persistence remains unchanged.
+The implementation reuses the application-level event persistence abstraction
+introduced in CORE-045 and the SQLite support introduced in CORE-050.
 
-Future stories can now safely connect hypothesis status application use cases
-to `DomainEventRepository`.
+Future stories can apply the same mechanism to hypothesis rejection.

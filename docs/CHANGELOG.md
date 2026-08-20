@@ -6,6 +6,43 @@ It complements the Git history and the functional specifications by providing a 
 
 ---
 
+## CORE-051 — Persist Confirmed Hypothesis Domain Event
+
+### Added
+
+- `ConfirmHypothesis` now receives a `DomainEventRepository`
+- Persistence of the `HypothesisConfirmed` event produced when confirming a hypothesis
+- Tests verifying that confirming a hypothesis still returns the confirmed hypothesis
+- Tests verifying that the hypothesis status is still changed to `CONFIRMED`
+- Tests verifying that the generated `HypothesisConfirmed` event is persisted
+- Verification that the persisted event preserves the original `HypothesisId`
+- Existing lookup behavior for missing investigations and hypotheses remains unchanged
+
+### Changed
+
+- `ConfirmHypothesis` now delegates pending domain event persistence to the shared `persist_domain_events()` application mechanism
+- Pending domain events are persisted from the `Hypothesis` entity
+- Investigation persistence still occurs before pending hypothesis domain events are persisted
+
+### Architectural Notes
+
+- Reuses the shared application-level event persistence mechanism introduced in CORE-045
+- Reuses SQLite support for hypothesis status events introduced in CORE-050
+- `ConfirmHypothesis` does not implement its own event-persistence loop
+- Domain behavior remains independent from persistence infrastructure
+- No Unit of Work introduced
+- No Event Bus introduced
+- No Outbox introduced
+- No transaction coordination introduced
+
+### Validation
+
+- pytest ✅ — 105 passed
+- Ruff ✅
+- mypy ✅ — 27 source files checked
+
+---
+
 ## CORE-050 — Add SQLite Support for Hypothesis Status Events
 
 ### Added
