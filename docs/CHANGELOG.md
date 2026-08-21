@@ -4,6 +4,37 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-068 — Enforce Unit of Work for Mutating Use Cases
+
+### Added
+
+- Application-layer architecture guard for direct repository dependencies
+- Explicit allowlist for intentional `InvestigationRepository` and `DomainEventRepository` dependencies
+- Automatic protection for new application modules against prohibited direct repository dependencies
+
+### Architectural Notes
+
+- Mutating application use cases remain behind the `UnitOfWork` persistence boundary
+- Read-only queries may continue to depend directly on `InvestigationRepository`
+- Repository abstractions and in-memory implementations remain explicit exceptions
+- `persist_domain_events()` may continue to depend directly on `DomainEventRepository`
+- `UnitOfWork` may continue to reference both repository abstractions
+- The architecture rule is enforced through Python AST inspection
+- No production code changed
+- No Event Bus introduced
+- No Outbox introduced
+
+### Validation
+
+- Architecture guard passes on the current application layer
+- A temporary prohibited repository dependency was correctly detected
+- Removing the temporary violation restored the architecture test to green
+- pytest — 133 passed
+- Ruff — passed
+- mypy — 57 source files checked
+
+---
+
 ## CORE-067 — Migrate Reopen Investigation to Unit of Work
 
 ### Changed

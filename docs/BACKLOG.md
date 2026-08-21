@@ -112,6 +112,7 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-065 | Migrate Close Investigation to Unit of Work | Done   |
 | CORE-066 | Migrate Remove Hypothesis to Unit of Work | Done   |
 | CORE-067 | Migrate Reopen Investigation to Unit of Work | Done   |
+| CORE-068 | Enforce Unit of Work for Mutating Use Cases | Done   |
 
 ---
 
@@ -119,19 +120,20 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 No CORE story is currently active.
 
-CORE-067 — Migrate Reopen Investigation to Unit of Work is complete.
+CORE-068 — Enforce Unit of Work for Mutating Use Cases is complete.
 
-`ReopenInvestigation` now uses the application-level `UnitOfWork` as its
-persistence boundary.
+The application layer now has an automated architecture guard preventing direct
+`InvestigationRepository` and `DomainEventRepository` dependencies by default.
 
-Investigation state is loaded and saved through the investigation repository
-exposed by the Unit of Work, while pending `InvestigationReopened` events are
-persisted through the Unit of Work's domain event repository.
+Intentional direct repository dependencies are represented by an explicit
+allowlist covering repository abstractions and implementations, read-only
+queries, `persist_domain_events()`, and `UnitOfWork`.
 
-Successful persistence commits the Unit of Work. If persistence fails,
-`ReopenInvestigation` rolls back the Unit of Work before propagating the
-original exception.
+Mutating application use cases remain behind the `UnitOfWork` persistence
+boundary. New application modules are protected automatically unless a direct
+repository dependency is explicitly allowed.
 
-Missing investigation behavior remains unchanged.
+The guard was also verified against a temporary prohibited dependency and
+correctly failed until the violation was removed.
 
-No other application use case is migrated to Unit of Work in this story.
+No production code is changed in this story.
