@@ -103,6 +103,7 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | ----------------------------- | ------ |
 | CORE-057 | Introduce Unit of Work        | Done   |
 | CORE-058 | Implement SQLite Unit of Work | Done   |
+| CORE-059 | Migrate Create Investigation to Unit of Work | Done   |
 
 ---
 
@@ -110,19 +111,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 No CORE story is currently active.
 
-CORE-058 — Implement SQLite Unit of Work is complete.
+CORE-059 — Migrate Create Investigation to Unit of Work is complete.
 
-The SQLite infrastructure layer now provides a `SqliteUnitOfWork` that
-coordinates investigation persistence and domain event persistence through a
-shared SQLite connection.
+`CreateInvestigation` now uses the application-level `UnitOfWork` as its
+persistence boundary.
 
-Both SQLite repositories can now use an externally managed connection, allowing
-`commit()` and `rollback()` to coordinate investigation state and corresponding
-domain events as one transaction.
+Investigation state and pending domain events are persisted through repositories
+exposed by the Unit of Work and committed together after successful persistence.
 
-Standalone SQLite repositories preserve their existing behavior while
-repositories managed by `SqliteUnitOfWork` defer transaction control to the
-shared Unit of Work.
+If persistence fails, `CreateInvestigation` rolls back the Unit of Work before
+propagating the original exception.
 
-Existing application use cases remain unchanged and are not yet migrated to use
-the Unit of Work.
+No other application use case is migrated to Unit of Work in this story.

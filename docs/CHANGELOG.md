@@ -4,6 +4,33 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-059 — Migrate Create Investigation to Unit of Work
+
+### Changed
+
+- `CreateInvestigation` now receives a `UnitOfWork`
+- Investigation persistence uses `unit_of_work.investigations`
+- Domain event persistence uses `unit_of_work.domain_events`
+- Successful persistence commits the Unit of Work
+- Persistence failures roll back the Unit of Work
+
+### Architectural Notes
+
+- `CreateInvestigation` now defines an explicit transaction boundary
+- Repository implementations remain behind the `UnitOfWork` abstraction
+- `persist_domain_events()` remains the shared event persistence mechanism
+- No other application use case migrated
+- No Event Bus introduced
+- No Outbox introduced
+
+### Validation
+
+- pytest — 116 passed
+- Ruff — passed
+- mypy — 56 source files checked
+
+---
+
 ## CORE-058 — Implement SQLite Unit of Work
 
 ### Added
