@@ -4,6 +4,43 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-070 — Add Application Acceptance Test
+
+### Added
+
+- End-to-end application acceptance coverage through `bootstrap()`
+- Complete persisted investigation workflow using SQLite
+- Application reconstruction verification against the same SQLite database
+
+### Acceptance Coverage
+
+- Create investigation
+- Activate investigation
+- Add hypothesis
+- Add evidence
+- Confirm hypothesis
+- Close investigation
+- Reconstruct the application
+- Retrieve and verify the persisted aggregate
+- List persisted investigations
+
+### Architectural Notes
+
+- The acceptance test interacts with TITAN through the application composition root
+- Repositories and SQLite connections are not accessed directly by the acceptance scenario
+- Persistence is verified across application reconstruction
+- The scenario validates the complete path from application use cases through Unit of Work and SQLite
+- No production code changed
+- No new runtime dependency introduced
+
+### Validation
+
+- pytest — 136 passed
+- Ruff — passed
+- mypy — 60 source files checked
+
+---
+
 ## CORE-069 — Introduce Application Composition Root
 
 ### Added

@@ -118,27 +118,26 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 ## Epic 7 — Application Composition
 
-| ID       | Story                              | Status |
-| -------- | ---------------------------------- | ------ |
+| ID       | Story                                  | Status |
+| -------- | -------------------------------------- | ------ |
 | CORE-069 | Introduce Application Composition Root | Done   |
+| CORE-070 | Add Application Acceptance Test        | Done   |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-069 — Introduce Application Composition Root is complete.
+CORE-070 — Add Application Acceptance Test is complete.
 
-TITAN Core now provides a composition root through `titan.bootstrap`.
+TITAN Core now has an end-to-end acceptance scenario exercising the application
+through the composition root.
 
-The `bootstrap(database)` factory creates a SQLite-backed `TitanApplication`
-containing all current application use cases.
+The scenario creates and activates an investigation, adds a hypothesis and
+evidence, confirms the hypothesis, closes the investigation, and then
+reconstructs the application against the same SQLite database.
 
-Mutating use cases share a `SqliteUnitOfWork`, preserving the transaction
-boundary established in Epic 6. Read-only investigation queries use the
-investigation repository exposed by that Unit of Work.
+The persisted aggregate is retrieved and verified after reconstruction,
+demonstrating that the complete application workflow survives beyond
+process-local object state.
 
-The composition root keeps SQLite infrastructure knowledge outside the domain
-and application layers.
-
-No CLI, web framework, Event Bus, Outbox, or new runtime dependency is
-introduced in this story.
+No production code is changed in this story.
