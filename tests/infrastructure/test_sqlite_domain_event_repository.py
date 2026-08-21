@@ -294,6 +294,10 @@ def test_legacy_domain_event_schema_is_migrated(
     )
     created_event = investigation.pull_events()[0]
 
+    assert isinstance(
+        created_event,
+        InvestigationCreated,
+    )
     connection = sqlite3.connect(
         database,
     )

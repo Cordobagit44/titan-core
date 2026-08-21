@@ -1,4 +1,5 @@
 import sqlite3
+from contextlib import nullcontext
 from datetime import datetime
 from uuid import UUID
 
@@ -28,11 +29,22 @@ class SqliteDomainEventRepository(
 ):
     def __init__(
         self,
-        database: str,
+        database: str | None = None,
+        *,
+        connection: sqlite3.Connection | None = None,
     ) -> None:
-        self._connection = sqlite3.connect(
-            database,
-        )
+        if connection is not None:
+            self._connection = connection
+            self._manages_transaction = False
+        elif database is not None:
+            self._connection = sqlite3.connect(
+                database,
+            )
+            self._manages_transaction = True
+        else:
+            raise ValueError(
+                "database or connection is required",
+            )
 
         self._initialize_schema()
 
@@ -43,7 +55,10 @@ class SqliteDomainEventRepository(
             self._create_domain_events_table(
                 "domain_events",
             )
-            self._connection.commit()
+
+            if self._manages_transaction:
+                self._connection.commit()
+
             return
 
         if self._domain_events_schema_requires_migration():
@@ -114,7 +129,9 @@ class SqliteDomainEventRepository(
 
         evidence_id_expression = "evidence_id" if "evidence_id" in existing_columns else "NULL"
 
-        with self._connection:
+        transaction = self._connection if self._manages_transaction else nullcontext()
+
+        with transaction:
             self._connection.execute(
                 """
                 DROP TABLE IF EXISTS domain_events_new
@@ -243,7 +260,9 @@ class SqliteDomainEventRepository(
             else None
         )
 
-        with self._connection:
+        transaction = self._connection if self._manages_transaction else nullcontext()
+
+        with transaction:
             self._connection.execute(
                 """
                 INSERT INTO domain_events (

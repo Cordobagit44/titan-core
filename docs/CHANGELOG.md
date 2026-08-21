@@ -3,6 +3,43 @@
 This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
+
+## CORE-058 — Implement SQLite Unit of Work
+
+### Added
+
+- SQLite `SqliteUnitOfWork` implementation
+- Shared SQLite connection for investigation and domain event repositories
+- Explicit transaction commit coordination
+- Explicit transaction rollback coordination
+- Integration tests covering commit and rollback behavior
+
+### Changed
+
+- `SqliteInvestigationRepository` can use an externally managed SQLite connection
+- `SqliteDomainEventRepository` can use an externally managed SQLite connection
+- Repositories managed by `SqliteUnitOfWork` defer transaction control to the Unit of Work
+- Standalone SQLite repositories preserve their existing transaction behavior
+
+### Architectural Notes
+
+- Transaction coordination remains in the SQLite infrastructure layer
+- The application-level `UnitOfWork` abstraction remains unchanged
+- Investigation and domain event repositories share one connection when managed by `SqliteUnitOfWork`
+- Existing application use cases remain unchanged
+- No Event Bus introduced
+- No Outbox introduced
+- No nested transactions introduced
+- No distributed transactions introduced
+
+### Validation
+
+- pytest — 114 passed
+- Ruff — passed
+- mypy — 57 source files checked
+
+---
+
 ## CORE-057 — Introduce Unit of Work
 
 ### Added

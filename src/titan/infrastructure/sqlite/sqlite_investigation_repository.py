@@ -1,4 +1,5 @@
 import sqlite3
+from contextlib import nullcontext
 from datetime import datetime
 from uuid import UUID
 
@@ -26,11 +27,22 @@ class SqliteInvestigationRepository(
 ):
     def __init__(
         self,
-        database: str,
+        database: str | None = None,
+        *,
+        connection: sqlite3.Connection | None = None,
     ) -> None:
-        self._connection = sqlite3.connect(
-            database,
-        )
+        if connection is not None:
+            self._connection = connection
+            self._manages_transaction = False
+        elif database is not None:
+            self._connection = sqlite3.connect(
+                database,
+            )
+            self._manages_transaction = True
+        else:
+            raise ValueError(
+                "database or connection is required",
+            )
 
         self._connection.execute(
             """
@@ -69,7 +81,8 @@ class SqliteInvestigationRepository(
             """
         )
 
-        self._connection.commit()
+        if self._manages_transaction:
+            self._connection.commit()
 
     def save(
         self,
@@ -81,7 +94,9 @@ class SqliteInvestigationRepository(
 
         hypothesis_ids = tuple(str(hypothesis.id.value) for hypothesis in investigation.hypotheses)
 
-        with self._connection:
+        transaction = self._connection if self._manages_transaction else nullcontext()
+
+        with transaction:
             if hypothesis_ids:
                 placeholders = ", ".join("?" for _ in hypothesis_ids)
 
