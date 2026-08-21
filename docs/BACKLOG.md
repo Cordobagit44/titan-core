@@ -116,24 +116,29 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 ---
 
+## Epic 7 — Application Composition
+
+| ID       | Story                              | Status |
+| -------- | ---------------------------------- | ------ |
+| CORE-069 | Introduce Application Composition Root | Done   |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-068 — Enforce Unit of Work for Mutating Use Cases is complete.
+CORE-069 — Introduce Application Composition Root is complete.
 
-The application layer now has an automated architecture guard preventing direct
-`InvestigationRepository` and `DomainEventRepository` dependencies by default.
+TITAN Core now provides a composition root through `titan.bootstrap`.
 
-Intentional direct repository dependencies are represented by an explicit
-allowlist covering repository abstractions and implementations, read-only
-queries, `persist_domain_events()`, and `UnitOfWork`.
+The `bootstrap(database)` factory creates a SQLite-backed `TitanApplication`
+containing all current application use cases.
 
-Mutating application use cases remain behind the `UnitOfWork` persistence
-boundary. New application modules are protected automatically unless a direct
-repository dependency is explicitly allowed.
+Mutating use cases share a `SqliteUnitOfWork`, preserving the transaction
+boundary established in Epic 6. Read-only investigation queries use the
+investigation repository exposed by that Unit of Work.
 
-The guard was also verified against a temporary prohibited dependency and
-correctly failed until the violation was removed.
+The composition root keeps SQLite infrastructure knowledge outside the domain
+and application layers.
 
-No production code is changed in this story.
+No CLI, web framework, Event Bus, Outbox, or new runtime dependency is
+introduced in this story.

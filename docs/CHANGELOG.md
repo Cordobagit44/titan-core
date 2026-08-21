@@ -4,6 +4,37 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-069 — Introduce Application Composition Root
+
+### Added
+
+- `titan.bootstrap` application composition root
+- `TitanApplication` composition object exposing all current application use cases
+- `bootstrap(database)` factory for constructing a SQLite-backed application
+- Integration coverage for application wiring through SQLite
+
+### Architectural Notes
+
+- Mutating use cases share a `SqliteUnitOfWork`
+- Read-only investigation queries use the investigation repository exposed by the Unit of Work
+- SQLite infrastructure knowledge remains outside the domain and application layers
+- The composition root provides the outer wiring boundary for the application
+- No CLI introduced
+- No web framework introduced
+- No Event Bus introduced
+- No Outbox introduced
+- No new runtime dependency introduced
+
+### Validation
+
+- Bootstrap persists and retrieves investigations through SQLite
+- All current application use cases are exposed by the composition root
+- pytest — 135 passed
+- Ruff — passed
+- mypy — 59 source files checked
+
+---
+
 ## CORE-068 — Enforce Unit of Work for Mutating Use Cases
 
 ### Added
