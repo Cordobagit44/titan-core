@@ -4,6 +4,35 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-063 — Migrate Confirm Hypothesis to Unit of Work
+
+### Changed
+
+- `ConfirmHypothesis` now receives a `UnitOfWork`
+- Investigation loading and persistence use `unit_of_work.investigations`
+- `HypothesisConfirmed` event persistence uses `unit_of_work.domain_events`
+- Successful persistence commits the Unit of Work
+- Persistence failures roll back the Unit of Work
+- Missing investigation and hypothesis behavior remains unchanged
+
+### Architectural Notes
+
+- `ConfirmHypothesis` now defines an explicit transaction boundary
+- Repository implementations remain behind the `UnitOfWork` abstraction
+- `persist_domain_events()` remains the shared event persistence mechanism
+- Pending domain events continue to be persisted from the `Hypothesis` entity
+- No other application use case migrated
+- No Event Bus introduced
+- No Outbox introduced
+
+### Validation
+
+- pytest — 124 passed
+- Ruff — passed
+- mypy — 56 source files checked
+
+---
+
 ## CORE-062 — Migrate Activate Investigation to Unit of Work
 
 ### Changed
