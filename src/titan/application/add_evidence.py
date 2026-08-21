@@ -1,12 +1,7 @@
-from titan.application.domain_event_repository import (
-    DomainEventRepository,
-)
-from titan.application.investigation_repository import (
-    InvestigationRepository,
-)
 from titan.application.persist_domain_events import (
     persist_domain_events,
 )
+from titan.application.unit_of_work import UnitOfWork
 from titan.core.evidence import Evidence
 from titan.core.hypothesis import (
     HypothesisId,
@@ -17,11 +12,9 @@ from titan.core.investigation import InvestigationId
 class AddEvidence:
     def __init__(
         self,
-        repository: InvestigationRepository,
-        event_repository: DomainEventRepository,
+        unit_of_work: UnitOfWork,
     ) -> None:
-        self._repository = repository
-        self._event_repository = event_repository
+        self._unit_of_work = unit_of_work
 
     def __call__(
         self,
@@ -29,39 +22,45 @@ class AddEvidence:
         hypothesis_id: HypothesisId,
         description: str,
     ) -> Evidence:
-        investigation = self._repository.get(
-            investigation_id,
-        )
-
-        if investigation is None:
-            raise LookupError(
-                "investigation not found",
+        try:
+            investigation = self._unit_of_work.investigations.get(
+                investigation_id,
             )
 
-        hypothesis = investigation.find_hypothesis(
-            hypothesis_id,
-        )
+            if investigation is None:
+                raise LookupError(
+                    "investigation not found",
+                )
 
-        if hypothesis is None:
-            raise LookupError(
-                "hypothesis not found",
+            hypothesis = investigation.find_hypothesis(
+                hypothesis_id,
             )
 
-        evidence = Evidence(
-            description=description,
-        )
+            if hypothesis is None:
+                raise LookupError(
+                    "hypothesis not found",
+                )
 
-        hypothesis.add_evidence(
-            evidence,
-        )
+            evidence = Evidence(
+                description=description,
+            )
 
-        self._repository.save(
-            investigation,
-        )
+            hypothesis.add_evidence(
+                evidence,
+            )
 
-        persist_domain_events(
-            hypothesis,
-            self._event_repository,
-        )
+            self._unit_of_work.investigations.save(
+                investigation,
+            )
 
-        return evidence
+            persist_domain_events(
+                hypothesis,
+                self._unit_of_work.domain_events,
+            )
+
+            self._unit_of_work.commit()
+
+            return evidence
+        except Exception:
+            self._unit_of_work.rollback()
+            raise

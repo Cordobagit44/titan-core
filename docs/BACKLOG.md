@@ -105,6 +105,7 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-058 | Implement SQLite Unit of Work | Done   |
 | CORE-059 | Migrate Create Investigation to Unit of Work | Done   |
 | CORE-060 | Migrate Add Hypothesis to Unit of Work | Done   |
+| CORE-061 | Migrate Add Evidence to Unit of Work | Done   |
 
 ---
 
@@ -112,17 +113,20 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 No CORE story is currently active.
 
-CORE-060 — Migrate Add Hypothesis to Unit of Work is complete.
+CORE-061 — Migrate Add Evidence to Unit of Work is complete.
 
-`AddHypothesis` now uses the application-level `UnitOfWork` as its
+`AddEvidence` now uses the application-level `UnitOfWork` as its
 persistence boundary.
 
 Investigation state is loaded and saved through the investigation repository
-exposed by the Unit of Work, while pending domain events are persisted through
-the Unit of Work's domain event repository.
+exposed by the Unit of Work, while pending `EvidenceAdded` events are persisted
+through the Unit of Work's domain event repository.
 
 Successful persistence commits the Unit of Work. If persistence fails,
-`AddHypothesis` rolls back the Unit of Work before propagating the original
+`AddEvidence` rolls back the Unit of Work before propagating the original
 exception.
+
+Missing investigation and hypothesis behavior, along with evidence description
+validation, remains unchanged.
 
 No other application use case is migrated to Unit of Work in this story.
