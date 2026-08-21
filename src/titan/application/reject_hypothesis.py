@@ -1,12 +1,7 @@
-from titan.application.domain_event_repository import (
-    DomainEventRepository,
-)
-from titan.application.investigation_repository import (
-    InvestigationRepository,
-)
 from titan.application.persist_domain_events import (
     persist_domain_events,
 )
+from titan.application.unit_of_work import UnitOfWork
 from titan.core.hypothesis import (
     Hypothesis,
     HypothesisId,
@@ -17,44 +12,48 @@ from titan.core.investigation import InvestigationId
 class RejectHypothesis:
     def __init__(
         self,
-        repository: InvestigationRepository,
-        event_repository: DomainEventRepository,
+        unit_of_work: UnitOfWork,
     ) -> None:
-        self._repository = repository
-        self._event_repository = event_repository
+        self._unit_of_work = unit_of_work
 
     def __call__(
         self,
         investigation_id: InvestigationId,
         hypothesis_id: HypothesisId,
     ) -> Hypothesis:
-        investigation = self._repository.get(
-            investigation_id,
-        )
-
-        if investigation is None:
-            raise LookupError(
-                "investigation not found",
+        try:
+            investigation = self._unit_of_work.investigations.get(
+                investigation_id,
             )
 
-        hypothesis = investigation.find_hypothesis(
-            hypothesis_id,
-        )
+            if investigation is None:
+                raise LookupError(
+                    "investigation not found",
+                )
 
-        if hypothesis is None:
-            raise LookupError(
-                "hypothesis not found",
+            hypothesis = investigation.find_hypothesis(
+                hypothesis_id,
             )
 
-        hypothesis.reject()
+            if hypothesis is None:
+                raise LookupError(
+                    "hypothesis not found",
+                )
 
-        self._repository.save(
-            investigation,
-        )
+            hypothesis.reject()
 
-        persist_domain_events(
-            hypothesis,
-            self._event_repository,
-        )
+            self._unit_of_work.investigations.save(
+                investigation,
+            )
 
-        return hypothesis
+            persist_domain_events(
+                hypothesis,
+                self._unit_of_work.domain_events,
+            )
+
+            self._unit_of_work.commit()
+
+            return hypothesis
+        except Exception:
+            self._unit_of_work.rollback()
+            raise

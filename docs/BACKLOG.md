@@ -108,6 +108,7 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-061 | Migrate Add Evidence to Unit of Work | Done   |
 | CORE-062 | Migrate Activate Investigation to Unit of Work | Done   |
 | CORE-063 | Migrate Confirm Hypothesis to Unit of Work | Done   |
+| CORE-064 | Migrate Reject Hypothesis to Unit of Work | Done   |
 
 ---
 
@@ -115,17 +116,17 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 No CORE story is currently active.
 
-CORE-063 — Migrate Confirm Hypothesis to Unit of Work is complete.
+CORE-064 — Migrate Reject Hypothesis to Unit of Work is complete.
 
-`ConfirmHypothesis` now uses the application-level `UnitOfWork` as its
+`RejectHypothesis` now uses the application-level `UnitOfWork` as its
 persistence boundary.
 
 Investigation state is loaded and saved through the investigation repository
-exposed by the Unit of Work, while pending `HypothesisConfirmed` events are
+exposed by the Unit of Work, while pending `HypothesisRejected` events are
 persisted through the Unit of Work's domain event repository.
 
 Successful persistence commits the Unit of Work. If persistence fails,
-`ConfirmHypothesis` rolls back the Unit of Work before propagating the original
+`RejectHypothesis` rolls back the Unit of Work before propagating the original
 exception.
 
 Missing investigation and hypothesis behavior remains unchanged.
