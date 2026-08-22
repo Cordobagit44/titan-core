@@ -4,6 +4,38 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-072 — Add Application Lifecycle Management
+
+### Added
+
+- Explicit `close()` lifecycle operation for `SqliteUnitOfWork`
+- Application-level `close()` operation on `TitanApplication`
+- Infrastructure coverage verifying that SQLite connections are released
+- Bootstrap coverage verifying application-level resource cleanup
+
+### Architectural Notes
+
+- SQLite connection ownership remains in the infrastructure layer
+- `TitanApplication` delegates resource cleanup to the `SqliteUnitOfWork` created by the composition root
+- Application use cases remain unaware of SQLite connection lifecycle details
+- Existing commit and rollback transaction behavior remains unchanged
+- Resource cleanup no longer relies solely on process shutdown or garbage collection
+- No context manager support introduced
+- No CLI lifecycle integration introduced
+- No web framework lifecycle integration introduced
+- No new runtime dependency introduced
+
+### Validation
+
+- `SqliteUnitOfWork.close()` releases the underlying SQLite connection
+- Repository access after close raises `sqlite3.ProgrammingError`
+- `TitanApplication.close()` releases application-owned SQLite resources
+- pytest — 138 passed
+- Ruff — passed
+- mypy — 60 source files checked
+
+---
+
 ## CORE-071 — Update Project README
 
 ### Changed

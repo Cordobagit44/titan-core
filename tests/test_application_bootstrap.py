@@ -1,4 +1,7 @@
+import sqlite3
 from pathlib import Path
+
+import pytest
 
 from titan.bootstrap import bootstrap
 from titan.core.investigation import InvestigationStatus
@@ -58,3 +61,21 @@ def test_bootstrap_exposes_application_use_cases(
     assert callable(application.reopen_investigation)
     assert callable(application.get_investigation)
     assert callable(application.list_investigations)
+
+
+def test_application_close_releases_sqlite_resources(
+    tmp_path: Path,
+) -> None:
+    application = bootstrap(
+        str(
+            tmp_path / "titan.db",
+        )
+    )
+
+    application.close()
+
+    with pytest.raises(
+        sqlite3.ProgrammingError,
+        match="Cannot operate on a closed database",
+    ):
+        application.list_investigations()

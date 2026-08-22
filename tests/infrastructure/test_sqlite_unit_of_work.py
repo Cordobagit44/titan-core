@@ -1,4 +1,7 @@
+import sqlite3
 from pathlib import Path
+
+import pytest
 
 from titan.core.investigation import Investigation
 from titan.infrastructure.sqlite.sqlite_unit_of_work import (
@@ -89,3 +92,23 @@ def test_rollback_discards_investigation_and_domain_event(
     )
 
     assert restored.domain_events.list_all() == []
+
+
+def test_close_releases_sqlite_connection(
+    tmp_path: Path,
+) -> None:
+    database = str(
+        tmp_path / "unit_of_work.db",
+    )
+
+    unit_of_work = SqliteUnitOfWork(
+        database,
+    )
+
+    unit_of_work.close()
+
+    with pytest.raises(
+        sqlite3.ProgrammingError,
+        match="Cannot operate on a closed database",
+    ):
+        unit_of_work.investigations.list()

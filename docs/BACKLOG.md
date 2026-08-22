@@ -123,21 +123,22 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-069 | Introduce Application Composition Root | Done   |
 | CORE-070 | Add Application Acceptance Test        | Done   |
 | CORE-071 | Update Project README                  | Done   |
+| CORE-072 | Add Application Lifecycle Management   | Done   |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-071 — Update Project README is complete.
+CORE-072 — Add Application Lifecycle Management is complete.
 
-The project README now reflects the current TITAN Core implementation instead
-of the original CORE-000 bootstrap state.
+TITAN Core now provides explicit lifecycle management for SQLite-backed
+applications.
 
-It documents the domain, application, infrastructure, and composition
-boundaries; SQLite persistence and Unit of Work transaction coordination; the
-`bootstrap(database)` application API; the testing strategy; architecture
-guards; and the current project scope.
+`SqliteUnitOfWork.close()` releases the SQLite connection, while
+`TitanApplication.close()` exposes resource cleanup through the application
+composition boundary.
 
-The documented application API was verified against `TitanApplication`.
+Application use cases and transaction behavior remain unchanged.
 
-No production code is changed in this story.
+Context manager support, CLI lifecycle integration, and web framework lifecycle
+integration remain outside this story.

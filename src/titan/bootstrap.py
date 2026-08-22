@@ -31,6 +31,12 @@ class TitanApplication:
     reopen_investigation: ReopenInvestigation
     get_investigation: GetInvestigation
     list_investigations: ListInvestigations
+    _unit_of_work: SqliteUnitOfWork
+
+    def close(
+        self,
+    ) -> None:
+        self._unit_of_work.close()
 
 
 def bootstrap(
@@ -76,4 +82,5 @@ def bootstrap(
         list_investigations=ListInvestigations(
             investigations,
         ),
+        _unit_of_work=unit_of_work,
     )
