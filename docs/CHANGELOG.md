@@ -4,6 +4,37 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-071 — Update Project README
+
+### Changed
+
+- Replaced the obsolete CORE-000 bootstrap status in the project README
+- Documented the current TITAN Core capabilities
+- Documented the domain, application, infrastructure, and composition boundaries
+- Documented SQLite persistence and Unit of Work transaction coordination
+- Documented `bootstrap(database)` and the `TitanApplication` API
+- Added application usage examples for the persisted investigation workflow
+- Documented the current testing strategy and architecture guards
+- Documented the current project scope and explicitly excluded concerns
+
+### Architectural Notes
+
+- The documented application API was verified against `src/titan/bootstrap.py`
+- The README reflects the existing architecture without introducing new production behavior
+- TITAN Core remains independent from CLI, HTTP, web framework, Event Bus, Outbox, and AI provider concerns
+- No production code changed
+- No new runtime dependency introduced
+- Repository-wide Ruff formatting cleanup remains outside this story
+
+### Validation
+
+- README saved without a UTF-8 BOM
+- pytest — 136 passed
+- Ruff — passed
+- mypy — 60 source files checked
+
+---
+
 ## CORE-070 — Add Application Acceptance Test
 
 ### Added

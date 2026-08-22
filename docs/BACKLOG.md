@@ -122,22 +122,22 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | -------------------------------------- | ------ |
 | CORE-069 | Introduce Application Composition Root | Done   |
 | CORE-070 | Add Application Acceptance Test        | Done   |
+| CORE-071 | Update Project README                  | Done   |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-070 — Add Application Acceptance Test is complete.
+CORE-071 — Update Project README is complete.
 
-TITAN Core now has an end-to-end acceptance scenario exercising the application
-through the composition root.
+The project README now reflects the current TITAN Core implementation instead
+of the original CORE-000 bootstrap state.
 
-The scenario creates and activates an investigation, adds a hypothesis and
-evidence, confirms the hypothesis, closes the investigation, and then
-reconstructs the application against the same SQLite database.
+It documents the domain, application, infrastructure, and composition
+boundaries; SQLite persistence and Unit of Work transaction coordination; the
+`bootstrap(database)` application API; the testing strategy; architecture
+guards; and the current project scope.
 
-The persisted aggregate is retrieved and verified after reconstruction,
-demonstrating that the complete application workflow survives beyond
-process-local object state.
+The documented application API was verified against `TitanApplication`.
 
 No production code is changed in this story.
