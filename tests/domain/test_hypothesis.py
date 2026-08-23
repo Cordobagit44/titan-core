@@ -7,7 +7,10 @@ from titan.core.events import (
     HypothesisConfirmed,
     HypothesisRejected,
 )
-from titan.core.evidence import Evidence
+from titan.core.evidence import (
+    Evidence,
+    EvidenceRelationship,
+)
 from titan.core.hypothesis import Hypothesis, HypothesisStatus
 
 
@@ -56,6 +59,7 @@ def test_add_evidence_to_hypothesis() -> None:
     evidence = Evidence(
         description="Firewall logs show repeated failed logins.",
         source="Authentication server logs",
+        relationship=EvidenceRelationship.SUPPORTS,
     )
 
     hypothesis.add_evidence(evidence)
@@ -70,6 +74,7 @@ def test_add_evidence_emits_domain_event() -> None:
     evidence = Evidence(
         description="Firewall logs show repeated failed logins.",
         source="Authentication server logs",
+        relationship=EvidenceRelationship.SUPPORTS,
     )
 
     hypothesis.add_evidence(evidence)

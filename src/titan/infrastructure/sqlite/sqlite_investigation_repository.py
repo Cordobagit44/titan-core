@@ -9,6 +9,7 @@ from titan.application.investigation_repository import (
 from titan.core.evidence import (
     Evidence,
     EvidenceId,
+    EvidenceRelationship,
 )
 from titan.core.hypothesis import (
     Hypothesis,
@@ -76,6 +77,7 @@ class SqliteInvestigationRepository(
                 hypothesis_id TEXT NOT NULL,
                 description TEXT NOT NULL,
                 source TEXT NOT NULL,
+                relationship TEXT NOT NULL,
                 FOREIGN KEY (hypothesis_id)
                     REFERENCES hypotheses (id)
             )
@@ -103,6 +105,15 @@ class SqliteInvestigationRepository(
                 ALTER TABLE evidences
                 ADD COLUMN source TEXT NOT NULL
                 DEFAULT 'legacy source unavailable'
+                """
+            )
+
+        if "relationship" not in columns:
+            self._connection.execute(
+                """
+                ALTER TABLE evidences
+                ADD COLUMN relationship TEXT NOT NULL
+                DEFAULT 'unspecified'
                 """
             )
 
@@ -189,9 +200,10 @@ class SqliteInvestigationRepository(
                     id,
                     hypothesis_id,
                     description,
-                    source
+                    source,
+                    relationship
                 )
-                VALUES (?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?)
                 """,
                 (
                     (
@@ -199,6 +211,7 @@ class SqliteInvestigationRepository(
                         str(hypothesis.id.value),
                         evidence.description,
                         evidence.source,
+                        evidence.relationship.value,
                     )
                     for hypothesis in investigation.hypotheses
                     for evidence in hypothesis.evidences
@@ -301,7 +314,8 @@ class SqliteInvestigationRepository(
             SELECT
                 id,
                 description,
-                source
+                source,
+                relationship
             FROM evidences
             WHERE hypothesis_id = ?
             ORDER BY rowid
@@ -316,6 +330,9 @@ class SqliteInvestigationRepository(
                 ),
                 description=row[1],
                 source=row[2],
+                relationship=EvidenceRelationship(
+                    row[3],
+                ),
             )
             for row in cursor.fetchall()
         )

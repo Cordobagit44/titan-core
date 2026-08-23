@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from titan.bootstrap import bootstrap
+from titan.core.evidence import EvidenceRelationship
 from titan.core.hypothesis import HypothesisStatus
 from titan.core.investigation import InvestigationStatus
 
@@ -35,6 +36,7 @@ def test_complete_investigation_workflow_is_persisted(
         hypothesis_id=hypothesis.id,
         description="Methane concentration varies seasonally",
         source="NASA Curiosity methane measurements",
+        relationship=EvidenceRelationship.SUPPORTS,
     )
 
     application.confirm_hypothesis(
@@ -79,6 +81,7 @@ def test_complete_investigation_workflow_is_persisted(
     assert restored_evidence.id == evidence.id
     assert restored_evidence.description == "Methane concentration varies seasonally"
     assert restored_evidence.source == "NASA Curiosity methane measurements"
+    assert restored_evidence.relationship is EvidenceRelationship.SUPPORTS
 
     listed = restarted_application.list_investigations()
 

@@ -2,7 +2,10 @@ from titan.application.persist_domain_events import (
     persist_domain_events,
 )
 from titan.application.unit_of_work import UnitOfWork
-from titan.core.evidence import Evidence
+from titan.core.evidence import (
+    Evidence,
+    EvidenceRelationship,
+)
 from titan.core.hypothesis import (
     HypothesisId,
 )
@@ -22,6 +25,7 @@ class AddEvidence:
         hypothesis_id: HypothesisId,
         description: str,
         source: str,
+        relationship: EvidenceRelationship,
     ) -> Evidence:
         try:
             investigation = self._unit_of_work.investigations.get(
@@ -42,9 +46,15 @@ class AddEvidence:
                     "hypothesis not found",
                 )
 
+            if relationship is EvidenceRelationship.UNSPECIFIED:
+                raise ValueError(
+                    "relationship must be specified",
+                )
+
             evidence = Evidence(
                 description=description,
                 source=source,
+                relationship=relationship,
             )
 
             hypothesis.add_evidence(

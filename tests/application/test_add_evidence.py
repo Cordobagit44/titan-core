@@ -15,6 +15,7 @@ from titan.application.investigation_repository import (
 )
 from titan.application.unit_of_work import UnitOfWork
 from titan.core.events import EvidenceAdded
+from titan.core.evidence import EvidenceRelationship
 from titan.core.hypothesis import Hypothesis
 from titan.core.investigation import Investigation
 
@@ -95,11 +96,48 @@ def test_add_evidence_returns_created_evidence() -> None:
         hypothesis_id=hypothesis.id,
         description="Methane levels vary seasonally",
         source="NASA Curiosity methane measurements",
+        relationship=EvidenceRelationship.SUPPORTS,
     )
 
     assert evidence.description == "Methane levels vary seasonally"
     assert evidence.source == "NASA Curiosity methane measurements"
+    assert evidence.relationship is EvidenceRelationship.SUPPORTS
     assert hypothesis.evidences == (evidence,)
+
+
+def test_add_evidence_accepts_weakening_relationship() -> None:
+    unit_of_work = SpyUnitOfWork()
+
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+    investigation.pull_events()
+
+    investigation.add_hypothesis(
+        "Methane indicates microbial life",
+    )
+    investigation.pull_events()
+
+    unit_of_work.investigations.save(
+        investigation,
+    )
+
+    hypothesis = investigation.hypotheses[0]
+
+    add_evidence = AddEvidence(
+        unit_of_work,
+    )
+
+    evidence = add_evidence(
+        investigation_id=investigation.id,
+        hypothesis_id=hypothesis.id,
+        description="Methane variation matches abiotic processes",
+        source="Geochemical analysis",
+        relationship=EvidenceRelationship.WEAKENS,
+    )
+
+    assert evidence.relationship is EvidenceRelationship.WEAKENS
 
 
 def test_add_evidence_persists_domain_event() -> None:
@@ -131,6 +169,7 @@ def test_add_evidence_persists_domain_event() -> None:
         hypothesis_id=hypothesis.id,
         description="Methane levels vary seasonally",
         source="NASA Curiosity methane measurements",
+        relationship=EvidenceRelationship.SUPPORTS,
     )
 
     assert unit_of_work.domain_events.list_all() == [
@@ -170,6 +209,7 @@ def test_add_evidence_commits_unit_of_work() -> None:
         hypothesis_id=hypothesis.id,
         description="Methane levels vary seasonally",
         source="NASA Curiosity methane measurements",
+        relationship=EvidenceRelationship.SUPPORTS,
     )
 
     assert unit_of_work.committed is True
@@ -211,6 +251,7 @@ def test_add_evidence_rolls_back_if_persistence_fails() -> None:
             hypothesis_id=hypothesis.id,
             description="Methane levels vary seasonally",
             source="NASA Curiosity methane measurements",
+            relationship=EvidenceRelationship.SUPPORTS,
         )
 
     assert unit_of_work.committed is False
@@ -246,6 +287,7 @@ def test_add_evidence_raises_if_investigation_not_found() -> None:
             hypothesis_id=hypothesis.id,
             description="Methane levels vary seasonally",
             source="NASA Curiosity methane measurements",
+            relationship=EvidenceRelationship.SUPPORTS,
         )
 
 
@@ -279,6 +321,7 @@ def test_add_evidence_raises_if_hypothesis_not_found() -> None:
             hypothesis_id=unknown_hypothesis.id,
             description="Methane levels vary seasonally",
             source="NASA Curiosity methane measurements",
+            relationship=EvidenceRelationship.SUPPORTS,
         )
 
 
@@ -315,6 +358,7 @@ def test_add_evidence_validates_description() -> None:
             hypothesis_id=hypothesis.id,
             description="   ",
             source="NASA Curiosity methane measurements",
+            relationship=EvidenceRelationship.SUPPORTS,
         )
 
 
@@ -351,4 +395,45 @@ def test_add_evidence_validates_source() -> None:
             hypothesis_id=hypothesis.id,
             description="Methane levels vary seasonally",
             source="   ",
+            relationship=EvidenceRelationship.SUPPORTS,
         )
+
+
+def test_add_evidence_rejects_unspecified_relationship() -> None:
+    unit_of_work = SpyUnitOfWork()
+
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+    investigation.pull_events()
+
+    investigation.add_hypothesis(
+        "Methane indicates microbial life",
+    )
+    investigation.pull_events()
+
+    unit_of_work.investigations.save(
+        investigation,
+    )
+
+    hypothesis = investigation.hypotheses[0]
+
+    add_evidence = AddEvidence(
+        unit_of_work,
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="relationship must be specified",
+    ):
+        add_evidence(
+            investigation_id=investigation.id,
+            hypothesis_id=hypothesis.id,
+            description="Methane levels vary seasonally",
+            source="NASA Curiosity methane measurements",
+            relationship=EvidenceRelationship.UNSPECIFIED,
+        )
+
+    assert unit_of_work.committed is False
+    assert unit_of_work.rolled_back is True

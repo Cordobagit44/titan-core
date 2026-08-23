@@ -6,7 +6,10 @@ from titan.core.events import (
     HypothesisConfirmed,
     HypothesisRejected,
 )
-from titan.core.evidence import Evidence
+from titan.core.evidence import (
+    Evidence,
+    EvidenceRelationship,
+)
 from titan.core.hypothesis import Hypothesis
 from titan.core.investigation import (
     Investigation,
@@ -263,6 +266,7 @@ def test_evidence_added_event_is_persisted() -> None:
     evidence = Evidence(
         description="Methane levels vary seasonally",
         source="Mars methane observations",
+        relationship=EvidenceRelationship.SUPPORTS,
     )
 
     hypothesis.add_evidence(
@@ -299,6 +303,7 @@ def test_legacy_domain_event_schema_is_migrated(
         created_event,
         InvestigationCreated,
     )
+
     connection = sqlite3.connect(
         database,
     )
@@ -361,6 +366,7 @@ def test_legacy_domain_event_schema_is_migrated(
     evidence = Evidence(
         description="Methane levels vary seasonally",
         source="Mars methane observations",
+        relationship=EvidenceRelationship.SUPPORTS,
     )
 
     hypothesis.add_evidence(

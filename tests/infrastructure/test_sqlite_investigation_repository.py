@@ -1,7 +1,10 @@
 import sqlite3
 from pathlib import Path
 
-from titan.core.evidence import Evidence
+from titan.core.evidence import (
+    Evidence,
+    EvidenceRelationship,
+)
 from titan.core.investigation import Investigation
 from titan.infrastructure.sqlite.sqlite_investigation_repository import (
     SqliteInvestigationRepository,
@@ -136,7 +139,7 @@ def test_list_restores_hypotheses() -> None:
     assert investigations[0].hypotheses[0].statement == "Artificial structure"
 
 
-def test_get_restores_hypothesis_evidences() -> None:
+def test_get_restores_supporting_hypothesis_evidence() -> None:
     repository = SqliteInvestigationRepository(
         ":memory:",
     )
@@ -156,6 +159,7 @@ def test_get_restores_hypothesis_evidences() -> None:
         Evidence(
             description="High-resolution orbital imagery",
             source="Mars Reconnaissance Orbiter imagery",
+            relationship=EvidenceRelationship.SUPPORTS,
         )
     )
 
@@ -175,6 +179,50 @@ def test_get_restores_hypothesis_evidences() -> None:
 
     assert restored_evidence.description == "High-resolution orbital imagery"
     assert restored_evidence.source == "Mars Reconnaissance Orbiter imagery"
+    assert restored_evidence.relationship is EvidenceRelationship.SUPPORTS
+
+
+def test_get_restores_weakening_hypothesis_evidence() -> None:
+    repository = SqliteInvestigationRepository(
+        ":memory:",
+    )
+
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+
+    investigation.add_hypothesis(
+        "Artificial structure",
+    )
+
+    hypothesis = investigation.hypotheses[0]
+
+    hypothesis.add_evidence(
+        Evidence(
+            description="Geological process explains the observed structure",
+            source="Planetary geology analysis",
+            relationship=EvidenceRelationship.WEAKENS,
+        )
+    )
+
+    repository.save(
+        investigation,
+    )
+
+    found = repository.get(
+        investigation.id,
+    )
+
+    assert found is not None
+    assert len(found.hypotheses) == 1
+    assert len(found.hypotheses[0].evidences) == 1
+
+    restored_evidence = found.hypotheses[0].evidences[0]
+
+    assert restored_evidence.description == "Geological process explains the observed structure"
+    assert restored_evidence.source == "Planetary geology analysis"
+    assert restored_evidence.relationship is EvidenceRelationship.WEAKENS
 
 
 def test_legacy_evidence_schema_is_migrated(
@@ -198,6 +246,7 @@ def test_legacy_evidence_schema_is_migrated(
     evidence = Evidence(
         description="High-resolution orbital imagery",
         source="Source unavailable in legacy schema",
+        relationship=EvidenceRelationship.UNSPECIFIED,
     )
 
     connection = sqlite3.connect(
@@ -315,6 +364,7 @@ def test_legacy_evidence_schema_is_migrated(
     assert restored_evidence.id == evidence.id
     assert restored_evidence.description == evidence.description
     assert restored_evidence.source == "legacy source unavailable"
+    assert restored_evidence.relationship is EvidenceRelationship.UNSPECIFIED
 
 
 def test_get_restores_closed_investigation_status() -> None:

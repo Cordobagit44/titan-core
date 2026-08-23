@@ -4,6 +4,48 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-075 — Classify Evidence Relationship
+
+### Added
+
+- `EvidenceRelationship` domain enum with `SUPPORTS`, `WEAKENS`, and `UNSPECIFIED`
+- Explicit evidence relationship on `Evidence`
+- Relationship support through the `AddEvidence` use case
+- SQLite persistence and restoration of evidence relationships
+- Automatic migration of legacy evidence schemas without a relationship column
+- Acceptance coverage verifying relationship persistence across application reconstruction
+
+### Changed
+
+- New evidence must explicitly state whether it supports or weakens a hypothesis
+- `AddEvidence` rejects `UNSPECIFIED` for newly recorded evidence
+- Legacy persisted evidence is restored with `UNSPECIFIED` when no historical relationship exists
+
+### Architectural Notes
+
+- Evidence relationship is modeled in the domain
+- `UNSPECIFIED` is reserved for historical compatibility
+- `EvidenceAdded` remains unchanged
+- Existing Unit of Work transaction behavior remains unchanged
+- No evidence weighting introduced
+- No confidence or certainty scoring introduced
+- No assessment introduced
+- No automatic hypothesis confirmation or rejection introduced
+- No new runtime dependency introduced
+
+### Validation
+
+- Domain relationship modeling verified
+- Application relationship propagation verified
+- SQLite relationship persistence and restoration verified
+- Legacy SQLite evidence schema migration verified
+- Acceptance workflow preserves evidence relationship after application reconstruction
+- pytest — 147 passed
+- Ruff — passed
+- mypy — 60 source files checked
+
+---
+
 ## CORE-074 — Update README for Evidence Provenance
 
 ### Changed

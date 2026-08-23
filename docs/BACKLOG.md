@@ -134,18 +134,33 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-073 | Record Evidence Source                | Done   |
 | CORE-074 | Update README for Evidence Provenance | Done   |
 
+---
+
+## Epic 9 — Evidence Relationships
+
+| ID       | Story                          | Status      |
+| -------- | ------------------------------ | ----------- |
+| CORE-075 | Classify Evidence Relationship | Done   |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-074 — Update README for Evidence Provenance is complete.
+CORE-075 — Classify Evidence Relationship is complete.
 
-The project README now reflects the evidence provenance capability introduced
-in CORE-073 and the application lifecycle management introduced in CORE-072.
+TITAN Core evidence now records how evidence relates to a hypothesis through
+an explicit relationship classification.
 
-The documented `add_evidence()` workflow includes the required evidence source,
-application resource cleanup is demonstrated through `application.close()`,
-and the documented validation state reflects 142 passing tests.
+New evidence must be classified as either supporting or weakening. Persisted
+legacy evidence whose historical relationship is unknown is restored as
+`UNSPECIFIED`.
 
-CORE-074 changes documentation only. Domain, application, infrastructure, and
-transaction behavior remain unchanged.
+The relationship is preserved through SQLite persistence and across complete
+application reconstruction.
+
+`EvidenceAdded` remains unchanged and continues to identify only the hypothesis
+and evidence.
+
+CORE-075 does not introduce evidence weighting, confidence scores, assessments,
+automatic hypothesis decisions, claims, interpretations, thesis modeling, or
+other higher-level reasoning abstractions.
