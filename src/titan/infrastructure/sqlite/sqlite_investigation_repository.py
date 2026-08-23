@@ -75,14 +75,36 @@ class SqliteInvestigationRepository(
                 id TEXT PRIMARY KEY,
                 hypothesis_id TEXT NOT NULL,
                 description TEXT NOT NULL,
+                source TEXT NOT NULL,
                 FOREIGN KEY (hypothesis_id)
                     REFERENCES hypotheses (id)
             )
             """
         )
 
+        self._migrate_evidence_schema()
+
         if self._manages_transaction:
             self._connection.commit()
+
+    def _migrate_evidence_schema(
+        self,
+    ) -> None:
+        columns = {
+            row[1]
+            for row in self._connection.execute(
+                "PRAGMA table_info(evidences)",
+            ).fetchall()
+        }
+
+        if "source" not in columns:
+            self._connection.execute(
+                """
+                ALTER TABLE evidences
+                ADD COLUMN source TEXT NOT NULL
+                DEFAULT 'legacy source unavailable'
+                """
+            )
 
     def save(
         self,
@@ -166,15 +188,17 @@ class SqliteInvestigationRepository(
                 INSERT INTO evidences (
                     id,
                     hypothesis_id,
-                    description
+                    description,
+                    source
                 )
-                VALUES (?, ?, ?)
+                VALUES (?, ?, ?, ?)
                 """,
                 (
                     (
                         str(evidence.id.value),
                         str(hypothesis.id.value),
                         evidence.description,
+                        evidence.source,
                     )
                     for hypothesis in investigation.hypotheses
                     for evidence in hypothesis.evidences
@@ -276,7 +300,8 @@ class SqliteInvestigationRepository(
             """
             SELECT
                 id,
-                description
+                description,
+                source
             FROM evidences
             WHERE hypothesis_id = ?
             ORDER BY rowid
@@ -290,6 +315,7 @@ class SqliteInvestigationRepository(
                     value=UUID(row[0]),
                 ),
                 description=row[1],
+                source=row[2],
             )
             for row in cursor.fetchall()
         )

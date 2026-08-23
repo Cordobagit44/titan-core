@@ -4,6 +4,53 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-073 — Record Evidence Source
+
+### Added
+
+- Required `source` field for `Evidence`
+- Source validation in the domain model
+- Evidence source support through the `AddEvidence` use case
+- SQLite persistence and restoration of evidence source
+- Automatic migration of legacy evidence schemas without a `source` column
+- End-to-end acceptance coverage for evidence source persistence
+
+### Changed
+
+- `Evidence` now requires both a description and a source
+- `AddEvidence` now requires a source when creating evidence
+- The SQLite `evidences` table now stores `source TEXT NOT NULL`
+- Legacy evidence rows without recorded provenance receive the explicit `legacy source unavailable` marker
+
+### Architectural Notes
+
+- Evidence provenance is modeled in the domain
+- Application use cases pass provenance explicitly
+- SQLite remains responsible for schema evolution
+- Existing legacy evidence data is preserved during migration
+- `EvidenceAdded` remains unchanged and continues to identify the hypothesis and evidence
+- No source-type hierarchy introduced
+- No external provenance service introduced
+- No CLI introduced
+- No HTTP API introduced
+- No Event Bus introduced
+- No Outbox introduced
+- No AI provider integration introduced
+- No new runtime dependency introduced
+
+### Validation
+
+- Domain evidence source validation verified
+- Application evidence source propagation verified
+- SQLite source persistence and restoration verified
+- Legacy SQLite evidence schema migration verified
+- Evidence source persistence across application reconstruction verified
+- pytest — 142 passed
+- Ruff — passed
+- mypy — 60 source files checked
+
+---
+
 ## CORE-072 — Add Application Lifecycle Management
 
 ### Added

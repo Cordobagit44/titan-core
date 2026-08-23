@@ -34,6 +34,7 @@ def test_complete_investigation_workflow_is_persisted(
         investigation_id=investigation.id,
         hypothesis_id=hypothesis.id,
         description="Methane concentration varies seasonally",
+        source="NASA Curiosity methane measurements",
     )
 
     application.confirm_hypothesis(
@@ -44,6 +45,8 @@ def test_complete_investigation_workflow_is_persisted(
     application.close_investigation(
         investigation.id,
     )
+
+    application.close()
 
     restarted_application = bootstrap(
         database,
@@ -75,8 +78,11 @@ def test_complete_investigation_workflow_is_persisted(
 
     assert restored_evidence.id == evidence.id
     assert restored_evidence.description == "Methane concentration varies seasonally"
+    assert restored_evidence.source == "NASA Curiosity methane measurements"
 
     listed = restarted_application.list_investigations()
 
     assert len(listed) == 1
     assert listed[0].id == investigation.id
+
+    restarted_application.close()

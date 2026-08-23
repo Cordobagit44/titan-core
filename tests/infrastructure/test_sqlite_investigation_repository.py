@@ -1,3 +1,6 @@
+import sqlite3
+from pathlib import Path
+
 from titan.core.evidence import Evidence
 from titan.core.investigation import Investigation
 from titan.infrastructure.sqlite.sqlite_investigation_repository import (
@@ -152,6 +155,7 @@ def test_get_restores_hypothesis_evidences() -> None:
     hypothesis.add_evidence(
         Evidence(
             description="High-resolution orbital imagery",
+            source="Mars Reconnaissance Orbiter imagery",
         )
     )
 
@@ -166,7 +170,151 @@ def test_get_restores_hypothesis_evidences() -> None:
     assert found is not None
     assert len(found.hypotheses) == 1
     assert len(found.hypotheses[0].evidences) == 1
-    assert found.hypotheses[0].evidences[0].description == "High-resolution orbital imagery"
+
+    restored_evidence = found.hypotheses[0].evidences[0]
+
+    assert restored_evidence.description == "High-resolution orbital imagery"
+    assert restored_evidence.source == "Mars Reconnaissance Orbiter imagery"
+
+
+def test_legacy_evidence_schema_is_migrated(
+    tmp_path: Path,
+) -> None:
+    database = str(
+        tmp_path / "legacy_investigations.db",
+    )
+
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+
+    investigation.add_hypothesis(
+        "Artificial structure",
+    )
+
+    hypothesis = investigation.hypotheses[0]
+
+    evidence = Evidence(
+        description="High-resolution orbital imagery",
+        source="Source unavailable in legacy schema",
+    )
+
+    connection = sqlite3.connect(
+        database,
+    )
+
+    connection.execute(
+        """
+        CREATE TABLE investigations (
+            id TEXT PRIMARY KEY,
+            title TEXT NOT NULL,
+            purpose TEXT NOT NULL,
+            status TEXT NOT NULL,
+            closed_at TEXT
+        )
+        """
+    )
+
+    connection.execute(
+        """
+        CREATE TABLE hypotheses (
+            id TEXT PRIMARY KEY,
+            investigation_id TEXT NOT NULL,
+            statement TEXT NOT NULL,
+            status TEXT NOT NULL,
+            FOREIGN KEY (investigation_id)
+                REFERENCES investigations (id)
+        )
+        """
+    )
+
+    connection.execute(
+        """
+        CREATE TABLE evidences (
+            id TEXT PRIMARY KEY,
+            hypothesis_id TEXT NOT NULL,
+            description TEXT NOT NULL,
+            FOREIGN KEY (hypothesis_id)
+                REFERENCES hypotheses (id)
+        )
+        """
+    )
+
+    connection.execute(
+        """
+        INSERT INTO investigations (
+            id,
+            title,
+            purpose,
+            status,
+            closed_at
+        )
+        VALUES (?, ?, ?, ?, ?)
+        """,
+        (
+            str(investigation.id.value),
+            investigation.title,
+            investigation.purpose,
+            investigation.status.value,
+            None,
+        ),
+    )
+
+    connection.execute(
+        """
+        INSERT INTO hypotheses (
+            id,
+            investigation_id,
+            statement,
+            status
+        )
+        VALUES (?, ?, ?, ?)
+        """,
+        (
+            str(hypothesis.id.value),
+            str(investigation.id.value),
+            hypothesis.statement,
+            hypothesis.status.value,
+        ),
+    )
+
+    connection.execute(
+        """
+        INSERT INTO evidences (
+            id,
+            hypothesis_id,
+            description
+        )
+        VALUES (?, ?, ?)
+        """,
+        (
+            str(evidence.id.value),
+            str(hypothesis.id.value),
+            evidence.description,
+        ),
+    )
+
+    connection.commit()
+    connection.close()
+
+    repository = SqliteInvestigationRepository(
+        database,
+    )
+
+    restored = repository.get(
+        investigation.id,
+    )
+
+    assert restored is not None
+    assert len(restored.hypotheses) == 1
+    assert len(restored.hypotheses[0].evidences) == 1
+
+    restored_evidence = restored.hypotheses[0].evidences[0]
+
+    assert restored_evidence.id == evidence.id
+    assert restored_evidence.description == evidence.description
+    assert restored_evidence.source == "legacy source unavailable"
 
 
 def test_get_restores_closed_investigation_status() -> None:

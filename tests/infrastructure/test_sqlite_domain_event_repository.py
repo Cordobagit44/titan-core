@@ -262,6 +262,7 @@ def test_evidence_added_event_is_persisted() -> None:
     )
     evidence = Evidence(
         description="Methane levels vary seasonally",
+        source="Mars methane observations",
     )
 
     hypothesis.add_evidence(
@@ -359,6 +360,7 @@ def test_legacy_domain_event_schema_is_migrated(
     )
     evidence = Evidence(
         description="Methane levels vary seasonally",
+        source="Mars methane observations",
     )
 
     hypothesis.add_evidence(

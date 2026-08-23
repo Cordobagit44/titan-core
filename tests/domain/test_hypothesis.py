@@ -55,6 +55,7 @@ def test_add_evidence_to_hypothesis() -> None:
     )
     evidence = Evidence(
         description="Firewall logs show repeated failed logins.",
+        source="Authentication server logs",
     )
 
     hypothesis.add_evidence(evidence)
@@ -68,6 +69,7 @@ def test_add_evidence_emits_domain_event() -> None:
     )
     evidence = Evidence(
         description="Firewall logs show repeated failed logins.",
+        source="Authentication server logs",
     )
 
     hypothesis.add_evidence(evidence)

@@ -94,9 +94,11 @@ def test_add_evidence_returns_created_evidence() -> None:
         investigation_id=investigation.id,
         hypothesis_id=hypothesis.id,
         description="Methane levels vary seasonally",
+        source="NASA Curiosity methane measurements",
     )
 
     assert evidence.description == "Methane levels vary seasonally"
+    assert evidence.source == "NASA Curiosity methane measurements"
     assert hypothesis.evidences == (evidence,)
 
 
@@ -128,6 +130,7 @@ def test_add_evidence_persists_domain_event() -> None:
         investigation_id=investigation.id,
         hypothesis_id=hypothesis.id,
         description="Methane levels vary seasonally",
+        source="NASA Curiosity methane measurements",
     )
 
     assert unit_of_work.domain_events.list_all() == [
@@ -166,6 +169,7 @@ def test_add_evidence_commits_unit_of_work() -> None:
         investigation_id=investigation.id,
         hypothesis_id=hypothesis.id,
         description="Methane levels vary seasonally",
+        source="NASA Curiosity methane measurements",
     )
 
     assert unit_of_work.committed is True
@@ -206,6 +210,7 @@ def test_add_evidence_rolls_back_if_persistence_fails() -> None:
             investigation_id=investigation.id,
             hypothesis_id=hypothesis.id,
             description="Methane levels vary seasonally",
+            source="NASA Curiosity methane measurements",
         )
 
     assert unit_of_work.committed is False
@@ -240,6 +245,7 @@ def test_add_evidence_raises_if_investigation_not_found() -> None:
             investigation_id=investigation.id,
             hypothesis_id=hypothesis.id,
             description="Methane levels vary seasonally",
+            source="NASA Curiosity methane measurements",
         )
 
 
@@ -272,6 +278,7 @@ def test_add_evidence_raises_if_hypothesis_not_found() -> None:
             investigation_id=investigation.id,
             hypothesis_id=unknown_hypothesis.id,
             description="Methane levels vary seasonally",
+            source="NASA Curiosity methane measurements",
         )
 
 
@@ -307,4 +314,41 @@ def test_add_evidence_validates_description() -> None:
             investigation_id=investigation.id,
             hypothesis_id=hypothesis.id,
             description="   ",
+            source="NASA Curiosity methane measurements",
+        )
+
+
+def test_add_evidence_validates_source() -> None:
+    unit_of_work = SpyUnitOfWork()
+
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+    investigation.pull_events()
+
+    investigation.add_hypothesis(
+        "Methane indicates microbial life",
+    )
+    investigation.pull_events()
+
+    unit_of_work.investigations.save(
+        investigation,
+    )
+
+    hypothesis = investigation.hypotheses[0]
+
+    add_evidence = AddEvidence(
+        unit_of_work,
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="source must not be empty",
+    ):
+        add_evidence(
+            investigation_id=investigation.id,
+            hypothesis_id=hypothesis.id,
+            description="Methane levels vary seasonally",
+            source="   ",
         )

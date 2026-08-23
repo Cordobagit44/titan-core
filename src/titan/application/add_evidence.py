@@ -21,6 +21,7 @@ class AddEvidence:
         investigation_id: InvestigationId,
         hypothesis_id: HypothesisId,
         description: str,
+        source: str,
     ) -> Evidence:
         try:
             investigation = self._unit_of_work.investigations.get(
@@ -43,6 +44,7 @@ class AddEvidence:
 
             evidence = Evidence(
                 description=description,
+                source=source,
             )
 
             hypothesis.add_evidence(

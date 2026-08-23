@@ -125,20 +125,33 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-071 | Update Project README                  | Done   |
 | CORE-072 | Add Application Lifecycle Management   | Done   |
 
+---
+
+## Epic 8 — Evidence Provenance
+
+| ID       | Story                  | Status |
+| -------- | ---------------------- | ------ |
+| CORE-073 | Record Evidence Source | Done   |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-072 — Add Application Lifecycle Management is complete.
+CORE-073 — Record Evidence Source is complete.
 
-TITAN Core now provides explicit lifecycle management for SQLite-backed
-applications.
+TITAN Core evidence now requires an explicit source in addition to its
+description.
 
-`SqliteUnitOfWork.close()` releases the SQLite connection, while
-`TitanApplication.close()` exposes resource cleanup through the application
-composition boundary.
+The source is validated by the domain, accepted by the `AddEvidence` use case,
+persisted and restored through SQLite, and preserved across the complete
+application workflow.
 
-Application use cases and transaction behavior remain unchanged.
+Existing SQLite evidence schemas are migrated automatically. Legacy evidence
+rows receive the explicit `legacy source unavailable` marker when no original
+source was recorded.
 
-Context manager support, CLI lifecycle integration, and web framework lifecycle
-integration remain outside this story.
+`EvidenceAdded` remains unchanged and continues to identify the hypothesis and
+evidence without duplicating provenance data into the domain event.
+
+No source-type hierarchy, external provenance service, CLI, HTTP API, Event
+Bus, Outbox, or AI integration is introduced in this story.

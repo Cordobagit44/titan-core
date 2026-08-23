@@ -8,14 +8,28 @@ class EvidenceId:
 
     @classmethod
     def new(cls) -> "EvidenceId":
-        return cls(value=uuid4())
+        return cls(
+            value=uuid4(),
+        )
 
 
 @dataclass(frozen=True)
 class Evidence:
     description: str
-    id: EvidenceId = field(default_factory=EvidenceId.new)
+    source: str
+    id: EvidenceId = field(
+        default_factory=EvidenceId.new,
+    )
 
-    def __post_init__(self) -> None:
+    def __post_init__(
+        self,
+    ) -> None:
         if not self.description.strip():
-            raise ValueError("description must not be empty")
+            raise ValueError(
+                "description must not be empty",
+            )
+
+        if not self.source.strip():
+            raise ValueError(
+                "source must not be empty",
+            )
