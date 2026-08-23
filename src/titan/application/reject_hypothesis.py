@@ -31,16 +31,9 @@ class RejectHypothesis:
                     "investigation not found",
                 )
 
-            hypothesis = investigation.find_hypothesis(
+            hypothesis = investigation.reject_hypothesis(
                 hypothesis_id,
             )
-
-            if hypothesis is None:
-                raise LookupError(
-                    "hypothesis not found",
-                )
-
-            hypothesis.reject()
 
             self._unit_of_work.investigations.save(
                 investigation,
