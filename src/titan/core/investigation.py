@@ -99,6 +99,9 @@ class Investigation(Entity[DomainEvent]):
         if not title.strip():
             raise ValueError("title must not be empty")
 
+        if not purpose.strip():
+            raise ValueError("purpose must not be empty")
+
         return cls(
             investigation_id=InvestigationId.new(),
             title=title,
