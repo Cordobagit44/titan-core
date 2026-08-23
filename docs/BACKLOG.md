@@ -175,11 +175,13 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 | ID       | Story                          | Status      |
 | -------- | ------------------------------ | ----------- |
-| CORE-083 | Add Safe Local Synchronization | In Progress |
+| CORE-083 | Add Safe Local Synchronization | Done        |
 
 ## Current Story
 
-CORE-083 — Add Safe Local Synchronization is in progress.
+No CORE story is currently active.
+
+CORE-083 — Add Safe Local Synchronization is complete.
 
 CORE-083 adds an explicit PowerShell synchronization command and VS Code tasks.
 The workflow refuses to update a dirty checkout, a non-`main` branch, or local
@@ -187,4 +189,5 @@ history that is ahead of or diverged from `origin/main`. Remote-only changes are
 applied with `--ff-only`; an optional mode runs the complete quality gates.
 
 No scheduled pull, automatic branch switch, stash, reset, conflict resolution,
-commit, or push is introduced.
+commit, or push is introduced. CI passed the existing Ruff lint, Ruff format,
+mypy, and pytest quality gates.
