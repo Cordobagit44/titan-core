@@ -142,3 +142,23 @@ def test_create_investigation_rolls_back_if_persistence_fails() -> None:
 
     assert unit_of_work.committed is False
     assert unit_of_work.rolled_back is True
+
+
+def test_create_investigation_rolls_back_if_purpose_is_empty() -> None:
+    unit_of_work = SpyUnitOfWork()
+
+    create_investigation = CreateInvestigation(
+        unit_of_work,
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="purpose must not be empty",
+    ):
+        create_investigation(
+            title="Mars anomaly",
+            purpose="   ",
+        )
+
+    assert unit_of_work.committed is False
+    assert unit_of_work.rolled_back is True
