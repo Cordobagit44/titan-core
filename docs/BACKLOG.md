@@ -160,16 +160,23 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-078 | Protect Evidence Addition on Closed Investigations | Done   |
 | CORE-079 | Protect Hypothesis Decisions on Closed Investigations | Done |
 
+---
+
+## Epic 12 — Development Reliability
+
+| ID       | Story                              | Status      |
+| -------- | ---------------------------------- | ----------- |
+| CORE-080 | Close SQLite Test Resources        | Done        |
+| CORE-081 | Reconcile CORE-080 Continuity      | In Progress |
+
 ## Current Story
 
-No CORE story is currently active.
+CORE-081 — Reconcile CORE-080 Continuity is in progress.
 
-CORE-079 — Protect Hypothesis Decisions on Closed Investigations is complete.
+CORE-080 is complete and merged to `main`. Its final implementation closes
+bootstrap applications explicitly and uses test-level SQLite connection tracking
+to close test-owned connections deterministically. Production lifecycle and
+persistence behavior remain unchanged.
 
-Hypothesis confirmation and rejection now route through the `Investigation`
-aggregate. Closed investigations reject both status mutations, reopened
-investigations allow them again, and the existing hypothesis-level status
-invariants and domain events remain unchanged.
-
-Validation completed with 159 passing tests, Ruff lint and format checks
-passing, and mypy passing on 64 source files.
+CORE-081 reconciles the specification and backlog with that implemented state so
+future sessions can recover the project accurately from the repository.
