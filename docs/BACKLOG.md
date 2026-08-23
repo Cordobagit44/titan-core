@@ -138,22 +138,20 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 ## Epic 9 — Evidence Relationships
 
-| ID       | Story                                    | Status      |
-| -------- | ---------------------------------------- | ----------- |
-| CORE-075 | Classify Evidence Relationship           | Done        |
-| CORE-076 | Update README for Evidence Relationships | In Progress |
+| ID       | Story                                    | Status |
+| -------- | ---------------------------------------- | ------ |
+| CORE-075 | Classify Evidence Relationship           | Done   |
+| CORE-076 | Update README for Evidence Relationships | Done   |
 
 ## Current Story
 
-CORE-076 — Update README for Evidence Relationships is in progress.
+No CORE story is currently active.
 
-CORE-075 introduced explicit supporting and weakening evidence relationships,
-but the README still reflects the pre-CORE-075 API and validation state.
+CORE-076 — Update README for Evidence Relationships is complete.
 
-CORE-076 updates documentation only: the `add_evidence()` example must include
-an explicit `EvidenceRelationship`, the documented test count must reflect 147
-passing tests, and application reconstruction documentation must state that
-evidence relationship classification is preserved alongside provenance.
+The README now documents the explicit `EvidenceRelationship` required by
+`add_evidence()`, reports the 147-test validation state, and states that evidence
+relationship classification is preserved across application reconstruction.
 
-No domain, application, persistence, transaction, or runtime dependency changes
-are introduced by CORE-076.
+CORE-076 changes documentation only. Domain, application, persistence,
+transaction behavior, and runtime dependencies remain unchanged.
