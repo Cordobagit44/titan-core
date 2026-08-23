@@ -169,17 +169,22 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-080 | Close SQLite Test Resources        | Done   |
 | CORE-081 | Reconcile CORE-080 Continuity      | Done   |
 
+---
+
+## Epic 13 — Developer Workflow
+
+| ID       | Story                          | Status      |
+| -------- | ------------------------------ | ----------- |
+| CORE-083 | Add Safe Local Synchronization | In Progress |
+
 ## Current Story
 
-No CORE story is currently active.
+CORE-083 — Add Safe Local Synchronization is in progress.
 
-CORE-081 — Reconcile CORE-080 Continuity is complete.
+CORE-083 adds an explicit PowerShell synchronization command and VS Code tasks.
+The workflow refuses to update a dirty checkout, a non-`main` branch, or local
+history that is ahead of or diverged from `origin/main`. Remote-only changes are
+applied with `--ff-only`; an optional mode runs the complete quality gates.
 
-CORE-080 is complete and merged to `main`. Its final implementation closes
-bootstrap applications explicitly and uses test-level SQLite connection tracking
-to close test-owned connections deterministically. Production lifecycle and
-persistence behavior remain unchanged.
-
-CORE-081 reconciles the specification and backlog with that implemented state.
-Validation completed with 159 passing tests, no SQLite `ResourceWarning` summary,
-Ruff lint and format checks passing, and mypy passing on 65 source files.
+No scheduled pull, automatic branch switch, stash, reset, conflict resolution,
+commit, or push is introduced.
