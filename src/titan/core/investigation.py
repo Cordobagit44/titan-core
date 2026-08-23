@@ -164,6 +164,46 @@ class Investigation(Entity[DomainEvent]):
 
         return hypothesis
 
+    def confirm_hypothesis(
+        self,
+        hypothesis_id: HypothesisId,
+    ) -> Hypothesis:
+        if self.status is InvestigationStatus.CLOSED:
+            raise ValueError("investigation is closed")
+
+        hypothesis = self.find_hypothesis(
+            hypothesis_id,
+        )
+
+        if hypothesis is None:
+            raise LookupError(
+                "hypothesis not found",
+            )
+
+        hypothesis.confirm()
+
+        return hypothesis
+
+    def reject_hypothesis(
+        self,
+        hypothesis_id: HypothesisId,
+    ) -> Hypothesis:
+        if self.status is InvestigationStatus.CLOSED:
+            raise ValueError("investigation is closed")
+
+        hypothesis = self.find_hypothesis(
+            hypothesis_id,
+        )
+
+        if hypothesis is None:
+            raise LookupError(
+                "hypothesis not found",
+            )
+
+        hypothesis.reject()
+
+        return hypothesis
+
     def add_hypothesis(
         self,
         statement: str,
