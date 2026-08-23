@@ -15,7 +15,7 @@ Implemented capabilities include:
 
 - investigation creation, activation, closing, and reopening;
 - hypothesis creation, removal, confirmation, and rejection;
-- evidence attached to hypotheses;
+- evidence attached to hypotheses with explicit provenance and relationship classification;
 - domain event emission and persistence;
 - SQLite persistence for investigations and domain events;
 - transaction coordination through Unit of Work;
@@ -23,7 +23,7 @@ Implemented capabilities include:
 - architecture guards for domain and application dependencies;
 - end-to-end acceptance coverage through the composed application.
 
-The current test suite contains 142 passing tests.
+The current test suite contains 147 passing tests.
 
 ## Architecture
 
@@ -114,6 +114,7 @@ A TITAN application can be created against a SQLite database:
 
 ```python
 from titan.bootstrap import bootstrap
+from titan.core.evidence import EvidenceRelationship
 
 application = bootstrap("titan.db")
 ```
@@ -152,6 +153,7 @@ evidence = application.add_evidence(
     hypothesis_id=hypothesis.id,
     description="Methane concentration varies seasonally",
     source="NASA Curiosity methane measurements",
+    relationship=EvidenceRelationship.SUPPORTS,
 )
 ```
 
@@ -193,7 +195,8 @@ application.close()
 ```
 
 The application can be reconstructed against the same SQLite database and the
-persisted investigation state, including evidence provenance, will be restored.
+persisted investigation state, including evidence provenance and evidence
+relationship classification, will be restored.
 
 ## Application Use Cases
 
