@@ -164,19 +164,22 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 ## Epic 12 — Development Reliability
 
-| ID       | Story                              | Status      |
-| -------- | ---------------------------------- | ----------- |
-| CORE-080 | Close SQLite Test Resources        | Done        |
-| CORE-081 | Reconcile CORE-080 Continuity      | In Progress |
+| ID       | Story                              | Status |
+| -------- | ---------------------------------- | ------ |
+| CORE-080 | Close SQLite Test Resources        | Done   |
+| CORE-081 | Reconcile CORE-080 Continuity      | Done   |
 
 ## Current Story
 
-CORE-081 — Reconcile CORE-080 Continuity is in progress.
+No CORE story is currently active.
+
+CORE-081 — Reconcile CORE-080 Continuity is complete.
 
 CORE-080 is complete and merged to `main`. Its final implementation closes
 bootstrap applications explicitly and uses test-level SQLite connection tracking
 to close test-owned connections deterministically. Production lifecycle and
 persistence behavior remain unchanged.
 
-CORE-081 reconciles the specification and backlog with that implemented state so
-future sessions can recover the project accurately from the repository.
+CORE-081 reconciles the specification and backlog with that implemented state.
+Validation completed with 159 passing tests, no SQLite `ResourceWarning` summary,
+Ruff lint and format checks passing, and mypy passing on 65 source files.
