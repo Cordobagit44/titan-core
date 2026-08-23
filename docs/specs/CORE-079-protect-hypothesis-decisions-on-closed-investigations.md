@@ -2,7 +2,7 @@
 
 ## Status
 
-In Progress
+Done
 
 ## Context
 
@@ -10,11 +10,11 @@ CORE-078 established that evidence mutation belongs behind the `Investigation`
 aggregate boundary so a closed investigation cannot be changed indirectly
 through one of its hypotheses.
 
-The confirm and reject application use cases still locate a hypothesis and call
-`Hypothesis.confirm()` or `Hypothesis.reject()` directly. This means hypothesis
-status can still change after the owning investigation has been closed.
+The confirm and reject application use cases still located a hypothesis and
+called `Hypothesis.confirm()` or `Hypothesis.reject()` directly. This allowed
+hypothesis status to change after the owning investigation had been closed.
 
-That behavior conflicts with the existing aggregate rule that closed
+That behavior conflicted with the existing aggregate rule that closed
 investigations prevent modifications until reopened.
 
 ## Goal
@@ -27,16 +27,16 @@ while the investigation is closed and succeed again after it is reopened.
 
 ## Domain Model
 
-Add aggregate-level operations that locate the requested hypothesis and delegate
-the actual status transition to the `Hypothesis` entity.
+Aggregate-level operations locate the requested hypothesis and delegate the
+actual status transition to the `Hypothesis` entity.
 
-The `Investigation` aggregate must:
+The `Investigation` aggregate:
 
-- reject confirmation while closed;
-- reject rejection while closed;
-- preserve existing hypothesis lookup errors;
-- preserve the existing `HypothesisConfirmed` and `HypothesisRejected` events;
-- allow the operations after reopening.
+- rejects confirmation while closed;
+- rejects rejection while closed;
+- preserves existing hypothesis lookup errors;
+- preserves the existing `HypothesisConfirmed` and `HypothesisRejected` events;
+- allows the operations after reopening.
 
 `Hypothesis` remains responsible for its own status transition invariants, such
 as preventing confirmation of a rejected hypothesis and rejection of a
@@ -82,6 +82,14 @@ A rejected mutation on a closed investigation emits neither event.
 - The complete test suite passes.
 - Ruff lint and format checks pass.
 - mypy passes.
+
+## Validation
+
+- TDD red state captured in CI before production changes.
+- pytest — 159 passed.
+- Ruff lint — passed.
+- Ruff format — passed.
+- mypy — 64 source files checked successfully.
 
 ## Out of Scope
 
