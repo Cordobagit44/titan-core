@@ -169,17 +169,23 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-080 | Close SQLite Test Resources        | Done   |
 | CORE-081 | Reconcile CORE-080 Continuity      | Done   |
 
+---
+
+## Epic 13 — Investigation Integrity
+
+| ID       | Story                          | Status      |
+| -------- | ------------------------------ | ----------- |
+| CORE-082 | Validate Investigation Purpose | In Progress |
+
 ## Current Story
 
-No CORE story is currently active.
+CORE-082 — Validate Investigation Purpose is in progress.
 
-CORE-081 — Reconcile CORE-080 Continuity is complete.
+The investigation aggregate already stores purpose as authoritative state, but
+new investigations currently accept an empty or whitespace-only purpose.
+CORE-082 adds the smallest missing creation invariant: a new investigation must
+state why it exists.
 
-CORE-080 is complete and merged to `main`. Its final implementation closes
-bootstrap applications explicitly and uses test-level SQLite connection tracking
-to close test-owned connections deterministically. Production lifecycle and
-persistence behavior remain unchanged.
-
-CORE-081 reconciles the specification and backlog with that implemented state.
-Validation completed with 159 passing tests, no SQLite `ResourceWarning` summary,
-Ruff lint and format checks passing, and mypy passing on 65 source files.
+The story does not introduce purpose editing, length limits, normalization,
+thesis modeling, assessment, confidence scoring, or other higher-level reasoning
+abstractions.
