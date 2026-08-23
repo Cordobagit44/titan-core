@@ -171,7 +171,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 ---
 
-## Epic 13 — Developer Workflow
+## Epic 13 — Investigation Integrity
+
+| ID       | Story                          | Status |
+| -------- | ------------------------------ | ------ |
+| CORE-082 | Validate Investigation Purpose | Done   |
+
+---
+
+## Epic 14 — Developer Workflow
 
 | ID       | Story                          | Status      |
 | -------- | ------------------------------ | ----------- |
@@ -181,13 +189,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 No CORE story is currently active.
 
-CORE-083 — Add Safe Local Synchronization is complete.
+CORE-082 — Validate Investigation Purpose is complete.
 
-CORE-083 adds an explicit PowerShell synchronization command and VS Code tasks.
-The workflow refuses to update a dirty checkout, a non-`main` branch, or local
-history that is ahead of or diverged from `origin/main`. Remote-only changes are
-applied with `--ff-only`; an optional mode runs the complete quality gates.
+New investigations now reject empty or whitespace-only purposes while preserving
+valid purpose text unchanged. Application validation failures use the existing
+Unit of Work rollback path, and restoration of historical persisted data remains
+unchanged.
 
-No scheduled pull, automatic branch switch, stash, reset, conflict resolution,
-commit, or push is introduced. CI passed the existing Ruff lint, Ruff format,
-mypy, and pytest quality gates.
+CORE-083 — Add Safe Local Synchronization remains complete. Its guarded PowerShell
+script and VS Code tasks are available from `main`.
+
+CORE-082 validation passed the complete pytest suite, Ruff lint, Ruff format, and
+mypy quality gates.
