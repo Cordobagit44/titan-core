@@ -138,29 +138,22 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 ## Epic 9 — Evidence Relationships
 
-| ID       | Story                          | Status      |
-| -------- | ------------------------------ | ----------- |
-| CORE-075 | Classify Evidence Relationship | Done   |
+| ID       | Story                                    | Status      |
+| -------- | ---------------------------------------- | ----------- |
+| CORE-075 | Classify Evidence Relationship           | Done        |
+| CORE-076 | Update README for Evidence Relationships | In Progress |
 
 ## Current Story
 
-No CORE story is currently active.
+CORE-076 — Update README for Evidence Relationships is in progress.
 
-CORE-075 — Classify Evidence Relationship is complete.
+CORE-075 introduced explicit supporting and weakening evidence relationships,
+but the README still reflects the pre-CORE-075 API and validation state.
 
-TITAN Core evidence now records how evidence relates to a hypothesis through
-an explicit relationship classification.
+CORE-076 updates documentation only: the `add_evidence()` example must include
+an explicit `EvidenceRelationship`, the documented test count must reflect 147
+passing tests, and application reconstruction documentation must state that
+evidence relationship classification is preserved alongside provenance.
 
-New evidence must be classified as either supporting or weakening. Persisted
-legacy evidence whose historical relationship is unknown is restored as
-`UNSPECIFIED`.
-
-The relationship is preserved through SQLite persistence and across complete
-application reconstruction.
-
-`EvidenceAdded` remains unchanged and continues to identify only the hypothesis
-and evidence.
-
-CORE-075 does not introduce evidence weighting, confidence scores, assessments,
-automatic hypothesis decisions, claims, interpretations, thesis modeling, or
-other higher-level reasoning abstractions.
+No domain, application, persistence, transaction, or runtime dependency changes
+are introduced by CORE-076.
