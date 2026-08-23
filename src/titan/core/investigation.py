@@ -4,6 +4,7 @@ from enum import Enum
 from uuid import UUID, uuid4
 
 from titan.core.entity import Entity
+from titan.core.evidence import Evidence
 from titan.core.hypothesis import Hypothesis, HypothesisId
 
 
@@ -139,6 +140,29 @@ class Investigation(Entity[DomainEvent]):
             (hypothesis for hypothesis in self._hypotheses if hypothesis.id == hypothesis_id),
             None,
         )
+
+    def add_evidence(
+        self,
+        hypothesis_id: HypothesisId,
+        evidence: Evidence,
+    ) -> Hypothesis:
+        if self.status is InvestigationStatus.CLOSED:
+            raise ValueError("investigation is closed")
+
+        hypothesis = self.find_hypothesis(
+            hypothesis_id,
+        )
+
+        if hypothesis is None:
+            raise LookupError(
+                "hypothesis not found",
+            )
+
+        hypothesis.add_evidence(
+            evidence,
+        )
+
+        return hypothesis
 
     def add_hypothesis(
         self,
