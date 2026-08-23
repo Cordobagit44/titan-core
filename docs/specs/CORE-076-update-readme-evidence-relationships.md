@@ -2,7 +2,7 @@
 
 ## Status
 
-In Progress
+Done
 
 ## Context
 
@@ -10,8 +10,8 @@ CORE-075 introduced explicit evidence relationship classification through
 `EvidenceRelationship`, including `SUPPORTS`, `WEAKENS`, and the legacy
 compatibility state `UNSPECIFIED`.
 
-The project README still reflects the state before CORE-075. It reports 142
-passing tests and its `add_evidence()` example does not provide the required
+The project README still reflected the state before CORE-075. It reported 142
+passing tests and its `add_evidence()` example did not provide the required
 relationship argument.
 
 ## Goal
@@ -21,12 +21,12 @@ TITAN Core API and validation state after CORE-075.
 
 ## Documentation Changes
 
-The README must:
+The README now:
 
-- update the documented test suite size from 142 to 147 passing tests;
-- import `EvidenceRelationship` in the application usage example;
-- pass an explicit evidence relationship to `add_evidence()`;
-- state that persisted application reconstruction preserves evidence provenance
+- reports 147 passing tests;
+- imports `EvidenceRelationship` in the application usage example;
+- passes an explicit evidence relationship to `add_evidence()`;
+- states that persisted application reconstruction preserves evidence provenance
   and evidence relationship classification.
 
 ## Acceptance Criteria
@@ -38,6 +38,17 @@ The README must:
 - No production behavior changes.
 - No runtime dependency changes.
 - Existing quality gates remain green.
+
+## Validation
+
+GitHub Actions CI run 42 passed on the CORE-076 pull request branch.
+
+The CI quality job verified:
+
+- Ruff lint;
+- Ruff format;
+- mypy;
+- the complete pytest suite.
 
 ## Out of Scope
 
