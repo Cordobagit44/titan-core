@@ -2,20 +2,20 @@
 
 ## Status
 
-In Progress
+Done
 
 ## Context
 
 `docs/PROJECT_CONTEXT.md` is the continuity document used to recover TITAN Core
 state across development sessions and conversations.
 
-The document still describes the repository as if CORE-042 were the latest
-completed story. It also describes evidence provenance, source information, and
+The document still described the repository as if CORE-042 were the latest
+completed story. It also described evidence provenance, source information, and
 supporting or weakening relationships as future capabilities even though those
 capabilities were implemented in CORE-073 through CORE-075 and documented in
 CORE-076.
 
-This stale continuity state creates a concrete risk: a future development
+This stale continuity state created a concrete risk: a future development
 session could reconstruct an obsolete architecture and repeat completed work.
 
 ## Goal
@@ -26,7 +26,7 @@ sessions.
 
 ## Documentation Changes
 
-Update the current implemented-core sections to reflect:
+The refreshed context now reflects:
 
 - evidence description, source, and relationship classification;
 - `EvidenceRelationship.SUPPORTS`, `WEAKENS`, and legacy `UNSPECIFIED`;
@@ -36,9 +36,10 @@ Update the current implemented-core sections to reflect:
 - application composition through `bootstrap()` and `TitanApplication`;
 - explicit application lifecycle cleanup;
 - current SQLite persistence and legacy evidence schema migration behavior;
-- the current development state through CORE-076;
-- current validation at 147 passing tests, Ruff passing, and mypy passing on 60
-  source files;
+- the development state through CORE-076;
+- the 147-test validation state, Ruff passing, and mypy passing on 60 source
+  files;
+- the GitHub pull-request and CI workflow now used for development;
 - continuity instructions that direct future sessions to inspect the live
   repository before selecting the next story.
 
@@ -79,3 +80,16 @@ This story is documentation-only, but it addresses a development-safety issue.
 The continuity document must distinguish implemented behavior from long-term
 vision so that repository recovery remains reliable and completed capabilities
 are not accidentally recreated.
+
+The previous project context remains recoverable through Git history; the
+refreshed document prioritizes current architectural truth and concise recovery
+instructions.
+
+## Validation
+
+- GitHub Actions CI passed.
+- Ruff lint passed.
+- Ruff format check passed.
+- mypy passed.
+- pytest passed with 147 tests.
+- No production files changed.
