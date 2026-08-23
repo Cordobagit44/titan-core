@@ -2,19 +2,19 @@
 
 ## Status
 
-In Progress
+Done
 
 ## Context
 
-TITAN Core already treats closed investigations as immutable for investigation
+TITAN Core already treated closed investigations as immutable for investigation
 state changes such as adding or removing hypotheses and reactivation attempts.
 
-Evidence addition currently bypasses that aggregate-level protection because
-the `AddEvidence` application use case locates a `Hypothesis` and calls
+Evidence addition bypassed that aggregate-level protection because the
+`AddEvidence` application use case located a `Hypothesis` and called
 `Hypothesis.add_evidence()` directly.
 
-As a result, a closed investigation can still receive new evidence even though
-the documented lifecycle rule says closed investigations prevent modifications
+As a result, a closed investigation could still receive new evidence even
+though the lifecycle rule says closed investigations prevent modifications
 until reopened.
 
 ## Goal
@@ -24,7 +24,7 @@ immutability rule inside the `Investigation` aggregate boundary.
 
 ## Domain Behavior
 
-Introduce an `Investigation.add_evidence()` operation that:
+`Investigation.add_evidence()` now:
 
 - rejects evidence addition when the investigation is `CLOSED` using
   `ValueError("investigation is closed")`;
@@ -33,13 +33,12 @@ Introduce an `Investigation.add_evidence()` operation that:
   not exist;
 - delegates the actual evidence attachment and `EvidenceAdded` emission to the
   target `Hypothesis`;
-- returns the target hypothesis so the application layer can persist its pending
-  domain events without bypassing the aggregate mutation boundary.
+- returns the target hypothesis.
 
 ## Application Behavior
 
-`AddEvidence` must use `Investigation.add_evidence()` rather than mutating the
-hypothesis directly.
+`AddEvidence` now routes mutation through `Investigation.add_evidence()` rather
+than mutating the hypothesis directly.
 
 Existing behavior remains unchanged for:
 
@@ -50,8 +49,8 @@ Existing behavior remains unchanged for:
 - `EvidenceAdded` persistence;
 - Unit of Work commit and rollback behavior.
 
-When evidence addition is attempted against a closed investigation, the use
-case must roll back and propagate `ValueError("investigation is closed")`.
+Evidence addition against a closed investigation rolls back and propagates
+`ValueError("investigation is closed")`.
 
 ## Acceptance Criteria
 
@@ -88,9 +87,28 @@ CORE-078 does not introduce:
 ## Architectural Notes
 
 Closed-investigation immutability is an aggregate invariant. The application
-layer should orchestrate the operation, but the `Investigation` aggregate must
-own the rule that determines whether evidence mutation is allowed.
+layer orchestrates the operation, while the `Investigation` aggregate owns the
+rule that determines whether evidence mutation is allowed.
 
 `Hypothesis` remains responsible for attaching evidence and emitting
 `EvidenceAdded`. CORE-078 changes the mutation path, not the event definition or
 persistence model.
+
+## TDD Evidence
+
+RED was established by adding domain tests for `Investigation.add_evidence()`
+before the method existed. GitHub Actions failed in mypy with three
+`attr-defined` errors for the missing aggregate operation.
+
+GREEN was established after implementing the aggregate mutation path, routing
+`AddEvidence` through it, and adding application rollback coverage for closed
+investigations.
+
+## Validation
+
+- GitHub Actions CI passed.
+- Ruff lint passed.
+- Ruff format check passed.
+- mypy passed on 62 source files.
+- pytest — 151 passed.
+- Existing persistence schema and domain event definitions were unchanged.
