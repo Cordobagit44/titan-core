@@ -2,7 +2,7 @@
 
 ## Status
 
-In Progress
+Done
 
 ## Context
 
@@ -12,40 +12,51 @@ implementation.
 
 The merged implementation includes an autouse test fixture that tracks SQLite
 connections and closes them after each test. The CORE-080 specification still
-describes only the initial bootstrap-cleanup hypothesis, and `BACKLOG.md` still
-identifies CORE-079 as the latest completed story.
+described only the initial bootstrap-cleanup hypothesis, and `BACKLOG.md` still
+identified CORE-079 as the latest completed story.
 
-This mismatch makes repository recovery less reliable even though the code in
-`main` is ahead of the documentation.
+This mismatch made repository recovery less reliable even though the code in
+`main` was ahead of the documentation.
 
 ## Goal
 
 Restore the repository as a trustworthy recovery point by documenting the
-actual completed CORE-080 behavior and recording CORE-081 as the active
-continuity-repair story.
+actual completed CORE-080 behavior and recording the corrected continuity state.
 
 ## Documentation Changes
 
-CORE-081 must:
+CORE-081:
 
-- correct the CORE-080 specification to describe the final SQLite test-resource
-  cleanup and mark CORE-080 `Done`;
-- record CORE-080 as completed in `BACKLOG.md`;
-- record CORE-081 as the current story while this repair is in progress;
-- preserve the distinction between test-only resource cleanup and production
+- corrected the CORE-080 specification to describe the final SQLite test-resource
+  cleanup and marked CORE-080 `Done`;
+- recorded CORE-080 as completed in `BACKLOG.md`;
+- recorded CORE-081 during the repair and, after validation, marked it complete;
+- preserved the distinction between test-only resource cleanup and production
   lifecycle behavior.
 
 ## Acceptance Criteria
 
 - CORE-080 documentation matches the implementation merged to `main`.
 - `BACKLOG.md` no longer identifies CORE-079 as the latest completed story.
-- CORE-081 is explicitly visible as the current story.
+- CORE-081 is recorded as completed after successful validation.
 - No production source code changes.
 - No persistence schema changes.
 - No runtime dependency changes.
 - The complete test suite passes without SQLite `ResourceWarning` messages.
 - Ruff lint and format checks pass.
 - mypy passes.
+
+## Validation
+
+GitHub Actions CI run 69 passed on the CORE-081 pull request branch.
+
+The CI quality job verified:
+
+- Ruff lint passed;
+- Ruff format check passed;
+- mypy passed on 65 source files;
+- pytest passed with 159 tests;
+- the pytest run completed without a SQLite `ResourceWarning` summary.
 
 ## Out of Scope
 
