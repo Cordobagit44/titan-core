@@ -37,6 +37,15 @@ def test_create_investigation_rejects_empty_title(invalid_title: str) -> None:
         )
 
 
+@pytest.mark.parametrize("invalid_purpose", ["", "   "])
+def test_create_investigation_rejects_empty_purpose(invalid_purpose: str) -> None:
+    with pytest.raises(ValueError, match="purpose must not be empty"):
+        Investigation.create(
+            title="NVIDIA Long-Term",
+            purpose=invalid_purpose,
+        )
+
+
 def test_investigation_created_event_contains_title() -> None:
     investigation = Investigation.create(
         title="NVIDIA Long-Term",
