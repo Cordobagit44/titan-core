@@ -99,20 +99,20 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 ## Epic 6 — Transaction Coordination
 
-| ID       | Story                         | Status |
-| -------- | ----------------------------- | ------ |
-| CORE-057 | Introduce Unit of Work        | Done   |
-| CORE-058 | Implement SQLite Unit of Work | Done   |
-| CORE-059 | Migrate Create Investigation to Unit of Work | Done   |
-| CORE-060 | Migrate Add Hypothesis to Unit of Work | Done   |
-| CORE-061 | Migrate Add Evidence to Unit of Work | Done   |
-| CORE-062 | Migrate Activate Investigation to Unit of Work | Done   |
+| ID       | Story                                      | Status |
+| -------- | ------------------------------------------ | ------ |
+| CORE-057 | Introduce Unit of Work                     | Done   |
+| CORE-058 | Implement SQLite Unit of Work              | Done   |
+| CORE-059 | Migrate Create Investigation to Unit of Work | Done |
+| CORE-060 | Migrate Add Hypothesis to Unit of Work     | Done   |
+| CORE-061 | Migrate Add Evidence to Unit of Work       | Done   |
+| CORE-062 | Migrate Activate Investigation to Unit of Work | Done |
 | CORE-063 | Migrate Confirm Hypothesis to Unit of Work | Done   |
-| CORE-064 | Migrate Reject Hypothesis to Unit of Work | Done   |
-| CORE-065 | Migrate Close Investigation to Unit of Work | Done   |
-| CORE-066 | Migrate Remove Hypothesis to Unit of Work | Done   |
-| CORE-067 | Migrate Reopen Investigation to Unit of Work | Done   |
-| CORE-068 | Enforce Unit of Work for Mutating Use Cases | Done   |
+| CORE-064 | Migrate Reject Hypothesis to Unit of Work  | Done   |
+| CORE-065 | Migrate Close Investigation to Unit of Work | Done  |
+| CORE-066 | Migrate Remove Hypothesis to Unit of Work  | Done   |
+| CORE-067 | Migrate Reopen Investigation to Unit of Work | Done |
+| CORE-068 | Enforce Unit of Work for Mutating Use Cases | Done  |
 
 ---
 
@@ -143,15 +143,24 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-075 | Classify Evidence Relationship           | Done   |
 | CORE-076 | Update README for Evidence Relationships | Done   |
 
+---
+
+## Epic 10 — Project Continuity
+
+| ID       | Story                   | Status |
+| -------- | ----------------------- | ------ |
+| CORE-077 | Refresh Project Context | Done   |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-076 — Update README for Evidence Relationships is complete.
+CORE-077 — Refresh Project Context is complete.
 
-The README now documents the explicit `EvidenceRelationship` required by
-`add_evidence()`, reports the 147-test validation state, and states that evidence
-relationship classification is preserved across application reconstruction.
+`docs/PROJECT_CONTEXT.md` now reflects the repository state through CORE-076,
+including current evidence provenance and relationship behavior, transaction
+coordination, composition and lifecycle boundaries, validation state, and the
+GitHub pull-request/CI workflow used for safe continuation across sessions.
 
-CORE-076 changes documentation only. Domain, application, persistence,
+CORE-077 changes documentation only. Domain, application, persistence,
 transaction behavior, and runtime dependencies remain unchanged.
