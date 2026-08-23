@@ -57,8 +57,9 @@ class AddEvidence:
                 relationship=relationship,
             )
 
-            hypothesis.add_evidence(
-                evidence,
+            investigation.add_evidence(
+                hypothesis_id=hypothesis_id,
+                evidence=evidence,
             )
 
             self._unit_of_work.investigations.save(

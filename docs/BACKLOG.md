@@ -151,16 +151,24 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | ----------------------- | ------ |
 | CORE-077 | Refresh Project Context | Done   |
 
+---
+
+## Epic 11 — Aggregate Integrity
+
+| ID       | Story                                               | Status |
+| -------- | --------------------------------------------------- | ------ |
+| CORE-078 | Protect Evidence Addition on Closed Investigations | Done   |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-077 — Refresh Project Context is complete.
+CORE-078 — Protect Evidence Addition on Closed Investigations is complete.
 
-`docs/PROJECT_CONTEXT.md` now reflects the repository state through CORE-076,
-including current evidence provenance and relationship behavior, transaction
-coordination, composition and lifecycle boundaries, validation state, and the
-GitHub pull-request/CI workflow used for safe continuation across sessions.
+Evidence mutation now routes through the `Investigation` aggregate, which
+rejects additions while closed and preserves the existing hypothesis-level
+`EvidenceAdded` event behavior. The application use case rolls back when this
+aggregate invariant rejects the mutation.
 
-CORE-077 changes documentation only. Domain, application, persistence,
-transaction behavior, and runtime dependencies remain unchanged.
+Validation completed with 151 passing tests, Ruff lint and format checks
+passing, and mypy passing on 62 source files.
