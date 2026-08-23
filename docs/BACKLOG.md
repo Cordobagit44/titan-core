@@ -147,22 +147,20 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 ## Epic 10 — Project Continuity
 
-| ID       | Story                   | Status      |
-| -------- | ----------------------- | ----------- |
-| CORE-077 | Refresh Project Context | In Progress |
+| ID       | Story                   | Status |
+| -------- | ----------------------- | ------ |
+| CORE-077 | Refresh Project Context | Done   |
 
 ## Current Story
 
-CORE-077 — Refresh Project Context is in progress.
+No CORE story is currently active.
 
-`docs/PROJECT_CONTEXT.md` had remained frozen at the CORE-042 development state
-and still described evidence provenance and relationship behavior as future
-capabilities.
+CORE-077 — Refresh Project Context is complete.
 
-CORE-077 refreshes the continuity reference through CORE-076 so that future
-sessions can reliably recover the current architecture, validation state,
-GitHub workflow, and implemented evidence capabilities without recreating
-completed work.
+`docs/PROJECT_CONTEXT.md` now reflects the repository state through CORE-076,
+including current evidence provenance and relationship behavior, transaction
+coordination, composition and lifecycle boundaries, validation state, and the
+GitHub pull-request/CI workflow used for safe continuation across sessions.
 
 CORE-077 changes documentation only. Domain, application, persistence,
 transaction behavior, and runtime dependencies remain unchanged.
