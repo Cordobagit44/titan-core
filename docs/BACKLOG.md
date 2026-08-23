@@ -138,29 +138,20 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 ## Epic 9 — Evidence Relationships
 
-| ID       | Story                          | Status      |
-| -------- | ------------------------------ | ----------- |
-| CORE-075 | Classify Evidence Relationship | Done   |
+| ID       | Story                                    | Status |
+| -------- | ---------------------------------------- | ------ |
+| CORE-075 | Classify Evidence Relationship           | Done   |
+| CORE-076 | Update README for Evidence Relationships | Done   |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-075 — Classify Evidence Relationship is complete.
+CORE-076 — Update README for Evidence Relationships is complete.
 
-TITAN Core evidence now records how evidence relates to a hypothesis through
-an explicit relationship classification.
+The README now documents the explicit `EvidenceRelationship` required by
+`add_evidence()`, reports the 147-test validation state, and states that evidence
+relationship classification is preserved across application reconstruction.
 
-New evidence must be classified as either supporting or weakening. Persisted
-legacy evidence whose historical relationship is unknown is restored as
-`UNSPECIFIED`.
-
-The relationship is preserved through SQLite persistence and across complete
-application reconstruction.
-
-`EvidenceAdded` remains unchanged and continues to identify only the hypothesis
-and evidence.
-
-CORE-075 does not introduce evidence weighting, confidence scores, assessments,
-automatic hypothesis decisions, claims, interpretations, thesis modeling, or
-other higher-level reasoning abstractions.
+CORE-076 changes documentation only. Domain, application, persistence,
+transaction behavior, and runtime dependencies remain unchanged.
