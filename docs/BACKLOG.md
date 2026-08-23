@@ -129,29 +129,23 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 ## Epic 8 — Evidence Provenance
 
-| ID       | Story                  | Status |
-| -------- | ---------------------- | ------ |
-| CORE-073 | Record Evidence Source | Done   |
+| ID       | Story                                 | Status |
+| -------- | ------------------------------------- | ------ |
+| CORE-073 | Record Evidence Source                | Done   |
+| CORE-074 | Update README for Evidence Provenance | Done   |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-073 — Record Evidence Source is complete.
+CORE-074 — Update README for Evidence Provenance is complete.
 
-TITAN Core evidence now requires an explicit source in addition to its
-description.
+The project README now reflects the evidence provenance capability introduced
+in CORE-073 and the application lifecycle management introduced in CORE-072.
 
-The source is validated by the domain, accepted by the `AddEvidence` use case,
-persisted and restored through SQLite, and preserved across the complete
-application workflow.
+The documented `add_evidence()` workflow includes the required evidence source,
+application resource cleanup is demonstrated through `application.close()`,
+and the documented validation state reflects 142 passing tests.
 
-Existing SQLite evidence schemas are migrated automatically. Legacy evidence
-rows receive the explicit `legacy source unavailable` marker when no original
-source was recorded.
-
-`EvidenceAdded` remains unchanged and continues to identify the hypothesis and
-evidence without duplicating provenance data into the domain event.
-
-No source-type hierarchy, external provenance service, CLI, HTTP API, Event
-Bus, Outbox, or AI integration is introduced in this story.
+CORE-074 changes documentation only. Domain, application, infrastructure, and
+transaction behavior remain unchanged.

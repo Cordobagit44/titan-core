@@ -23,7 +23,7 @@ Implemented capabilities include:
 - architecture guards for domain and application dependencies;
 - end-to-end acceptance coverage through the composed application.
 
-The current test suite contains 136 passing tests.
+The current test suite contains 142 passing tests.
 
 ## Architecture
 
@@ -151,6 +151,7 @@ evidence = application.add_evidence(
     investigation_id=investigation.id,
     hypothesis_id=hypothesis.id,
     description="Methane concentration varies seasonally",
+    source="NASA Curiosity methane measurements",
 )
 ```
 
@@ -185,8 +186,14 @@ List investigations:
 investigations = application.list_investigations()
 ```
 
+Release application resources when finished:
+
+```python
+application.close()
+```
+
 The application can be reconstructed against the same SQLite database and the
-persisted investigation state will be restored.
+persisted investigation state, including evidence provenance, will be restored.
 
 ## Application Use Cases
 

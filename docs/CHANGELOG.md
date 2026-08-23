@@ -4,6 +4,35 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-074 — Update README for Evidence Provenance
+
+### Changed
+
+- Updated the documented test suite size from 136 to 142 passing tests
+- Updated the `add_evidence()` example to include the required evidence source
+- Documented explicit application resource cleanup through `application.close()`
+- Documented that persisted application reconstruction preserves evidence provenance
+
+### Architectural Notes
+
+- Documentation now reflects the evidence provenance behavior introduced in CORE-073
+- Documentation now reflects application lifecycle management introduced in CORE-072
+- No domain behavior changed
+- No application behavior changed
+- No SQLite persistence behavior changed
+- No transaction behavior changed
+- No new runtime dependency introduced
+
+### Validation
+
+- README usage matches the current `AddEvidence` signature
+- README lifecycle usage matches `TitanApplication.close()`
+- pytest — 142 passed
+- Ruff — passed
+- mypy — 60 source files checked
+
+---
+
 ## CORE-073 — Record Evidence Source
 
 ### Added
