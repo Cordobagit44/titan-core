@@ -1,6 +1,6 @@
 import sqlite3
 from collections.abc import Iterator
-from typing import Any
+from typing import Any, cast
 
 import pytest
 
@@ -13,7 +13,7 @@ def close_sqlite_connections(
     connect = sqlite3.connect
 
     def tracked_connect(*args: Any, **kwargs: Any) -> sqlite3.Connection:
-        connection = connect(*args, **kwargs)
+        connection = cast(sqlite3.Connection, connect(*args, **kwargs))
         connections.append(connection)
         return connection
 
