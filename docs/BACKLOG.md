@@ -173,19 +173,31 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 ## Epic 13 — Investigation Integrity
 
+| ID       | Story                          | Status |
+| -------- | ------------------------------ | ------ |
+| CORE-082 | Validate Investigation Purpose | Done   |
+
+---
+
+## Epic 14 — Developer Workflow
+
 | ID       | Story                          | Status      |
 | -------- | ------------------------------ | ----------- |
-| CORE-082 | Validate Investigation Purpose | In Progress |
+| CORE-083 | Add Safe Local Synchronization | Done        |
 
 ## Current Story
 
-CORE-082 — Validate Investigation Purpose is in progress.
+No CORE story is currently active.
 
-The investigation aggregate already stores purpose as authoritative state, but
-new investigations currently accept an empty or whitespace-only purpose.
-CORE-082 adds the smallest missing creation invariant: a new investigation must
-state why it exists.
+CORE-082 — Validate Investigation Purpose is complete.
 
-The story does not introduce purpose editing, length limits, normalization,
-thesis modeling, assessment, confidence scoring, or other higher-level reasoning
-abstractions.
+New investigations now reject empty or whitespace-only purposes while preserving
+valid purpose text unchanged. Application validation failures use the existing
+Unit of Work rollback path, and restoration of historical persisted data remains
+unchanged.
+
+CORE-083 — Add Safe Local Synchronization remains complete. Its guarded PowerShell
+script and VS Code tasks are available from `main`.
+
+CORE-082 validation passed the complete pytest suite, Ruff lint, Ruff format, and
+mypy quality gates.
