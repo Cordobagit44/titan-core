@@ -31,16 +31,9 @@ class ConfirmHypothesis:
                     "investigation not found",
                 )
 
-            hypothesis = investigation.find_hypothesis(
+            hypothesis = investigation.confirm_hypothesis(
                 hypothesis_id,
             )
-
-            if hypothesis is None:
-                raise LookupError(
-                    "hypothesis not found",
-                )
-
-            hypothesis.confirm()
 
             self._unit_of_work.investigations.save(
                 investigation,

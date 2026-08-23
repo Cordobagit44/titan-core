@@ -158,17 +158,18 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | ID       | Story                                               | Status |
 | -------- | --------------------------------------------------- | ------ |
 | CORE-078 | Protect Evidence Addition on Closed Investigations | Done   |
+| CORE-079 | Protect Hypothesis Decisions on Closed Investigations | Done |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-078 — Protect Evidence Addition on Closed Investigations is complete.
+CORE-079 — Protect Hypothesis Decisions on Closed Investigations is complete.
 
-Evidence mutation now routes through the `Investigation` aggregate, which
-rejects additions while closed and preserves the existing hypothesis-level
-`EvidenceAdded` event behavior. The application use case rolls back when this
-aggregate invariant rejects the mutation.
+Hypothesis confirmation and rejection now route through the `Investigation`
+aggregate. Closed investigations reject both status mutations, reopened
+investigations allow them again, and the existing hypothesis-level status
+invariants and domain events remain unchanged.
 
-Validation completed with 151 passing tests, Ruff lint and format checks
-passing, and mypy passing on 62 source files.
+Validation completed with 159 passing tests, Ruff lint and format checks
+passing, and mypy passing on 64 source files.
