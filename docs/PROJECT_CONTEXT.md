@@ -5,19 +5,20 @@
 This document is the continuity and recovery reference for TITAN Core.
 
 Its purpose is to preserve the architectural intent, product vision,
-development methodology, current state, and direction of the project
+development method, current implementation state, and direction of the project
 independently of any individual development session or conversation.
 
-When development resumes in a new environment or conversation, this document
-should be reviewed together with:
+When development resumes in a new environment or conversation, review this
+document together with:
 
-- `docs/BACKLOG.md`
-- `docs/CHANGELOG.md`
-- the specifications under `docs/specs/`
-- current source code and tests
-- relevant Git history
+- `docs/BACKLOG.md`;
+- `docs/CHANGELOG.md`;
+- the latest specifications under `docs/specs/`;
+- current source code and tests;
+- current GitHub pull requests and CI state;
+- relevant Git history when necessary.
 
-This document intentionally distinguishes between:
+This document distinguishes between:
 
 - functionality that exists today;
 - accepted architectural principles;
@@ -43,6 +44,7 @@ decision.
 
 A useful conceptual direction is:
 
+```text
 Question
     ↓
 Investigation
@@ -60,20 +62,16 @@ Thesis
 Assessment
     ↓
 Human Decision
+```
 
-Not every concept in this chain exists in the current implementation.
-
-It represents the broader reasoning model TITAN may progressively develop.
-
-The distinction is fundamental:
+Not every concept in this chain exists in the current implementation. It
+represents the broader reasoning model TITAN may progressively develop.
 
 A conventional AI system may attempt to transform a question directly into an
-answer.
+answer. TITAN should instead preserve the reasoning structure between the
+question and the eventual decision.
 
-TITAN should instead preserve the reasoning structure between the question and
-the eventual decision.
-
-The human remains responsible for the final judgment.
+The human remains responsible for final judgment.
 
 ---
 
@@ -87,16 +85,13 @@ domain-neutral as practical.
 
 The Core should prefer concepts such as:
 
-- Investigation
-- Hypothesis
-- Evidence
-- Assessment
-- Report
-- Event
-- Workflow
-
-over concepts that only make sense for a specific financial instrument or
-strategy.
+- Investigation;
+- Hypothesis;
+- Evidence;
+- Assessment;
+- Report;
+- Event;
+- Workflow.
 
 Financial concepts such as stocks, options, valuation models, tickers, entry
 prices, or trading strategies should not leak into the reasoning kernel unless
@@ -104,25 +99,26 @@ there is a demonstrated architectural reason.
 
 A useful architectural test is:
 
-If a Core concept can only be justified using stock-market vocabulary, it
-probably belongs in a finance-specific layer rather than the reasoning Core.
+> If a Core concept can only be justified using stock-market vocabulary, it
+> probably belongs in a finance-specific layer rather than the reasoning Core.
 
 ---
 
-## Product Vision
+## Product and Reasoning Vision
 
-The long-term product should be useful to people with very different levels
-of investment experience.
-
-A beginner should be able to ask TITAN to explain:
+TITAN should eventually help users understand:
 
 - what something means;
 - why a factor matters;
 - what evidence supports an idea;
-- what could invalidate an investment thesis;
+- what evidence weakens an idea;
+- where evidence came from;
+- what could invalidate a thesis;
+- how reasoning changed over time;
 - how to reason about uncertainty.
 
-An experienced investor should be able to inspect deeper structures such as:
+An experienced user should eventually be able to inspect deeper structures such
+as:
 
 - hypotheses;
 - supporting and weakening evidence;
@@ -133,50 +129,19 @@ An experienced investor should be able to inspect deeper structures such as:
 - assessments;
 - invalidation conditions.
 
-The intention is not to build two unrelated systems.
-
 The desired direction is one reasoning engine with different levels of
-presentation and interaction.
+presentation and interaction rather than separate systems for different user
+levels.
 
-Names such as "beginner mode" or "expert mode" should not be considered
-accepted product requirements until formally specified.
-
-The underlying principle is adaptive depth:
-
-TITAN should be accessible without becoming superficial and powerful without
-forcing every user to confront all of its internal complexity.
+Natural-language and voice interaction remain long-term interface directions.
+Reasoning must remain independent from its presentation mechanism.
 
 ---
 
-## Investment Scope
+## Living Research
 
-TITAN should not be conceptually restricted to a single investment style.
-
-The broader product vision includes the possibility of supporting research
-across different approaches such as:
-
-- long-term investing;
-- growth investing;
-- value-oriented research;
-- trading;
-- portfolio analysis;
-- comparative research;
-- event-driven research;
-- options and other investment instruments.
-
-These capabilities are future product directions, not current TITAN Core
-functionality.
-
-The reasoning engine should remain sufficiently general that different
-investment styles can use the same underlying research architecture while
-placing different emphasis on evidence, capabilities, and assessments.
-
----
-
-## Living Investment Research
-
-A central long-term idea is that an investment thesis should not be treated as
-a static document produced once and forgotten.
+A central long-term idea is that a thesis should not be treated as a static
+document produced once and forgotten.
 
 TITAN should eventually support research that evolves as reality changes.
 
@@ -190,24 +155,12 @@ New evidence may:
 - invalidate part of a thesis;
 - justify reopening an investigation.
 
-This makes historical traceability important.
+Historical traceability matters because TITAN should eventually be able to
+explain not only what is believed now, but what changed and why.
 
-TITAN should be capable of explaining not only:
-
-"What do we currently believe?"
-
-but eventually also:
-
-"What did we believe before?"
-
-"What changed?"
-
-"What evidence caused the change?"
-
-"Why did the assessment change?"
-
-The persistence and domain-event capabilities being built today are
-foundational pieces toward this longer-term objective.
+The current persistence and domain-event capabilities are foundational pieces
+toward this objective. TITAN Core does not currently implement full event
+sourcing.
 
 ---
 
@@ -215,56 +168,14 @@ foundational pieces toward this longer-term objective.
 
 TITAN should augment human judgment rather than replace it.
 
-The system may eventually collect information, structure evidence, execute
+Future automation may collect information, structure evidence, execute
 specialized analytical capabilities, identify contradictions, compare
 hypotheses, generate reports, and explain reasoning.
 
 The final investment decision remains a human responsibility.
 
-TITAN should help the user understand why a conclusion exists rather than
-merely presenting a recommendation.
-
-A successful TITAN should make its user a better reasoner over time, not merely
-make the user dependent on automated answers.
-
----
-
-## Conversational and Voice Experience
-
-Natural-language interaction is part of the long-term product vision.
-
-A future user should be able to ask questions such as:
-
-- Why are we waiting?
-- What evidence matters most?
-- What would have to happen for the thesis to change?
-- What could invalidate this hypothesis?
-- Compare this investigation with another one.
-- Explain this to me as a beginner.
-- Show me the deeper evidence behind that conclusion.
-
-Voice may eventually become another interface to the same reasoning system.
-
-Possible experiences explored historically include:
-
-- text-only interaction;
-- an assistant that speaks when something important changes;
-- a more proactive mentor-like experience.
-
-Voice is not part of the current Core and should not contain independent
-investment reasoning.
-
-The desired architectural direction is:
-
-Reasoning
-    ↓
-Structured Knowledge
-    ↓
-Explanation
-    ↓
-Text / Voice / Other Interfaces
-
-The intelligence should exist independently of its presentation mechanism.
+A successful TITAN should help its user become a better reasoner rather than
+merely become dependent on automated answers.
 
 ---
 
@@ -273,81 +184,45 @@ The intelligence should exist independently of its presentation mechanism.
 TITAN should not be architecturally dependent on a particular AI model or
 provider.
 
-Future cognitive capabilities may be implemented by:
-
-- remote language models;
-- local models;
-- deterministic algorithms;
-- rules;
-- specialized analytical systems;
-- humans;
-- combinations of these.
+Future cognitive capabilities may be implemented by remote language models,
+local models, deterministic algorithms, rules, specialized analytical systems,
+humans, or combinations of these.
 
 The Core should depend on meaningful contracts and structured results rather
 than on the identity of the provider that produced them.
 
 AI should not be allowed to arbitrarily mutate authoritative domain state.
 
-A future architecture may use capabilities or expert workflows to produce
-reports, proposals, evidence, or assessments that are subsequently integrated
-through controlled application and domain behavior.
-
-This remains future architecture and must be introduced incrementally when
-real requirements justify it.
-
----
-
-## Historical Traceability
-
-Historical reconstruction is an important architectural direction.
-
-TITAN should avoid silently destroying the reasoning history that explains how
-an investigation reached its current state.
-
-Domain events are one mechanism that can contribute to this capability.
-
-The long-term objective is not merely persistence of current state.
-
-It is the ability to understand the evolution of knowledge and reasoning over
-time.
-
-This does not mean TITAN Core currently implements full event sourcing.
-
-No such assumption should be made unless explicitly introduced by a future
-story and specification.
+AI integration remains future architecture and must be introduced incrementally
+when a concrete requirement justifies it.
 
 ---
 
 ## Future Reasoning Concepts
 
-Historical design work explored several concepts that may become important as
-TITAN evolves.
+Historical design work explored concepts that may become important as TITAN
+evolves, including:
 
-These include:
+- Thesis;
+- Claim;
+- Interpretation;
+- Assessment;
+- Expert Report;
+- Contradiction;
+- Open Question;
+- richer evidence relationships;
+- knowledge evolution.
 
-- Thesis
-- Claim
-- Interpretation
-- Provenance
-- Assessment
-- Expert Report
-- Contradiction
-- Open Question
-- Evidence relationships
-- Knowledge evolution
+These concepts are preserved as direction, not automatically accepted
+requirements.
 
-These concepts are preserved here because they form part of TITAN's broader
-reasoning vision.
-
-They are not automatically accepted requirements.
-
-Before introducing any of them into the implementation:
+Before introducing a future concept into the implementation:
 
 1. establish the concrete domain need;
 2. define the concept precisely;
 3. write a focused CORE story;
 4. create a specification;
-5. introduce the behavior using TDD.
+5. introduce behavior using TDD when production behavior changes.
 
 Abstractions must be earned by demonstrated requirements rather than added
 because they appeared in historical design discussions.
@@ -356,49 +231,33 @@ because they appeared in historical design discussions.
 
 ## Current Implemented Core
 
-The sections below describe functionality that actually exists in the current
-TITAN Core implementation.
-
 The primary aggregate is `Investigation`.
 
 An investigation currently contains:
 
-- `InvestigationId`
-- title
-- purpose
-- investigation status
-- hypotheses
-- closure timestamp when applicable
-
-An investigation controls its own lifecycle and protects its domain
-invariants.
+- `InvestigationId`;
+- title;
+- purpose;
+- investigation status;
+- hypotheses;
+- closure timestamp when applicable.
 
 ### Investigation lifecycle
 
-Current statuses:
+Current statuses are:
 
-- `DRAFT`
-- `ACTIVE`
-- `CLOSED`
+- `DRAFT`;
+- `ACTIVE`;
+- `CLOSED`.
 
-Supported lifecycle operations include:
-
-- create
-- activate
-- close
-- reopen
-
+Supported lifecycle operations include create, activate, close, and reopen.
 Closed investigations prevent modifications until reopened.
 
----
+### Hypotheses
 
-## Hypotheses
+Investigations contain hypotheses with their own identity and status.
 
-Investigations contain hypotheses.
-
-A hypothesis has its own identity and lifecycle.
-
-The domain currently supports:
+Current hypothesis behavior includes:
 
 - adding hypotheses;
 - preventing duplicate hypotheses;
@@ -407,55 +266,71 @@ The domain currently supports:
 - confirming hypotheses;
 - rejecting hypotheses.
 
-Hypotheses may contain evidence used during the research process.
+Hypothesis statuses are `PENDING`, `CONFIRMED`, and `REJECTED`.
 
----
+### Evidence
 
-## Evidence
+Evidence belongs to a hypothesis and currently records:
 
-Evidence currently belongs to hypotheses.
+- `EvidenceId`;
+- description;
+- source provenance;
+- relationship to the hypothesis.
 
-Evidence has its own identity and description and is persisted together with
-the investigation aggregate.
+`EvidenceRelationship` currently supports:
 
-The current Evidence model is intentionally small.
+- `SUPPORTS`;
+- `WEAKENS`;
+- `UNSPECIFIED`.
 
-Richer concepts such as provenance, reliability, source information, and
-supporting or weakening relationships remain possible future domain
-capabilities and should not be assumed to exist today.
+New evidence created through the application layer must explicitly use either
+`SUPPORTS` or `WEAKENS`.
+
+`UNSPECIFIED` is reserved for persisted legacy evidence whose historical
+relationship was not recorded.
+
+Evidence source and relationship are persisted through SQLite and survive
+application reconstruction.
+
+Current evidence behavior does not include weighting, numeric scoring,
+confidence, certainty, assessment, automatic hypothesis decisions, claims, or
+interpretations.
 
 ---
 
 ## Domain Events
 
-TITAN uses domain events to represent meaningful facts that occurred inside
-the domain.
+TITAN uses domain events to represent meaningful facts that occurred inside the
+domain.
 
-Current investigation domain events include:
+Current domain events include:
 
-- `InvestigationCreated`
-- `InvestigationActivated`
-- `InvestigationClosed`
-- `InvestigationReopened`
-- `HypothesisAdded`
-- `HypothesisRemoved`
+- `InvestigationCreated`;
+- `InvestigationActivated`;
+- `InvestigationClosed`;
+- `InvestigationReopened`;
+- `HypothesisAdded`;
+- `HypothesisRemoved`;
+- `HypothesisConfirmed`;
+- `HypothesisRejected`;
+- `EvidenceAdded`.
 
-Domain entities record events internally and expose them through
+Domain entities record events internally and expose pending events through
 `pull_events()`.
 
 The domain model does not depend on event persistence infrastructure.
 
-Domain events should remain meaningful domain facts rather than infrastructure
-messages.
+`EvidenceAdded` identifies the hypothesis and evidence. Evidence provenance and
+relationship remain aggregate state and are not duplicated into that event.
 
 ---
 
 ## Application Layer
 
 The application layer orchestrates domain behavior through use cases and
-repository abstractions.
+persistence abstractions.
 
-Implemented use cases include operations for:
+Current application operations include:
 
 - creating investigations;
 - activating investigations;
@@ -469,8 +344,13 @@ Implemented use cases include operations for:
 - rejecting hypotheses;
 - adding evidence.
 
-Application code depends on abstractions rather than concrete persistence
-implementations.
+Mutating use cases operate through `UnitOfWork`.
+
+A mutation coordinates investigation persistence and domain-event persistence
+within one transaction boundary. Successful operations commit; failures roll
+back.
+
+Read-only investigation queries depend on repository abstractions.
 
 ---
 
@@ -478,83 +358,75 @@ implementations.
 
 ### Investigation persistence
 
-`InvestigationRepository` defines the application-level persistence
-abstraction.
+`InvestigationRepository` defines the application-level persistence contract.
+Current implementations include:
 
-Implementations currently include:
-
-- `InMemoryInvestigationRepository`
-- `SqliteInvestigationRepository`
+- `InMemoryInvestigationRepository`;
+- `SqliteInvestigationRepository`.
 
 SQLite persistence restores:
 
-- investigation identity;
-- title;
-- purpose;
-- status;
+- investigation identity and lifecycle state;
 - closure timestamp;
-- hypotheses;
-- hypothesis status;
-- evidence.
+- hypotheses and hypothesis status;
+- evidence identity and description;
+- evidence source;
+- evidence relationship.
+
+SQLite automatically migrates legacy evidence schemas that lack source or
+relationship columns. Historical rows without recorded provenance receive the
+explicit legacy source marker, and rows without historical relationship data
+restore as `UNSPECIFIED`.
 
 ### Domain event persistence
 
-`DomainEventRepository` defines the abstraction for storing domain events.
+`DomainEventRepository` defines the domain-event persistence contract. Current
+implementations include:
 
-Implementations currently include:
+- `InMemoryDomainEventRepository`;
+- `SqliteDomainEventRepository`.
 
-- `InMemoryDomainEventRepository`
-- `SqliteDomainEventRepository`
+SQLite provides durable ordered event persistence for the current supported
+domain-event set.
 
-The SQLite implementation provides durable, ordered domain event persistence.
+### Unit of Work
 
-It currently supports persistence and restoration of:
+`UnitOfWork` is the transaction boundary used by mutating application use cases.
+`SqliteUnitOfWork` coordinates investigation and domain-event repositories over
+a shared SQLite connection.
 
-- `InvestigationCreated`
-- `InvestigationActivated`
-- `InvestigationClosed`
-- `InvestigationReopened`
-- `HypothesisAdded`
-- `HypothesisRemoved`
+---
 
-Event-specific data such as closure timestamps, hypothesis statements, and
-hypothesis identifiers is preserved.
+## Composition and Lifecycle
 
-The existence of durable domain-event persistence does not by itself imply
-that all application use cases automatically persist or publish generated
-events.
+`src/titan/bootstrap.py` is the composition root.
 
-That integration must be introduced explicitly through future stories.
+`bootstrap(database)` constructs a SQLite-backed `TitanApplication` exposing the
+current application use cases.
+
+`TitanApplication.close()` explicitly releases application-owned SQLite
+resources through the Unit of Work lifecycle.
+
+Application and domain code remain unaware of SQLite connection details.
 
 ---
 
 ## Architecture Principles
 
-TITAN Core follows these principles.
-
-### Domain-Driven Design
-
-Business rules belong in the domain model.
-
-Infrastructure must not leak into the domain.
-
 ### Dependency Direction
 
-Dependencies should point inward.
-
-The Core domain must remain independent from SQLite, user interfaces, AI
-providers, and other infrastructure technologies.
+Dependencies point inward. The Core domain remains independent from SQLite,
+interfaces, AI providers, and other infrastructure technologies.
 
 ### Domain Neutrality
 
-The reasoning Core should avoid unnecessary dependence on a particular
-investment instrument, strategy, interface, or AI provider.
+The reasoning Core avoids unnecessary dependence on a particular investment
+instrument, strategy, interface, or AI provider.
 
-### Repository Abstractions
+### Repository and Transaction Boundaries
 
-Application code works against repository abstractions.
-
-Concrete persistence belongs in infrastructure.
+Application code depends on abstractions. Concrete persistence and SQLite
+transaction management belong in infrastructure.
 
 ### Explicit Reasoning
 
@@ -563,56 +435,51 @@ research structures rather than hidden inside opaque outputs.
 
 ### Historical Integrity
 
-Changes to knowledge should eventually be traceable.
-
-New functionality should avoid destroying historical information without an
-explicit domain reason.
+Changes to knowledge should remain traceable where the domain requires it. New
+functionality should not destroy historical information without an explicit
+reason.
 
 ### Human Authority
 
-TITAN assists human reasoning.
-
-It does not remove human responsibility for investment decisions.
+TITAN assists human reasoning and does not remove human responsibility for
+investment decisions.
 
 ### Test-Driven Development
 
-New behavior is normally developed using:
+Production behavior is normally developed using:
 
-1. RED — introduce a failing test describing the required behavior.
-2. GREEN — implement the minimum behavior necessary to satisfy the test.
+1. RED — introduce a failing test describing the required behavior;
+2. GREEN — implement the minimum behavior necessary to satisfy the test;
 3. REFACTOR — improve the implementation while keeping the suite green.
 
-Existing behavior must remain protected by the full test suite.
+Documentation-only stories do not require artificial failing tests, but they
+must still preserve the existing quality gates.
 
 ### Small Stories
 
-Development proceeds through numbered CORE stories.
-
-Each story should have a focused responsibility and should not silently expand
-into unrelated architectural work.
-
-Large future concepts should be decomposed into the smallest useful behavior
-that can be specified and tested.
+Development proceeds through numbered CORE stories. Each story has a focused
+responsibility and should not silently expand into unrelated architectural
+work.
 
 ### Earned Abstractions
 
-Do not introduce an abstraction merely because it may become useful later.
-
-A recurring design principle is:
-
 Abstractions are earned, not invented.
 
-### Quality Gates
+---
 
-Before a CORE story is considered complete, run:
+## Quality Gates
 
-`uv run pytest`
+Before a CORE story is considered complete, the repository CI must pass the
+current primary quality gates:
 
-`uv run ruff check .`
+```text
+uv run ruff check .
+uv run ruff format --check .
+uv run mypy
+uv run pytest
+```
 
-`uv run mypy src`
-
-All three must pass.
+The GitHub Actions workflow executes these gates for pull requests.
 
 ---
 
@@ -620,9 +487,10 @@ All three must pass.
 
 The normal development sequence is:
 
+```text
 Specification
     ↓
-RED
+RED when behavior changes
     ↓
 GREEN
     ↓
@@ -632,146 +500,107 @@ Review
     ↓
 Full Validation
     ↓
-Commit
+Pull Request
+    ↓
+CI
     ↓
 Integration
+```
 
-Do not skip directly from an architectural idea to a large implementation.
-
-Before adding a new capability:
+Before adding a new production capability:
 
 1. identify the concrete need;
 2. inspect the existing implementation;
 3. define the smallest story;
-4. write or update its specification;
+4. write its specification;
 5. create a failing test;
 6. implement the minimum behavior;
 7. refactor only when justified;
 8. run the complete quality gates.
 
-A useful recurring question is:
+A recurring question is:
 
-"Are we increasing TITAN's ability to reason, or merely increasing the amount
-of code?"
+> Are we increasing TITAN's ability to reason, or merely increasing the amount
+> of code?
 
 ---
 
-## Git Workflow
+## Git and GitHub Workflow
 
-Development normally follows this workflow:
+The preferred workflow is now:
 
-1. Start from an up-to-date `main`.
-2. Create `feature/CORE-XXX`.
-3. Develop using TDD.
-4. Run the complete quality gates.
-5. Update the specification, backlog, and changelog as appropriate.
-6. Review `git status`.
-7. Commit only the files belonging to the story.
-8. Push the feature branch.
-9. Switch to `main`.
-10. Integrate using `git merge --ff-only feature/CORE-XXX`.
-11. Push `main`.
+1. Start from current `main`.
+2. Create `feature/CORE-XXX` from `main`.
+3. Create or update the story specification.
+4. Develop the focused change.
+5. Keep continuity documentation current when the story materially changes
+   project state.
+6. Open a pull request targeting `main`.
+7. Let GitHub Actions execute the quality gates.
+8. Review the final diff and CI result.
+9. Integrate only after CI succeeds.
+10. Verify `main` points to the integrated story.
 
-Avoid unrelated changes in story commits.
+GitHub is the durable technical source of truth. A local VS Code checkout may
+be synchronized from `main`, but local editor state is not the canonical
+project state.
+
+Avoid unrelated changes in story branches and pull requests.
 
 ---
 
 ## Source of Truth
 
-Different sources answer different questions.
-
 ### What exists today?
 
-Prefer:
+Prefer, in order:
 
 1. current source code;
 2. current tests;
-3. current specifications;
+3. latest completed specifications;
 4. current backlog and changelog;
-5. Git history.
+5. current GitHub `main` and CI state;
+6. this document for summarized continuity.
+
+If this document disagrees with implementation or tests, inspect the live
+repository before proceeding and update this document through a focused story.
 
 ### Why does TITAN exist and where is it intended to go?
 
-Use:
-
-1. this document;
-2. accepted architectural decision records when available;
-3. preserved historical design material.
+Use this document together with accepted architectural decision records and
+preserved historical design material.
 
 Historical discussions are valuable for recovering intent, but an idea from a
 historical conversation is not automatically an accepted current requirement.
-
-If documentation and implementation disagree about current behavior, inspect
-the implementation and tests before proceeding.
 
 ---
 
 ## Current Development State
 
-Last completed story:
+State at the start of CORE-077:
 
-`CORE-042 — Add SQLite Domain Event Repository`
+- last completed story: `CORE-076 — Update README for Evidence Relationships`;
+- `main` integration commit: `5801735 — CORE-076: update README for evidence relationships`;
+- current validated suite: 147 passing tests;
+- Ruff: passing;
+- mypy: passing on 60 source files;
+- application composition, SQLite persistence, Unit of Work transaction
+  coordination, application lifecycle management, evidence provenance, and
+  evidence relationship classification are implemented;
+- no confidence scoring, assessment, claims, interpretations, thesis model,
+  Event Bus, Outbox, CLI, HTTP API, or AI provider integration is implemented.
 
-Last integrated story commit:
-
-`3d0cf9e — CORE-042: add SQLite domain event repository`
-
-Current branch after integration:
-
-`main`
-
-Validation at completion of CORE-042:
-
-- pytest: 95 passed
-- Ruff: passed
-- mypy: passed on 26 source files
-
-CORE-042 is integrated into `main` and pushed to `origin/main`.
-
----
-
-## Next Development Step
-
-`CORE-043` has not yet been defined.
-
-Do not assume its requirements solely from its number or from historical
-roadmaps.
-
-Before implementation:
-
-1. review the current architecture;
-2. review `BACKLOG.md` and recent specifications;
-3. review relevant recovered architectural decisions;
-4. inspect the current application and persistence boundaries;
-5. identify the next smallest architectural capability required by TITAN;
-6. define CORE-043 explicitly;
-7. write its specification;
-8. begin implementation using TDD.
-
-One demonstrated architectural question currently exists:
-
-Domain aggregates generate domain events and TITAN now has durable domain-event
-persistence, but application use cases do not yet necessarily coordinate
-aggregate persistence with domain-event persistence.
-
-The correct solution has not yet been accepted.
-
-Possible approaches must be evaluated from the current architecture rather
-than assumed from historical discussions.
-
-Reliable event publication, transaction coordination, dispatch, or other
-patterns may become relevant, but none should be introduced until the concrete
-requirement is established.
+CORE-077 refreshes this continuity document because it had remained frozen at
+CORE-042 and no longer represented the live repository.
 
 ---
 
 ## Long-Term Direction
 
-The long-term direction should be understood as a progression rather than a
-fixed implementation roadmap.
+The long-term direction is a progression rather than a fixed implementation
+roadmap:
 
-A possible conceptual evolution is:
-
+```text
 Current Foundation
     ↓
 Investigation Lifecycle
@@ -782,7 +611,11 @@ Evidence
     ↓
 Historical Traceability
     ↓
-Richer Evidence Relationships
+Evidence Provenance
+    ↓
+Evidence Relationships
+    ↓
+Richer Reasoning Structures
     ↓
 Claims / Interpretations
     ↓
@@ -797,65 +630,53 @@ Living Research
 Adaptive User Experience
     ↓
 Conversational / Voice Interfaces
+```
 
-The exact order must be determined incrementally.
+The exact order must be determined incrementally. The existence of this vision
+must not be used to justify premature implementation.
 
-The existence of this vision must not be used to justify premature
-implementation.
+---
+
+## Next Development Step
+
+After CORE-077 is complete, do not infer CORE-078 solely from the conceptual
+roadmap.
+
+Before defining the next story:
+
+1. verify `main` and CI state;
+2. review `BACKLOG.md`, `CHANGELOG.md`, and recent specifications;
+3. inspect the current domain, application, persistence, and acceptance tests;
+4. identify the smallest demonstrated reasoning capability that should come
+   next;
+5. define CORE-078 explicitly;
+6. write its specification before production implementation.
+
+Potential future reasoning concepts remain candidates until a concrete domain
+need is established.
 
 ---
 
 ## Continuity Instructions
 
 When resuming TITAN Core development in a new conversation or development
-session, begin by establishing the current repository state.
+session:
 
-Review:
+1. inspect GitHub `main` and the latest merged pull request;
+2. read this document;
+3. read the bottom of `docs/BACKLOG.md` for the active or last completed story;
+4. read the latest entry in `docs/CHANGELOG.md` and the latest specifications;
+5. inspect relevant source code and tests before making architectural
+   assumptions;
+6. verify whether a feature branch or pull request is already active;
+7. continue existing work rather than recreating completed functionality.
 
-- this document;
-- the backlog;
-- the changelog;
-- the latest specifications;
-- relevant source code;
-- relevant tests;
-- Git history when necessary.
-
-Then distinguish:
+Always distinguish:
 
 1. what is implemented;
 2. what has been formally accepted;
 3. what is long-term vision;
 4. what was merely explored historically.
 
-Do not recreate completed functionality.
-
-Do not assume that an idea discussed previously became an accepted
-requirement unless it is represented in the repository or explicitly
-confirmed.
-
-Do not allow enthusiasm for the long-term vision to bypass incremental
-development discipline.
-
-Continue from the last completed CORE story using the same small-story,
-test-driven development process.
-
----
-
-## North Star
-
-TITAN should not become a machine that merely produces more answers.
-
-It should become a system that helps humans investigate better, preserve the
-reasoning behind their beliefs, recognize when evidence changes those beliefs,
-understand uncertainty, and make better decisions.
-
-Technology will change.
-
-AI providers will change.
-
-Interfaces will change.
-
-Investment instruments and analytical techniques will change.
-
-The reasoning model, historical traceability, and commitment to improving
-human judgment are the architectural assets TITAN Core should protect.
+GitHub repository state is the durable recovery mechanism. Conversation memory
+is helpful context, but it is not the sole source of project continuity.
