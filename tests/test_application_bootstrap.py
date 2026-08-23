@@ -40,6 +40,8 @@ def test_bootstrap_wires_sqlite_application(
     assert listed[0].id == restored.id
     assert listed[0].status is InvestigationStatus.ACTIVE
 
+    application.close()
+
 
 def test_bootstrap_exposes_application_use_cases(
     tmp_path: Path,
@@ -61,6 +63,8 @@ def test_bootstrap_exposes_application_use_cases(
     assert callable(application.reopen_investigation)
     assert callable(application.get_investigation)
     assert callable(application.list_investigations)
+
+    application.close()
 
 
 def test_application_close_releases_sqlite_resources(
