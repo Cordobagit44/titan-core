@@ -349,14 +349,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-106 | Persist Investigation Claims | Done |
 | CORE-107 | Persist ClaimAdded Domain Event | Done |
 | CORE-108 | Add Claim Use Case | Done |
+| CORE-109 | Cover Claim Workflow Acceptance | Done |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-108 — Add Claim Use Case is complete.
+CORE-109 — Cover Claim Workflow Acceptance is complete.
 
-The story exposes transactional claim creation through the application and
-coordinates aggregate and event persistence through Unit of Work.
+The story verifies evidence-grounded claim creation and reconstruction across a
+real composed application restart.
 
-CORE-108 validation passed 232 tests, Ruff lint, Ruff format, and mypy.
+CORE-109 validation passed 232 tests, Ruff lint, Ruff format, and mypy.
