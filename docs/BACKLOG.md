@@ -393,13 +393,19 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | --------------------------------------- | ----------- |
 | CORE-122 | Report Malformed Interpretation Records | Done        |
 
+## Epic 40 — Reasoning Record Text Integrity
+
+| ID       | Story                              | Status      |
+| -------- | ---------------------------------- | ----------- |
+| CORE-123 | Validate Persisted Reasoning Text  | Done        |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-122 — Report Malformed Interpretation Records is complete.
+CORE-123 — Validate Persisted Reasoning Text is complete.
 
-The story adds contextual SQLite deserialization errors for malformed
-interpretation identity fields.
+The story extends contextual required-text validation to persisted claims and
+interpretations.
 
-CORE-122 validation passed 264 tests, Ruff lint, Ruff format, and mypy.
+CORE-123 validation passed 266 tests, Ruff lint, Ruff format, and mypy.

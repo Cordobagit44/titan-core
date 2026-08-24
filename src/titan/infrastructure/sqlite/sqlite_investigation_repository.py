@@ -494,7 +494,12 @@ class SqliteInvestigationRepository(
             claim_id=ClaimId(
                 value=self._parse_interpretation_claim_id(row[0], row[1]),
             ),
-            rationale=row[2],
+            rationale=self._validate_required_text(
+                "interpretation",
+                row[0],
+                "rationale",
+                row[2],
+            ),
         )
 
     def _to_claim(
@@ -505,7 +510,12 @@ class SqliteInvestigationRepository(
             id=ClaimId(
                 value=self._parse_claim_id(row[0]),
             ),
-            statement=row[1],
+            statement=self._validate_required_text(
+                "claim",
+                row[0],
+                "statement",
+                row[1],
+            ),
             evidence_id=EvidenceId(
                 value=self._parse_claim_evidence_id(row[0], row[2]),
             ),
