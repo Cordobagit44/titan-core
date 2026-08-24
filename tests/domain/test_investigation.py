@@ -2,6 +2,7 @@ from datetime import UTC, datetime
 
 import pytest
 
+from titan.core.evidence import Evidence, EvidenceRelationship
 from titan.core.hypothesis import Hypothesis
 from titan.core.investigation import (
     HypothesisAdded,
@@ -488,3 +489,27 @@ def test_restore_accepts_case_distinct_hypotheses() -> None:
 
     assert investigation.hypotheses == hypotheses
     assert investigation.pull_events() == []
+
+
+def test_restore_rejects_evidence_reused_across_hypotheses() -> None:
+    evidence = Evidence(
+        description="Orbital imagery",
+        source="Mars orbiter",
+        relationship=EvidenceRelationship.SUPPORTS,
+    )
+    first = Hypothesis(statement="Artificial structure")
+    second = Hypothesis(statement="Natural structure")
+    first.add_evidence(evidence)
+    second.add_evidence(evidence)
+
+    with pytest.raises(
+        ValueError,
+        match="evidence already belongs to another hypothesis",
+    ):
+        Investigation.restore(
+            investigation_id=InvestigationId.new(),
+            title="Mars anomaly",
+            purpose="Find evidence",
+            status=InvestigationStatus.DRAFT,
+            hypotheses=(first, second),
+        )
