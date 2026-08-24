@@ -871,9 +871,6 @@ def test_get_reports_malformed_interpretation_claim_id() -> None:
 
     with pytest.raises(
         ValueError,
-        match=(
-            f"malformed persisted interpretation {interpretation.id.value}: "
-            "invalid claim_id"
-        ),
+        match=(f"malformed persisted interpretation {interpretation.id.value}: invalid claim_id"),
     ):
         repository.get(investigation.id)
