@@ -289,13 +289,21 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | ---------------------------------------- | ------ |
 | CORE-096 | Reject Whitespace-Equivalent Hypotheses  | Done   |
 
+---
+
+## Epic 28 — Investigation Record Diagnostics
+
+| ID       | Story                                  | Status |
+| -------- | -------------------------------------- | ------ |
+| CORE-097 | Report Malformed Investigation Records | Done   |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-096 — Reject Whitespace-Equivalent Hypotheses is complete.
+CORE-097 — Report Malformed Investigation Records is complete.
 
-The story prevents leading or trailing whitespace from bypassing hypothesis
-duplicate detection while preserving original statement text.
+The story reports malformed persisted investigation identifiers, statuses, and
+closure timestamps with explicit record and field context.
 
-CORE-096 validation passed 192 tests, Ruff lint, Ruff format, and mypy.
+CORE-097 validation passed 195 tests, Ruff lint, Ruff format, and mypy.
