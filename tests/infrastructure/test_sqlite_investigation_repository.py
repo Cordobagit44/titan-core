@@ -565,3 +565,51 @@ def test_get_reports_malformed_investigation_closed_at() -> None:
         match=(f"malformed persisted investigation {investigation.id.value}: invalid closed_at"),
     ):
         repository.get(investigation.id)
+
+
+def test_get_reports_malformed_hypothesis_id() -> None:
+    repository = SqliteInvestigationRepository(":memory:")
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+    repository.save(investigation)
+    repository._connection.execute(
+        """
+        INSERT INTO hypotheses (id, investigation_id, statement, status)
+        VALUES (?, ?, ?, ?)
+        """,
+        (
+            "not-a-uuid",
+            str(investigation.id.value),
+            "Artificial structure",
+            "PENDING",
+        ),
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="malformed persisted hypothesis record: invalid id",
+    ):
+        repository.get(investigation.id)
+
+
+def test_get_reports_malformed_hypothesis_status() -> None:
+    repository = SqliteInvestigationRepository(":memory:")
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+    investigation.add_hypothesis("Artificial structure")
+    hypothesis = investigation.hypotheses[0]
+    repository.save(investigation)
+    repository._connection.execute(
+        "UPDATE hypotheses SET status = ? WHERE id = ?",
+        ("UNKNOWN", str(hypothesis.id.value)),
+    )
+
+    with pytest.raises(
+        ValueError,
+        match=(f"malformed persisted hypothesis {hypothesis.id.value}: invalid status"),
+    ):
+        repository.get(investigation.id)

@@ -577,14 +577,14 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-097 implementation:
+State after CORE-098 implementation:
 
-- last completed story: `CORE-097 — Report Malformed Investigation Records`;
-- latest integrated baseline before CORE-097: `4702fcd — CORE-096: reject whitespace-equivalent hypotheses`;
+- last completed story: `CORE-098 — Report Malformed Hypothesis Records`;
+- latest integrated baseline before CORE-098: `bc4b47b — CORE-097: report malformed investigation records`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 195 passing tests;
+- current validated suite: 197 passing tests;
 - Ruff lint: passing;
-- Ruff format: passing on 177 files;
+- Ruff format: passing on 178 files;
 - mypy: passing on 65 source files;
 - application composition, SQLite persistence, Unit of Work transaction
   coordination, application lifecycle management, evidence provenance,
@@ -598,14 +598,15 @@ State after CORE-097 implementation:
   and field context; cross-hypothesis evidence identity ownership and
   whitespace-normalized hypothesis uniqueness are enforced; malformed
   persisted investigation identifiers, statuses, and closure timestamps are
-  reported with record and field context;
+  reported with record and field context; malformed persisted hypothesis
+  identifiers and statuses receive equivalent contextual diagnostics;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
 - no confidence scoring, assessment, claims, interpretations, thesis model,
   Event Bus, Outbox, CLI, HTTP API, or AI provider integration is implemented.
 
-CORE-097 adds contextual diagnostics for malformed primary investigation
-records while preserving the original parser failures as causes.
+CORE-098 adds contextual diagnostics for malformed nested hypothesis records
+while preserving the original parser failures as causes.
 
 ---
 
@@ -653,7 +654,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-097 is complete, do not infer CORE-098 solely from the conceptual
+After CORE-098 is complete, do not infer CORE-099 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -663,7 +664,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-098 explicitly;
+5. define CORE-099 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain

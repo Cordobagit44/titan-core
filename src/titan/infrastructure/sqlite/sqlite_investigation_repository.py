@@ -360,7 +360,7 @@ class SqliteInvestigationRepository(
         row: tuple[str, str, str],
     ) -> Hypothesis:
         hypothesis_id = HypothesisId(
-            value=UUID(row[0]),
+            value=self._parse_hypothesis_id(row[0]),
         )
 
         hypothesis = Hypothesis(
@@ -375,9 +375,7 @@ class SqliteInvestigationRepository(
                 evidence,
             )
 
-        status = HypothesisStatus(
-            row[2],
-        )
+        status = self._parse_hypothesis_status(row[0], row[2])
 
         if status is HypothesisStatus.CONFIRMED:
             hypothesis.confirm()
@@ -421,4 +419,27 @@ class SqliteInvestigationRepository(
         except ValueError as error:
             raise ValueError(
                 f"malformed persisted investigation {investigation_id}: invalid closed_at",
+            ) from error
+
+    @staticmethod
+    def _parse_hypothesis_id(
+        value: str,
+    ) -> UUID:
+        try:
+            return UUID(value)
+        except ValueError as error:
+            raise ValueError(
+                "malformed persisted hypothesis record: invalid id",
+            ) from error
+
+    @staticmethod
+    def _parse_hypothesis_status(
+        hypothesis_id: str,
+        value: str,
+    ) -> HypothesisStatus:
+        try:
+            return HypothesisStatus(value)
+        except ValueError as error:
+            raise ValueError(
+                f"malformed persisted hypothesis {hypothesis_id}: invalid status",
             ) from error
