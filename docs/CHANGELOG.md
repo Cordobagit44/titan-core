@@ -4,6 +4,35 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-104 — Attach Claims to Hypotheses
+
+### Added
+
+- Immutable claim collection owned by `Hypothesis`
+- Evidence-membership validation before claim attachment
+- `ClaimAdded` event preserving hypothesis, claim, and evidence identities
+
+### Changed
+
+- Decided hypotheses reject new claims
+- Duplicate claim identities are rejected without mutation or events
+
+### Architectural Notes
+
+- Claim ownership follows the existing hypothesis evidence boundary
+- Statement equality does not collapse distinct claim identities
+- No persistence or application API was introduced
+
+### Validation
+
+- Targeted hypothesis claim tests — 7 passed
+- pytest — 220 passed
+- Ruff lint — passed
+- Ruff format — 187 files already formatted
+- mypy — 68 source files checked
+
+---
+
 ## CORE-103 — Introduce Evidence-Grounded Claim
 
 ### Added
