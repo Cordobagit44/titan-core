@@ -604,8 +604,9 @@ State after CORE-121 implementation:
   identifiers and statuses receive equivalent contextual diagnostics;
   malformed persisted evidence identifiers and relationships also receive
   contextual diagnostics; malformed persisted claim identifiers and evidence
-  references receive equivalent contextual diagnostics; blank required persisted text is rejected across
-  investigation, hypothesis, and evidence records; restored investigations
+  references receive equivalent contextual diagnostics; blank required
+  persisted text is rejected across investigation, hypothesis, and evidence
+  records; restored investigations
   enforce whitespace-normalized hypothesis statement uniqueness;
   restored investigations also enforce exclusive evidence identity ownership;
   an immutable evidence-grounded `Claim` model with explicit identity is
