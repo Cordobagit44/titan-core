@@ -329,13 +329,21 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | ------------------------------------- | ------ |
 | CORE-101 | Reject Persisted Duplicate Hypotheses | Done   |
 
+---
+
+## Epic 33 — Restored Evidence Ownership
+
+| ID       | Story                              | Status |
+| -------- | ---------------------------------- | ------ |
+| CORE-102 | Reject Restored Evidence Reuse     | Done   |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-101 — Reject Persisted Duplicate Hypotheses is complete.
+CORE-102 — Reject Restored Evidence Reuse is complete.
 
-The story applies whitespace-normalized hypothesis uniqueness consistently
-during aggregate restoration.
+The story applies exclusive evidence identity ownership consistently during
+aggregate restoration.
 
-CORE-101 validation passed 208 tests, Ruff lint, Ruff format, and mypy.
+CORE-102 validation passed 209 tests, Ruff lint, Ruff format, and mypy.
