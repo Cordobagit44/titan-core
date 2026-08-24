@@ -379,11 +379,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | ID       | Story                                          | Status      |
 | -------- | ---------------------------------------------- | ----------- |
 | CORE-119 | Prevent Cross-Hypothesis Interpretation Reuse  | Done        |
-| CORE-120 | Reject Restored Interpretation Reuse            | In Progress |
+| CORE-120 | Reject Restored Interpretation Reuse            | Done        |
 
 ## Current Story
 
-CORE-120 — Reject Restored Interpretation Reuse is active.
+No CORE story is currently active.
+
+CORE-120 — Reject Restored Interpretation Reuse is complete.
 
 The story applies exclusive interpretation identity ownership while restoring
 an investigation.
+
+CORE-120 validation passed 260 tests, Ruff lint, Ruff format, and mypy.
