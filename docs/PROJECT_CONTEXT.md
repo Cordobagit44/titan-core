@@ -577,15 +577,15 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-109 implementation:
+State after CORE-110 implementation:
 
-- last completed story: `CORE-109 — Cover Claim Workflow Acceptance`;
-- latest integrated baseline before CORE-109: `1d8a4f1 — CORE-108: add claim use case`;
+- last completed story: `CORE-110 — Introduce Interpretation`;
+- latest integrated baseline before CORE-110: `a6f0a9a — CORE-109: cover claim workflow acceptance`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 232 passing tests;
+- current validated suite: 236 passing tests;
 - Ruff lint: passing;
-- Ruff format: passing on 195 files;
-- mypy: passing on 71 source files;
+- Ruff format: passing on 198 files;
+- mypy: passing on 73 source files;
 - application composition, SQLite persistence, Unit of Work transaction
   coordination, application lifecycle management, evidence provenance,
   evidence relationship classification, closed-investigation aggregate
@@ -615,13 +615,16 @@ State after CORE-109 implementation:
   `AddClaim` coordinates both persistence paths through Unit of Work and is
   exposed by `bootstrap()`; the composed acceptance workflow verifies claim
   reconstruction after a real SQLite-backed application restart;
+  an immutable `Interpretation` model connects one claim to one hypothesis with
+  an explicit rationale;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
-- no confidence scoring, assessment, interpretations, thesis model,
+- no confidence scoring, assessment, interpretation ownership or persistence,
+  thesis model,
   Event Bus, Outbox, CLI, HTTP API, or AI provider integration is implemented.
 
-CORE-109 verifies the complete persisted claim workflow without adding new
-production behavior.
+CORE-110 introduces the minimum explicit interpretation model without adding
+ownership, persistence, events, application APIs, or automatic reasoning.
 
 ---
 
@@ -669,7 +672,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-109 is complete, do not infer CORE-110 solely from the conceptual
+After CORE-110 is complete, do not infer CORE-111 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -679,7 +682,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-110 explicitly;
+5. define CORE-111 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
