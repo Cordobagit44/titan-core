@@ -411,14 +411,16 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | ID       | Story                         | Status      |
 | -------- | ----------------------------- | ----------- |
 | CORE-126 | Introduce Provisional Thesis  | Done        |
+| CORE-127 | Attach Theses to Investigations | Done       |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-126 — Introduce Provisional Thesis is complete.
+CORE-127 — Attach Theses to Investigations is complete.
 
-The story introduces the minimum immutable domain model for a provisional
-conclusion without aggregate or persistence integration.
+Open investigations own provisional theses, expose them as an immutable tuple,
+and emit `ThesisAdded` when attachment succeeds. Duplicate thesis identities
+and mutations on closed investigations are rejected without mutation or event.
 
-CORE-126 validation passed 272 tests, Ruff lint, Ruff format, and mypy.
+CORE-127 validation passed 277 tests and the complete GitHub Actions quality gate.
