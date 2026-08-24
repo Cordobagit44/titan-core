@@ -4,6 +4,30 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-089 — Migrate Investigation Closure Schema
+
+### Changed
+
+- Legacy SQLite `investigations` tables now receive a nullable `closed_at`
+  column automatically
+- Existing investigation rows and identifiers remain unchanged
+- Legacy rows restore with no invented closure timestamp
+
+### Architectural Notes
+
+- Migration is additive and idempotent
+- No public API, domain rule, event type, or dependency changed
+
+### Validation
+
+- Targeted SQLite investigation repository tests — 12 passed
+- pytest — 176 passed
+- Ruff lint — passed
+- Ruff format — 169 files already formatted
+- mypy — 65 source files checked
+
+---
+
 ## CORE-088 — Remove Orphaned SQLite Evidence
 
 ### Changed
