@@ -927,9 +927,6 @@ def test_get_rejects_interpretation_with_unknown_claim_reference() -> None:
 
     with pytest.raises(
         ValueError,
-        match=(
-            f"malformed persisted interpretation {interpretation.id.value}: "
-            "claim not found"
-        ),
+        match=(f"malformed persisted interpretation {interpretation.id.value}: claim not found"),
     ):
         repository.get(investigation.id)
