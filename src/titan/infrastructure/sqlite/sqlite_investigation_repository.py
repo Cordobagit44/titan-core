@@ -286,20 +286,20 @@ class SqliteInvestigationRepository(
         row: tuple[str, str, str, str, str | None],
     ) -> Investigation:
         investigation_id = InvestigationId(
-            value=UUID(row[0]),
+            value=self._parse_investigation_id(row[0]),
         )
 
         hypotheses = self._get_hypotheses(
             investigation_id,
         )
 
-        closed_at = datetime.fromisoformat(row[4]) if row[4] is not None else None
+        closed_at = self._parse_closed_at(row[0], row[4]) if row[4] is not None else None
 
         return Investigation.restore(
             investigation_id=investigation_id,
             title=row[1],
             purpose=row[2],
-            status=InvestigationStatus(row[3]),
+            status=self._parse_investigation_status(row[0], row[3]),
             hypotheses=hypotheses,
             closed_at=closed_at,
         )
@@ -387,3 +387,38 @@ class SqliteInvestigationRepository(
         hypothesis.pull_events()
 
         return hypothesis
+
+    @staticmethod
+    def _parse_investigation_id(
+        value: str,
+    ) -> UUID:
+        try:
+            return UUID(value)
+        except ValueError as error:
+            raise ValueError(
+                "malformed persisted investigation record: invalid id",
+            ) from error
+
+    @staticmethod
+    def _parse_investigation_status(
+        investigation_id: str,
+        value: str,
+    ) -> InvestigationStatus:
+        try:
+            return InvestigationStatus(value)
+        except ValueError as error:
+            raise ValueError(
+                f"malformed persisted investigation {investigation_id}: invalid status",
+            ) from error
+
+    @staticmethod
+    def _parse_closed_at(
+        investigation_id: str,
+        value: str,
+    ) -> datetime:
+        try:
+            return datetime.fromisoformat(value)
+        except ValueError as error:
+            raise ValueError(
+                f"malformed persisted investigation {investigation_id}: invalid closed_at",
+            ) from error
