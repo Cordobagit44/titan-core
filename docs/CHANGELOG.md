@@ -4,6 +4,30 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-117 — Prevent Cross-Hypothesis Claim Reuse
+
+### Changed
+
+- Investigation-level claim attachment rejects identifiers already owned by another hypothesis
+- Rejected reuse leaves the target hypothesis unchanged and emits no event
+- Distinct claim identities remain valid under existing hypothesis rules
+
+### Architectural Notes
+
+- Claim identity ownership is enforced at the aggregate boundary
+- Hypothesis-level grounding and duplicate checks remain unchanged
+- No schema, persistence, application API, or event payload changed
+
+### Validation
+
+- Targeted investigation claim tests — passed
+- pytest — 257 passed
+- Ruff lint — passed
+- Ruff format — 209 files already formatted
+- mypy — 77 source files checked
+
+---
+
 ## CORE-116 — Cover Interpretation Workflow Acceptance
 
 ### Changed
