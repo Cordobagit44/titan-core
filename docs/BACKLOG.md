@@ -401,10 +401,10 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 ## Epic 41 — Persisted Reasoning References
 
-| ID       | Story                                    | Status      |
-| -------- | ---------------------------------------- | ----------- |
-| CORE-124 | Reject Broken Persisted Claim References          | Done        |
-| CORE-125 | Reject Broken Persisted Interpretation References | Done        |
+| ID       | Story                                               | Status |
+| -------- | --------------------------------------------------- | ------ |
+| CORE-124 | Reject Broken Persisted Claim References            | Done   |
+| CORE-125 | Reject Broken Persisted Interpretation References   | Done   |
 
 ## Current Story
 
