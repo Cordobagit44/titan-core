@@ -233,13 +233,21 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | -------------------------------------- | ------ |
 | CORE-089 | Migrate Investigation Closure Schema   | Done   |
 
+---
+
+## Epic 21 — Event Store Compatibility
+
+| ID       | Story                               | Status |
+| -------- | ----------------------------------- | ------ |
+| CORE-090 | Migrate Minimal Domain Event Schema | Done   |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-089 — Migrate Investigation Closure Schema is complete.
+CORE-090 — Migrate Minimal Domain Event Schema is complete.
 
-The story migrates legacy SQLite investigation tables by adding the nullable
-`closed_at` column without replacing existing rows.
+The story migrates minimal historical event tables by mapping absent optional
+payload columns to `NULL` while preserving existing events.
 
-CORE-089 validation passed 176 tests, Ruff lint, Ruff format, and mypy.
+CORE-090 validation passed 177 tests, Ruff lint, Ruff format, and mypy.

@@ -4,6 +4,30 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-090 — Migrate Minimal Domain Event Schema
+
+### Changed
+
+- Minimal historical domain-event tables now migrate to the current schema
+- Missing optional payload columns are copied as `NULL`
+- Existing events keep their identifiers, order, and available payload
+- Migrated tables accept current hypothesis and evidence events
+
+### Architectural Notes
+
+- Migration continues to rebuild the event table transactionally
+- No public API, domain rule, event type, or dependency changed
+
+### Validation
+
+- Targeted SQLite domain-event repository tests — 12 passed
+- pytest — 177 passed
+- Ruff lint — passed
+- Ruff format — 170 files already formatted
+- mypy — 65 source files checked
+
+---
+
 ## CORE-089 — Migrate Investigation Closure Schema
 
 ### Changed

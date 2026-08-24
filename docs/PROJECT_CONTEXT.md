@@ -577,12 +577,12 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-089 implementation:
+State after CORE-090 implementation:
 
-- last completed story: `CORE-089 — Migrate Investigation Closure Schema`;
-- latest integrated baseline before CORE-089: `16ab30a — CORE-088: remove orphaned SQLite evidence`;
+- last completed story: `CORE-090 — Migrate Minimal Domain Event Schema`;
+- latest integrated baseline before CORE-090: `c1f9875 — CORE-089: migrate investigation closure schema`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 176 passing tests;
+- current validated suite: 177 passing tests;
 - Ruff lint: passing;
 - Ruff format: passing on 165 files;
 - mypy: passing on 65 source files;
@@ -592,14 +592,15 @@ State after CORE-089 implementation:
   protections, non-empty investigation purpose validation, and repeated
   hypothesis decision protection, decided-hypothesis removal protection, and
   decided-hypothesis evidence protection, orphaned SQLite evidence cleanup, and
-  investigation closure-schema migration are implemented;
+  investigation closure-schema migration, and minimal event-store migration
+  are implemented;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
 - no confidence scoring, assessment, claims, interpretations, thesis model,
   Event Bus, Outbox, CLI, HTTP API, or AI provider integration is implemented.
 
-CORE-089 migrates legacy investigation tables to support closure timestamps
-without replacing existing rows or inventing historical timestamps.
+CORE-090 migrates minimal historical event tables without losing existing
+events or inventing absent optional payload values.
 
 ---
 
@@ -647,7 +648,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-089 is complete, do not infer CORE-090 solely from the conceptual
+After CORE-090 is complete, do not infer CORE-091 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -657,7 +658,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-090 explicitly;
+5. define CORE-091 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
