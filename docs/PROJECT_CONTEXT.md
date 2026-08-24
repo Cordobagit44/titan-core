@@ -577,15 +577,15 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-102 implementation:
+State after CORE-103 implementation:
 
-- last completed story: `CORE-102 — Reject Restored Evidence Reuse`;
-- latest integrated baseline before CORE-102: `7966292 — CORE-101: reject persisted duplicate hypotheses`;
+- last completed story: `CORE-103 — Introduce Evidence-Grounded Claim`;
+- latest integrated baseline before CORE-103: `4f5e311 — CORE-102: reject restored evidence reuse`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 209 passing tests;
+- current validated suite: 213 passing tests;
 - Ruff lint: passing;
-- Ruff format: passing on 182 files;
-- mypy: passing on 65 source files;
+- Ruff format: passing on 185 files;
+- mypy: passing on 67 source files;
 - application composition, SQLite persistence, Unit of Work transaction
   coordination, application lifecycle management, evidence provenance,
   evidence relationship classification, closed-investigation aggregate
@@ -605,13 +605,16 @@ State after CORE-102 implementation:
   investigation, hypothesis, and evidence records; restored investigations
   enforce whitespace-normalized hypothesis statement uniqueness;
   restored investigations also enforce exclusive evidence identity ownership;
+  an immutable evidence-grounded `Claim` model with explicit identity is
+  available as the first richer reasoning structure;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
-- no confidence scoring, assessment, claims, interpretations, thesis model,
+- no confidence scoring, assessment, claim aggregate integration,
+  interpretations, thesis model,
   Event Bus, Outbox, CLI, HTTP API, or AI provider integration is implemented.
 
-CORE-102 applies the established evidence identity ownership invariant to
-aggregate restoration without changing SQLite schemas.
+CORE-103 introduces the minimum evidence-grounded claim model without adding
+aggregate integration, persistence, events, or automatic extraction.
 
 ---
 
@@ -659,7 +662,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-102 is complete, do not infer CORE-103 solely from the conceptual
+After CORE-103 is complete, do not infer CORE-104 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -669,7 +672,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-103 explicitly;
+5. define CORE-104 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain

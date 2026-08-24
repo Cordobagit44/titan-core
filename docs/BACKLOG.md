@@ -337,13 +337,21 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | ---------------------------------- | ------ |
 | CORE-102 | Reject Restored Evidence Reuse     | Done   |
 
+---
+
+## Epic 34 — Claims
+
+| ID       | Story                              | Status |
+| -------- | ---------------------------------- | ------ |
+| CORE-103 | Introduce Evidence-Grounded Claim  | Done   |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-102 — Reject Restored Evidence Reuse is complete.
+CORE-103 — Introduce Evidence-Grounded Claim is complete.
 
-The story applies exclusive evidence identity ownership consistently during
-aggregate restoration.
+The story introduces an immutable atomic claim with its own identity and an
+explicit link to supporting evidence.
 
-CORE-102 validation passed 209 tests, Ruff lint, Ruff format, and mypy.
+CORE-103 validation passed 213 tests, Ruff lint, Ruff format, and mypy.
