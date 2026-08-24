@@ -127,6 +127,7 @@ class Investigation(Entity[DomainEvent]):
         purpose: str,
         status: InvestigationStatus,
         hypotheses: tuple[Hypothesis, ...],
+        theses: tuple[Thesis, ...] = (),
         closed_at: datetime | None = None,
     ) -> "Investigation":
         normalized_statements = [hypothesis.statement.strip() for hypothesis in hypotheses]
@@ -155,6 +156,11 @@ class Investigation(Entity[DomainEvent]):
         if len(interpretation_ids) != len(set(interpretation_ids)):
             raise ValueError("interpretation already belongs to another hypothesis")
 
+        thesis_ids = [thesis.id for thesis in theses]
+
+        if len(thesis_ids) != len(set(thesis_ids)):
+            raise ValueError("thesis already exists")
+
         investigation = cls(
             investigation_id=investigation_id,
             title=title,
@@ -164,6 +170,7 @@ class Investigation(Entity[DomainEvent]):
         investigation.status = status
         investigation.closed_at = closed_at
         investigation._hypotheses.extend(hypotheses)
+        investigation._theses.extend(theses)
         investigation.pull_events()
 
         return investigation
