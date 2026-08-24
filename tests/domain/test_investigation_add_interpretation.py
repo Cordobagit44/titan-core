@@ -65,3 +65,40 @@ def test_add_interpretation_requires_known_hypothesis() -> None:
 
     assert hypothesis.interpretations == ()
     assert hypothesis.pull_events() == []
+
+
+def test_investigation_rejects_interpretation_reused_across_hypotheses() -> None:
+    investigation, first, first_claim = create_reasoning_chain()
+    first_interpretation = create_interpretation(first, first_claim)
+    investigation.add_interpretation(first.id, first_interpretation)
+    first.pull_events()
+
+    investigation.add_hypothesis("Methane has an abiotic cause")
+    second = investigation.hypotheses[1]
+    second_evidence = Evidence(
+        description="Methane appears near geological faults",
+        source="Mars rover",
+        relationship=EvidenceRelationship.SUPPORTS,
+    )
+    investigation.add_evidence(second.id, second_evidence)
+    second_claim = Claim(
+        statement="Geology can produce methane",
+        evidence_id=second_evidence.id,
+    )
+    investigation.add_claim(second.id, second_claim)
+    second.pull_events()
+    reused = Interpretation(
+        id=first_interpretation.id,
+        hypothesis_id=second.id,
+        claim_id=second_claim.id,
+        rationale="Geological activity explains the observed methane.",
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="interpretation already belongs to another hypothesis",
+    ):
+        investigation.add_interpretation(second.id, reused)
+
+    assert second.interpretations == ()
+    assert second.pull_events() == []
