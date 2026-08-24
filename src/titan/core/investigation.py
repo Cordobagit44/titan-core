@@ -208,6 +208,16 @@ class Investigation(Entity[DomainEvent]):
                 "hypothesis not found",
             )
 
+        if any(
+            existing.id == claim.id
+            for owner in self._hypotheses
+            if owner.id != hypothesis.id
+            for existing in owner.claims
+        ):
+            raise ValueError(
+                "claim already belongs to another hypothesis",
+            )
+
         hypothesis.add_claim(
             claim,
         )
