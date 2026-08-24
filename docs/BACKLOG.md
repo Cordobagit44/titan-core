@@ -374,13 +374,19 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-117 | Prevent Cross-Hypothesis Claim Reuse   | Done        |
 | CORE-118 | Reject Restored Claim Reuse             | Done        |
 
+## Epic 37 — Interpretation Ownership
+
+| ID       | Story                                          | Status      |
+| -------- | ---------------------------------------------- | ----------- |
+| CORE-119 | Prevent Cross-Hypothesis Interpretation Reuse  | Done        |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-118 — Reject Restored Claim Reuse is complete.
+CORE-119 — Prevent Cross-Hypothesis Interpretation Reuse is complete.
 
-The story applies exclusive claim identity ownership while restoring an
-investigation.
+The story preserves exclusive interpretation identity ownership across
+hypotheses while modifying an investigation.
 
-CORE-118 validation passed 258 tests, Ruff lint, Ruff format, and mypy.
+CORE-119 validation passed 259 tests, Ruff lint, Ruff format, and mypy.
