@@ -4,6 +4,32 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-121 — Report Malformed Claim Records
+
+### Changed
+
+- Malformed persisted claim identifiers now raise contextual deserialization
+  errors
+- Malformed persisted claim evidence identifiers identify the owning claim and
+  invalid field
+- Original UUID parser failures remain available through exception chaining
+
+### Architectural Notes
+
+- Validation remains at the SQLite deserialization boundary
+- Valid claim reconstruction and aggregate ownership behavior remain unchanged
+- No public API, schema, event type, or dependency changed
+
+### Validation
+
+- Targeted SQLite investigation repository tests — passed
+- pytest — 262 passed
+- Ruff lint — passed
+- Ruff format — 213 files already formatted
+- mypy — 77 source files checked
+
+---
+
 ## CORE-120 — Reject Restored Interpretation Reuse
 
 ### Changed
