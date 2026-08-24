@@ -4,6 +4,33 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-120 — Reject Restored Interpretation Reuse
+
+### Changed
+
+- Investigation restoration rejects interpretation identifiers reused across
+  hypotheses
+- Rejection uses the established aggregate ownership error
+- Valid restored interpretation state remains unchanged
+
+### Architectural Notes
+
+- Interpretation identity ownership is enforced consistently for mutation and
+  restoration
+- SQLite behavior remains unchanged because interpretation identifiers are
+  already primary keys
+- No public API, schema, event type, or dependency changed
+
+### Validation
+
+- Targeted investigation restoration tests — passed
+- pytest — 260 passed
+- Ruff lint — passed
+- Ruff format — 212 files already formatted
+- mypy — 77 source files checked
+
+---
+
 ## CORE-119 — Prevent Cross-Hypothesis Interpretation Reuse
 
 ### Changed
