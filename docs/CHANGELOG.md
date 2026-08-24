@@ -4,6 +4,32 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-125 — Reject Broken Persisted Interpretation References
+
+### Changed
+
+- Persisted interpretations referencing claims outside their hypothesis are
+  rejected
+- The rejection identifies the interpretation and missing claim relationship
+- The original domain lookup failure remains available through exception
+  chaining
+
+### Architectural Notes
+
+- Reference validation remains at the SQLite reconstruction boundary
+- Valid interpretation grounding and aggregate behavior remain unchanged
+- No public API, schema, event type, or dependency changed
+
+### Validation
+
+- Targeted SQLite investigation repository test — passed
+- pytest — 268 passed
+- Ruff lint — passed
+- Ruff format — 217 files already formatted
+- mypy — 77 source files checked
+
+---
+
 ## CORE-124 — Reject Broken Persisted Claim References
 
 ### Changed
