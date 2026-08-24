@@ -123,6 +123,13 @@ class Investigation(Entity[DomainEvent]):
         if len(normalized_statements) != len(set(normalized_statements)):
             raise ValueError("hypothesis already exists")
 
+        evidence_ids = [
+            evidence.id for hypothesis in hypotheses for evidence in hypothesis.evidences
+        ]
+
+        if len(evidence_ids) != len(set(evidence_ids)):
+            raise ValueError("evidence already belongs to another hypothesis")
+
         investigation = cls(
             investigation_id=investigation_id,
             title=title,
