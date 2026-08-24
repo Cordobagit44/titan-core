@@ -313,13 +313,21 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | --------------------------------- | ------ |
 | CORE-099 | Report Malformed Evidence Records | Done   |
 
+---
+
+## Epic 31 — Persisted Text Integrity
+
+| ID       | Story                         | Status |
+| -------- | ----------------------------- | ------ |
+| CORE-100 | Validate Persisted Record Text | Done   |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-099 — Report Malformed Evidence Records is complete.
+CORE-100 — Validate Persisted Record Text is complete.
 
-The story reports malformed persisted evidence identifiers and relationships
-with explicit record and field context.
+The story rejects blank required text throughout persisted investigation,
+hypothesis, and evidence records with explicit context.
 
-CORE-099 validation passed 199 tests, Ruff lint, Ruff format, and mypy.
+CORE-100 validation passed 204 tests, Ruff lint, Ruff format, and mypy.

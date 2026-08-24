@@ -4,6 +4,30 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-100 — Validate Persisted Record Text
+
+### Changed
+
+- Blank persisted investigation titles and purposes are rejected contextually
+- Blank persisted hypothesis statements are rejected contextually
+- Blank persisted evidence descriptions and sources are rejected contextually
+
+### Architectural Notes
+
+- Required text is validated at the SQLite deserialization boundary
+- Valid text is preserved exactly; no normalization or rewriting occurs
+- No public signature, schema, event type, or dependency changed
+
+### Validation
+
+- Targeted SQLite investigation repository tests — 24 passed
+- pytest — 204 passed
+- Ruff lint — passed
+- Ruff format — 180 files already formatted
+- mypy — 65 source files checked
+
+---
+
 ## CORE-099 — Report Malformed Evidence Records
 
 ### Changed

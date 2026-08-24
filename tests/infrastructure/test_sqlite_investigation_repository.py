@@ -665,3 +665,46 @@ def test_get_reports_malformed_evidence_relationship() -> None:
         match=(f"malformed persisted evidence {evidence.id.value}: invalid relationship"),
     ):
         repository.get(investigation.id)
+
+
+@pytest.mark.parametrize(
+    ("table", "column", "record_type"),
+    [
+        ("investigations", "title", "investigation"),
+        ("investigations", "purpose", "investigation"),
+        ("hypotheses", "statement", "hypothesis"),
+        ("evidences", "description", "evidence"),
+        ("evidences", "source", "evidence"),
+    ],
+)
+def test_get_rejects_blank_required_persisted_text(
+    table: str,
+    column: str,
+    record_type: str,
+) -> None:
+    repository = SqliteInvestigationRepository(":memory:")
+    investigation = Investigation.create("Mars anomaly", "Find evidence")
+    investigation.add_hypothesis("Artificial structure")
+    hypothesis = investigation.hypotheses[0]
+    evidence = Evidence(
+        description="Orbital imagery",
+        source="Mars orbiter",
+        relationship=EvidenceRelationship.SUPPORTS,
+    )
+    hypothesis.add_evidence(evidence)
+    repository.save(investigation)
+    record_id = {
+        "investigation": investigation.id.value,
+        "hypothesis": hypothesis.id.value,
+        "evidence": evidence.id.value,
+    }[record_type]
+    repository._connection.execute(
+        f"UPDATE {table} SET {column} = ? WHERE id = ?",
+        ("   ", str(record_id)),
+    )
+
+    with pytest.raises(
+        ValueError,
+        match=(f"malformed persisted {record_type} {record_id}: invalid {column}"),
+    ):
+        repository.get(investigation.id)

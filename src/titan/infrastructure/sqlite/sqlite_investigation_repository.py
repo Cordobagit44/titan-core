@@ -297,8 +297,8 @@ class SqliteInvestigationRepository(
 
         return Investigation.restore(
             investigation_id=investigation_id,
-            title=row[1],
-            purpose=row[2],
+            title=self._validate_required_text("investigation", row[0], "title", row[1]),
+            purpose=self._validate_required_text("investigation", row[0], "purpose", row[2]),
             status=self._parse_investigation_status(row[0], row[3]),
             hypotheses=hypotheses,
             closed_at=closed_at,
@@ -351,8 +351,8 @@ class SqliteInvestigationRepository(
             id=EvidenceId(
                 value=self._parse_evidence_id(row[0]),
             ),
-            description=row[1],
-            source=row[2],
+            description=self._validate_required_text("evidence", row[0], "description", row[1]),
+            source=self._validate_required_text("evidence", row[0], "source", row[2]),
             relationship=self._parse_evidence_relationship(row[0], row[3]),
         )
 
@@ -366,7 +366,7 @@ class SqliteInvestigationRepository(
 
         hypothesis = Hypothesis(
             id=hypothesis_id,
-            statement=row[1],
+            statement=self._validate_required_text("hypothesis", row[0], "statement", row[1]),
         )
 
         for evidence in self._get_evidences(
@@ -467,3 +467,17 @@ class SqliteInvestigationRepository(
             raise ValueError(
                 f"malformed persisted evidence {evidence_id}: invalid relationship",
             ) from error
+
+    @staticmethod
+    def _validate_required_text(
+        record_type: str,
+        record_id: str,
+        field: str,
+        value: str,
+    ) -> str:
+        if not value.strip():
+            raise ValueError(
+                f"malformed persisted {record_type} {record_id}: invalid {field}",
+            )
+
+        return value
