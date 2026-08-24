@@ -4,6 +4,30 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-098 — Report Malformed Hypothesis Records
+
+### Changed
+
+- Malformed persisted hypothesis identifiers now identify the invalid field
+- Malformed persisted hypothesis statuses now identify both the hypothesis and field
+- Original UUID and enum parser failures remain chained as causes
+
+### Architectural Notes
+
+- Parsing diagnostics remain private to the SQLite deserialization boundary
+- Existing saving, ordering, migration, and valid restoration behavior remains unchanged
+- No public signature, schema, event type, or dependency changed
+
+### Validation
+
+- Targeted SQLite investigation repository tests — 17 passed
+- pytest — 197 passed
+- Ruff lint — passed
+- Ruff format — 178 files already formatted
+- mypy — 65 source files checked
+
+---
+
 ## CORE-097 — Report Malformed Investigation Records
 
 ### Changed
