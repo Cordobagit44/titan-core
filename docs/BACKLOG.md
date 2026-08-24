@@ -358,14 +358,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | ID       | Story                   | Status |
 | -------- | ----------------------- | ------ |
 | CORE-110 | Introduce Interpretation | Done  |
+| CORE-111 | Attach Interpretations to Hypotheses | Done |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-110 — Introduce Interpretation is complete.
+CORE-111 — Attach Interpretations to Hypotheses is complete.
 
-The story introduces an immutable reasoning link between one claim and one
-hypothesis with an explicit rationale.
+The story makes pending hypotheses own interpretations and validates their
+hypothesis and claim references before attachment.
 
-CORE-110 validation passed 236 tests, Ruff lint, Ruff format, and mypy.
+CORE-111 validation passed 244 tests, Ruff lint, Ruff format, and mypy.
