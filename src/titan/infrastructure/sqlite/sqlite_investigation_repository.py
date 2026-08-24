@@ -23,6 +23,7 @@ from titan.core.investigation import (
     InvestigationId,
     InvestigationStatus,
 )
+from titan.core.thesis import Thesis, ThesisId
 
 
 class SqliteInvestigationRepository(
@@ -55,6 +56,18 @@ class SqliteInvestigationRepository(
                 purpose TEXT NOT NULL,
                 status TEXT NOT NULL,
                 closed_at TEXT
+            )
+            """
+        )
+
+        self._connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS theses (
+                id TEXT PRIMARY KEY,
+                investigation_id TEXT NOT NULL,
+                statement TEXT NOT NULL,
+                FOREIGN KEY (investigation_id)
+                    REFERENCES investigations (id)
             )
             """
         )
@@ -181,6 +194,14 @@ class SqliteInvestigationRepository(
         with transaction:
             self._connection.execute(
                 """
+                DELETE FROM theses
+                WHERE investigation_id = ?
+                """,
+                (investigation_id,),
+            )
+
+            self._connection.execute(
+                """
                 DELETE FROM interpretations
                 WHERE hypothesis_id IN (
                     SELECT id
@@ -244,6 +265,25 @@ class SqliteInvestigationRepository(
                         if investigation.closed_at is not None
                         else None
                     ),
+                ),
+            )
+
+            self._connection.executemany(
+                """
+                INSERT INTO theses (
+                    id,
+                    investigation_id,
+                    statement
+                )
+                VALUES (?, ?, ?)
+                """,
+                (
+                    (
+                        str(thesis.id.value),
+                        investigation_id,
+                        thesis.statement,
+                    )
+                    for thesis in investigation.theses
                 ),
             )
 
@@ -392,6 +432,7 @@ class SqliteInvestigationRepository(
         hypotheses = self._get_hypotheses(
             investigation_id,
         )
+        theses = self._get_theses(investigation_id)
 
         closed_at = self._parse_closed_at(row[0], row[4]) if row[4] is not None else None
 
@@ -401,8 +442,27 @@ class SqliteInvestigationRepository(
             purpose=self._validate_required_text("investigation", row[0], "purpose", row[2]),
             status=self._parse_investigation_status(row[0], row[3]),
             hypotheses=hypotheses,
+            theses=theses,
             closed_at=closed_at,
         )
+
+    def _get_theses(
+        self,
+        investigation_id: InvestigationId,
+    ) -> tuple[Thesis, ...]:
+        cursor = self._connection.execute(
+            """
+            SELECT
+                id,
+                statement
+            FROM theses
+            WHERE investigation_id = ?
+            ORDER BY rowid
+            """,
+            (str(investigation_id.value),),
+        )
+
+        return tuple(self._to_thesis(row) for row in cursor.fetchall())
 
     def _get_hypotheses(
         self,
@@ -480,6 +540,15 @@ class SqliteInvestigationRepository(
         )
 
         return tuple(self._to_interpretation(hypothesis_id, row) for row in cursor.fetchall())
+
+    def _to_thesis(
+        self,
+        row: tuple[str, str],
+    ) -> Thesis:
+        return Thesis(
+            id=ThesisId(value=self._parse_thesis_id(row[0])),
+            statement=self._validate_required_text("thesis", row[0], "statement", row[1]),
+        )
 
     def _to_interpretation(
         self,
@@ -623,6 +692,17 @@ class SqliteInvestigationRepository(
         except ValueError as error:
             raise ValueError(
                 f"malformed persisted investigation {investigation_id}: invalid closed_at",
+            ) from error
+
+    @staticmethod
+    def _parse_thesis_id(
+        value: str,
+    ) -> UUID:
+        try:
+            return UUID(value)
+        except ValueError as error:
+            raise ValueError(
+                "malformed persisted thesis record: invalid id",
             ) from error
 
     @staticmethod

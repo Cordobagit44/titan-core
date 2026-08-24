@@ -240,6 +240,7 @@ An investigation currently contains:
 - purpose;
 - investigation status;
 - hypotheses;
+- provisional theses;
 - closure timestamp when applicable.
 
 ### Investigation lifecycle
@@ -373,7 +374,8 @@ SQLite persistence restores:
 - hypotheses and hypothesis status;
 - evidence identity and description;
 - evidence source;
-- evidence relationship.
+- evidence relationship;
+- provisional thesis identity, statement, ownership, and insertion order.
 
 SQLite automatically migrates legacy evidence schemas that lack source or
 relationship columns. Historical rows without recorded provenance receive the
@@ -579,12 +581,12 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-127 implementation:
+State after CORE-128 implementation:
 
-- last completed story: `CORE-127 — Attach Theses to Investigations`;
-- latest integrated baseline before CORE-127: `f98d48d — CORE-126: introduce provisional thesis`;
+- last completed story: `CORE-128 — Persist Investigation Theses`;
+- latest integrated baseline before CORE-128: `d02b9f4 — CORE-127: attach theses to investigations`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 277 passing tests;
+- current validated suite: 280 passing tests;
 - Ruff lint: passing;
 - Ruff format: passing;
 - mypy: passing;
@@ -640,15 +642,17 @@ State after CORE-127 implementation:
   mutation or restoration; an immutable provisional `Thesis` model with
   explicit identity and non-blank statement is available; open investigations
   own theses, expose them as an immutable tuple, emit `ThesisAdded`, and reject
-  duplicate thesis identities or attachment while closed;
+  duplicate thesis identities or attachment while closed; SQLite saves and
+  reconstructs those theses without replaying mutation events;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
-- no confidence scoring, assessment, thesis persistence, Event Bus, Outbox, CLI,
+- no confidence scoring, assessment, thesis application API or event-store
+  persistence, Event Bus, Outbox, CLI,
   HTTP API, or AI provider integration is implemented.
 
-CORE-127 attaches provisional theses to the investigation aggregate and emits
-a domain event while deliberately leaving persistence and application APIs for
-later focused stories.
+CORE-128 persists investigation-owned theses in SQLite while deliberately
+leaving application APIs and domain-event persistence for later focused
+stories.
 
 ---
 
@@ -696,7 +700,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-127 is complete, do not infer CORE-128 solely from the conceptual
+After CORE-128 is complete, do not infer CORE-129 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -706,7 +710,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-128 explicitly;
+5. define CORE-129 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain

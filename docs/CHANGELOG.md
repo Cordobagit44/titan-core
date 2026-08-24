@@ -4,6 +4,32 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-128 — Persist Investigation Theses
+
+### Added
+
+- SQLite `theses` table beneath the owning investigation
+- Thesis identity, statement, ownership, and insertion-order persistence
+- Aggregate restoration of theses without pending mutation events
+- Safe replacement of prior thesis rows on aggregate re-save
+
+### Architectural Notes
+
+- Theses remain direct investigation-owned state
+- Persistence reconstructs through `Investigation.restore()`
+- Application APIs and domain-event persistence remain unchanged
+
+### Validation
+
+- Thesis persistence tests — 3 passed
+- pytest — 280 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
+
+---
+
 ## CORE-127 — Attach Theses to Investigations
 
 ### Added
