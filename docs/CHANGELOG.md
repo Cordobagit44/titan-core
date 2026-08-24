@@ -4,6 +4,30 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-091 — Prevent Duplicate Evidence
+
+### Changed
+
+- A hypothesis now rejects an evidence identifier already in its collection
+- Rejected duplicates leave evidence unchanged and emit no `EvidenceAdded` event
+- Distinct evidence identifiers remain valid when descriptive fields match
+
+### Architectural Notes
+
+- Evidence identity protection remains inside `Hypothesis`
+- Duplicate detection uses `EvidenceId`, not description or source text
+- No public API, schema, event type, or dependency changed
+
+### Validation
+
+- Targeted hypothesis tests — 20 passed
+- pytest — 179 passed
+- Ruff lint — passed
+- Ruff format — 171 files already formatted
+- mypy — 65 source files checked
+
+---
+
 ## CORE-090 — Migrate Minimal Domain Event Schema
 
 ### Changed

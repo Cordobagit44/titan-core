@@ -241,13 +241,21 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | ----------------------------------- | ------ |
 | CORE-090 | Migrate Minimal Domain Event Schema | Done   |
 
+---
+
+## Epic 22 — Evidence Identity
+
+| ID       | Story                     | Status |
+| -------- | ------------------------- | ------ |
+| CORE-091 | Prevent Duplicate Evidence | Done  |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-090 — Migrate Minimal Domain Event Schema is complete.
+CORE-091 — Prevent Duplicate Evidence is complete.
 
-The story migrates minimal historical event tables by mapping absent optional
-payload columns to `NULL` while preserving existing events.
+The story ensures each evidence identifier appears at most once within a
+hypothesis while allowing distinct evidence with matching descriptive fields.
 
-CORE-090 validation passed 177 tests, Ruff lint, Ruff format, and mypy.
+CORE-091 validation passed 179 tests, Ruff lint, Ruff format, and mypy.
