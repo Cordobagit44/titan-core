@@ -387,13 +387,19 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | ------------------------------ | ----------- |
 | CORE-121 | Report Malformed Claim Records | Done        |
 
+## Epic 39 — Interpretation Record Diagnostics
+
+| ID       | Story                                   | Status      |
+| -------- | --------------------------------------- | ----------- |
+| CORE-122 | Report Malformed Interpretation Records | Done        |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-121 — Report Malformed Claim Records is complete.
+CORE-122 — Report Malformed Interpretation Records is complete.
 
-The story adds contextual SQLite deserialization errors for malformed claim
-identity fields.
+The story adds contextual SQLite deserialization errors for malformed
+interpretation identity fields.
 
-CORE-121 validation passed 262 tests, Ruff lint, Ruff format, and mypy.
+CORE-122 validation passed 264 tests, Ruff lint, Ruff format, and mypy.

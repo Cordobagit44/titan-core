@@ -842,3 +842,35 @@ def test_get_reports_malformed_claim_evidence_id() -> None:
         match=f"malformed persisted claim {claim.id.value}: invalid evidence_id",
     ):
         repository.get(investigation.id)
+
+
+def test_get_reports_malformed_interpretation_id() -> None:
+    repository = SqliteInvestigationRepository(":memory:")
+    investigation, interpretation = create_investigation_with_interpretation()
+    repository.save(investigation)
+    repository._connection.execute(
+        "UPDATE interpretations SET id = ? WHERE id = ?",
+        ("not-a-uuid", str(interpretation.id.value)),
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="malformed persisted interpretation record: invalid id",
+    ):
+        repository.get(investigation.id)
+
+
+def test_get_reports_malformed_interpretation_claim_id() -> None:
+    repository = SqliteInvestigationRepository(":memory:")
+    investigation, interpretation = create_investigation_with_interpretation()
+    repository.save(investigation)
+    repository._connection.execute(
+        "UPDATE interpretations SET claim_id = ? WHERE id = ?",
+        ("not-a-uuid", str(interpretation.id.value)),
+    )
+
+    with pytest.raises(
+        ValueError,
+        match=(f"malformed persisted interpretation {interpretation.id.value}: invalid claim_id"),
+    ):
+        repository.get(investigation.id)
