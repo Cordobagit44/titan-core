@@ -133,9 +133,7 @@ def test_add_interpretation_rolls_back_for_unknown_claim() -> None:
 
 
 def test_add_interpretation_rolls_back_when_event_persistence_fails() -> None:
-    unit_of_work, investigation, claim = prepare_unit_of_work(
-        FailingDomainEventRepository()
-    )
+    unit_of_work, investigation, claim = prepare_unit_of_work(FailingDomainEventRepository())
     hypothesis = investigation.hypotheses[0]
 
     with pytest.raises(RuntimeError, match="domain event persistence failed"):
