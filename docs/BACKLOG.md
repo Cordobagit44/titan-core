@@ -410,11 +410,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 | ID       | Story                         | Status      |
 | -------- | ----------------------------- | ----------- |
-| CORE-126 | Introduce Provisional Thesis  | In Progress |
+| CORE-126 | Introduce Provisional Thesis  | Done        |
 
 ## Current Story
 
-CORE-126 — Introduce Provisional Thesis is active.
+No CORE story is currently active.
+
+CORE-126 — Introduce Provisional Thesis is complete.
 
 The story introduces the minimum immutable domain model for a provisional
 conclusion without aggregate or persistence integration.
+
+CORE-126 validation passed 272 tests, Ruff lint, Ruff format, and mypy.
