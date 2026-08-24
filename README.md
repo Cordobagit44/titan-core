@@ -14,6 +14,7 @@ investigation workflows.
 Implemented capabilities include:
 
 - investigation creation, activation, closing, and reopening;
+- validation that new investigations include a non-empty purpose;
 - hypothesis creation, removal, confirmation, and rejection;
 - evidence attached to hypotheses with explicit provenance and relationship classification;
 - domain event emission and persistence;
@@ -23,7 +24,7 @@ Implemented capabilities include:
 - architecture guards for domain and application dependencies;
 - end-to-end acceptance coverage through the composed application.
 
-The current test suite contains 147 passing tests.
+The current test suite contains 162 passing tests.
 
 ## Architecture
 
