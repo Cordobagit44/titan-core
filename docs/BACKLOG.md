@@ -193,15 +193,21 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | ------------------------------- | ----------- |
 | CORE-084 | Reconcile Project Documentation | Done        |
 
+---
+
+## Epic 16 — Hypothesis Integrity
+
+| ID       | Story                                 | Status      |
+| -------- | ------------------------------------- | ----------- |
+| CORE-085 | Prevent Repeated Hypothesis Decisions | Done        |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-084 — Reconcile Project Documentation is complete.
+CORE-085 — Prevent Repeated Hypothesis Decisions is complete.
 
-The story aligns the README, changelog, project context, and backlog with the
-implemented and validated repository state through CORE-083. It introduces no
-production or test behavior.
+The story prevents duplicate confirmation or rejection of a hypothesis from
+emitting repeated domain events while preserving existing valid transitions.
 
-CORE-084 validation passed the complete pytest suite, Ruff lint, Ruff format,
-and mypy quality gates.
+CORE-085 validation passed 166 tests, Ruff lint, Ruff format, and mypy.
