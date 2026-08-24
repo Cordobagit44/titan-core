@@ -581,12 +581,12 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-128 implementation:
+State after CORE-129 implementation:
 
-- last completed story: `CORE-128 — Persist Investigation Theses`;
-- latest integrated baseline before CORE-128: `d02b9f4 — CORE-127: attach theses to investigations`;
+- last completed story: `CORE-129 — Persist ThesisAdded Domain Event`;
+- latest integrated baseline before CORE-129: `3ed2e71 — CORE-128: persist investigation theses`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 280 passing tests;
+- current validated suite: 284 passing tests;
 - Ruff lint: passing;
 - Ruff format: passing;
 - mypy: passing;
@@ -643,16 +643,16 @@ State after CORE-128 implementation:
   explicit identity and non-blank statement is available; open investigations
   own theses, expose them as an immutable tuple, emit `ThesisAdded`, and reject
   duplicate thesis identities or attachment while closed; SQLite saves and
-  reconstructs those theses without replaying mutation events;
+  reconstructs those theses without replaying mutation events; the SQLite event
+  store persists `ThesisAdded` with investigation and thesis identities;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
-- no confidence scoring, assessment, thesis application API or event-store
-  persistence, Event Bus, Outbox, CLI,
+- no confidence scoring, assessment, thesis application API, Event Bus,
+  Outbox, CLI,
   HTTP API, or AI provider integration is implemented.
 
-CORE-128 persists investigation-owned theses in SQLite while deliberately
-leaving application APIs and domain-event persistence for later focused
-stories.
+CORE-129 persists `ThesisAdded` in the SQLite event history while deliberately
+leaving application orchestration for a later focused story.
 
 ---
 
@@ -700,7 +700,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-128 is complete, do not infer CORE-129 solely from the conceptual
+After CORE-129 is complete, do not infer CORE-130 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -710,7 +710,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-129 explicitly;
+5. define CORE-130 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
