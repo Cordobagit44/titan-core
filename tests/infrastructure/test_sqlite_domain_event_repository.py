@@ -9,12 +9,14 @@ from titan.core.events import (
     EvidenceAdded,
     HypothesisConfirmed,
     HypothesisRejected,
+    InterpretationAdded,
 )
 from titan.core.evidence import (
     Evidence,
     EvidenceRelationship,
 )
 from titan.core.hypothesis import Hypothesis
+from titan.core.interpretation import Interpretation
 from titan.core.investigation import (
     Investigation,
     InvestigationCreated,
@@ -708,5 +710,85 @@ def test_malformed_claim_added_id_is_reported() -> None:
     with pytest.raises(
         ValueError,
         match="malformed persisted domain event ClaimAdded: invalid claim_id",
+    ):
+        repository.list_all()
+
+
+def create_interpretation_added_event() -> InterpretationAdded:
+    hypothesis = Hypothesis(statement="Methane indicates microbial activity")
+    evidence = Evidence(
+        description="Methane varies seasonally",
+        source="Mars orbiter",
+        relationship=EvidenceRelationship.SUPPORTS,
+    )
+    hypothesis.add_evidence(evidence)
+    claim = Claim(statement="Methane varies seasonally", evidence_id=evidence.id)
+    hypothesis.add_claim(claim)
+    hypothesis.pull_events()
+    interpretation = Interpretation(
+        hypothesis_id=hypothesis.id,
+        claim_id=claim.id,
+        rationale="Seasonality is consistent with an active process",
+    )
+    hypothesis.add_interpretation(interpretation)
+    event = hypothesis.pull_events()[0]
+    assert isinstance(event, InterpretationAdded)
+    return event
+
+
+def test_save_and_list_interpretation_added_event() -> None:
+    repository = SqliteDomainEventRepository(":memory:")
+    event = create_interpretation_added_event()
+
+    repository.save(event)
+
+    assert repository.list_all() == [event]
+
+
+def test_incomplete_interpretation_added_event_is_rejected() -> None:
+    connection = sqlite3.connect(":memory:")
+    repository = SqliteDomainEventRepository(connection=connection)
+    event = create_interpretation_added_event()
+    connection.execute(
+        """
+        INSERT INTO domain_events (
+            event_type, hypothesis_id, claim_id
+        ) VALUES (?, ?, ?)
+        """,
+        (
+            "InterpretationAdded",
+            str(event.hypothesis_id.value),
+            str(event.claim_id.value),
+        ),
+    )
+
+    with pytest.raises(
+        ValueError,
+        match=("incomplete persisted domain event InterpretationAdded: missing interpretation_id"),
+    ):
+        repository.list_all()
+
+
+def test_malformed_interpretation_added_id_is_reported() -> None:
+    connection = sqlite3.connect(":memory:")
+    repository = SqliteDomainEventRepository(connection=connection)
+    event = create_interpretation_added_event()
+    connection.execute(
+        """
+        INSERT INTO domain_events (
+            event_type, hypothesis_id, claim_id, interpretation_id
+        ) VALUES (?, ?, ?, ?)
+        """,
+        (
+            "InterpretationAdded",
+            str(event.hypothesis_id.value),
+            str(event.claim_id.value),
+            "not-a-uuid",
+        ),
+    )
+
+    with pytest.raises(
+        ValueError,
+        match=("malformed persisted domain event InterpretationAdded: invalid interpretation_id"),
     ):
         repository.list_all()
