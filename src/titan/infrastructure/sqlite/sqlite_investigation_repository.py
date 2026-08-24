@@ -460,14 +460,7 @@ class SqliteInvestigationRepository(
             (str(hypothesis_id.value),),
         )
 
-        return tuple(
-            Claim(
-                id=ClaimId(value=UUID(row[0])),
-                statement=row[1],
-                evidence_id=EvidenceId(value=UUID(row[2])),
-            )
-            for row in cursor.fetchall()
-        )
+        return tuple(self._to_claim(row) for row in cursor.fetchall())
 
     def _get_interpretations(
         self,
@@ -494,6 +487,20 @@ class SqliteInvestigationRepository(
                 rationale=row[2],
             )
             for row in cursor.fetchall()
+        )
+
+    def _to_claim(
+        self,
+        row: tuple[str, str, str],
+    ) -> Claim:
+        return Claim(
+            id=ClaimId(
+                value=self._parse_claim_id(row[0]),
+            ),
+            statement=row[1],
+            evidence_id=EvidenceId(
+                value=self._parse_claim_evidence_id(row[0], row[2]),
+            ),
         )
 
     def _to_evidence(
@@ -633,6 +640,29 @@ class SqliteInvestigationRepository(
         except ValueError as error:
             raise ValueError(
                 f"malformed persisted evidence {evidence_id}: invalid relationship",
+            ) from error
+
+    @staticmethod
+    def _parse_claim_id(
+        value: str,
+    ) -> UUID:
+        try:
+            return UUID(value)
+        except ValueError as error:
+            raise ValueError(
+                "malformed persisted claim record: invalid id",
+            ) from error
+
+    @staticmethod
+    def _parse_claim_evidence_id(
+        claim_id: str,
+        value: str,
+    ) -> UUID:
+        try:
+            return UUID(value)
+        except ValueError as error:
+            raise ValueError(
+                f"malformed persisted claim {claim_id}: invalid evidence_id",
             ) from error
 
     @staticmethod
