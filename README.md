@@ -18,6 +18,7 @@ Implemented capabilities include:
 - hypothesis creation, pending-hypothesis removal, confirmation, and rejection;
 - evidence attached to pending hypotheses with explicit provenance and relationship classification;
 - SQLite-persisted evidence-grounded claims owned by pending hypotheses;
+- immutable interpretations connecting claims to hypotheses with rationale;
 - domain event emission and persistence;
 - SQLite persistence for investigations and domain events;
 - transaction coordination through Unit of Work;
@@ -25,7 +26,7 @@ Implemented capabilities include:
 - architecture guards for domain and application dependencies;
 - end-to-end acceptance coverage through the composed application.
 
-The current test suite contains 232 passing tests.
+The current test suite contains 236 passing tests.
 
 ## Architecture
 
@@ -72,6 +73,7 @@ Contains the business model:
 - `Hypothesis`
 - `Evidence`
 - `Claim`
+- `Interpretation`
 - identifiers and statuses;
 - domain events;
 - domain invariants and lifecycle behavior.
