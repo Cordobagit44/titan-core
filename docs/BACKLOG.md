@@ -363,14 +363,11 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-113 | Persist Investigation Interpretations | Done |
 | CORE-114 | Persist InterpretationAdded Domain Event | Done |
 | CORE-115 | Add Interpretation Use Case | Done |
+| CORE-116 | Cover Interpretation Workflow Acceptance | In Progress |
 
 ## Current Story
 
-No CORE story is currently active.
+CORE-116 — Cover Interpretation Workflow Acceptance is active.
 
-CORE-115 — Add Interpretation Use Case is complete.
-
-The story exposes transactional interpretation creation through the application
-layer while preserving aggregate validation and Unit of Work coordination.
-
-CORE-115 validation passed 256 tests, Ruff lint, Ruff format, and mypy.
+The story verifies interpretation creation and reconstruction through the
+composed SQLite-backed application without changing production behavior.
