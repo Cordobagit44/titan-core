@@ -87,6 +87,37 @@ def test_add_evidence_emits_domain_event() -> None:
     assert events[0].evidence_id == evidence.id
 
 
+@pytest.mark.parametrize(
+    "status",
+    [HypothesisStatus.CONFIRMED, HypothesisStatus.REJECTED],
+)
+def test_decided_hypothesis_rejects_new_evidence(
+    status: HypothesisStatus,
+) -> None:
+    hypothesis = Hypothesis(
+        statement="Credentials were compromised",
+    )
+    if status is HypothesisStatus.CONFIRMED:
+        hypothesis.confirm()
+    else:
+        hypothesis.reject()
+    hypothesis.pull_events()
+    evidence = Evidence(
+        description="Firewall logs show repeated failed logins.",
+        source="Authentication server logs",
+        relationship=EvidenceRelationship.SUPPORTS,
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="decided hypothesis cannot accept evidence",
+    ):
+        hypothesis.add_evidence(evidence)
+
+    assert hypothesis.evidences == ()
+    assert hypothesis.pull_events() == []
+
+
 def test_hypothesis_starts_pending() -> None:
     hypothesis = Hypothesis(
         statement="Credentials were compromised",
