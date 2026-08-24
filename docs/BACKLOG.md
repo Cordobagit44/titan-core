@@ -381,13 +381,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-119 | Prevent Cross-Hypothesis Interpretation Reuse  | Done        |
 | CORE-120 | Reject Restored Interpretation Reuse            | Done        |
 
+## Epic 38 — Claim Record Diagnostics
+
+| ID       | Story                          | Status      |
+| -------- | ------------------------------ | ----------- |
+| CORE-121 | Report Malformed Claim Records | In Progress |
+
 ## Current Story
 
-No CORE story is currently active.
+CORE-121 — Report Malformed Claim Records is active.
 
-CORE-120 — Reject Restored Interpretation Reuse is complete.
-
-The story applies exclusive interpretation identity ownership while restoring
-an investigation.
-
-CORE-120 validation passed 260 tests, Ruff lint, Ruff format, and mypy.
+The story adds contextual SQLite deserialization errors for malformed claim
+identity fields.
