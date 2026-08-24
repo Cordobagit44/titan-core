@@ -4,6 +4,31 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-085 — Prevent Repeated Hypothesis Decisions
+
+### Changed
+
+- Confirming an already confirmed hypothesis now raises a domain error
+- Rejecting an already rejected hypothesis now raises a domain error
+- Failed repeated decisions emit no additional domain event
+- Application failures roll back and do not commit
+
+### Architectural Notes
+
+- The invariant remains inside `Hypothesis`
+- Existing opposite-terminal transition protections remain unchanged
+- No persistence schema, event type, or dependency changed
+
+### Validation
+
+- Targeted hypothesis decision tests — 30 passed
+- pytest — 166 passed
+- Ruff lint — passed
+- Ruff format — 165 files already formatted
+- mypy — 65 source files checked
+
+---
+
 ## CORE-084 — Reconcile Project Documentation
 
 ### Changed

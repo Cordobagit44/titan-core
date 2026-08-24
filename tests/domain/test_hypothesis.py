@@ -143,6 +143,38 @@ def test_cannot_reject_confirmed_hypothesis() -> None:
         hypothesis.reject()
 
 
+def test_cannot_confirm_already_confirmed_hypothesis() -> None:
+    hypothesis = Hypothesis(
+        statement="Credentials were compromised",
+    )
+    hypothesis.confirm()
+    hypothesis.pull_events()
+
+    with pytest.raises(
+        ValueError,
+        match="hypothesis is already confirmed",
+    ):
+        hypothesis.confirm()
+
+    assert hypothesis.pull_events() == []
+
+
+def test_cannot_reject_already_rejected_hypothesis() -> None:
+    hypothesis = Hypothesis(
+        statement="Credentials were compromised",
+    )
+    hypothesis.reject()
+    hypothesis.pull_events()
+
+    with pytest.raises(
+        ValueError,
+        match="hypothesis is already rejected",
+    ):
+        hypothesis.reject()
+
+    assert hypothesis.pull_events() == []
+
+
 def test_confirm_emits_domain_event() -> None:
     hypothesis = Hypothesis(
         statement="Credentials were compromised",

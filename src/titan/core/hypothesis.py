@@ -70,6 +70,11 @@ class Hypothesis(Entity[HypothesisEvent]):
         )
 
     def confirm(self) -> None:
+        if self.status is HypothesisStatus.CONFIRMED:
+            raise ValueError(
+                "hypothesis is already confirmed",
+            )
+
         if self.status is HypothesisStatus.REJECTED:
             raise ValueError(
                 "rejected hypothesis cannot be confirmed",
@@ -83,6 +88,11 @@ class Hypothesis(Entity[HypothesisEvent]):
         )
 
     def reject(self) -> None:
+        if self.status is HypothesisStatus.REJECTED:
+            raise ValueError(
+                "hypothesis is already rejected",
+            )
+
         if self.status is HypothesisStatus.CONFIRMED:
             raise ValueError(
                 "confirmed hypothesis cannot be rejected",
