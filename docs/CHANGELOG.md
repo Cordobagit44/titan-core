@@ -4,6 +4,34 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-113 — Persist Investigation Interpretations
+
+### Added
+
+- SQLite interpretation records with hypothesis and claim references
+- Aggregate restoration of interpretations for `get()` and `list()`
+
+### Changed
+
+- Aggregate replacement deletes interpretation rows before their claims
+- Reconstruction restores evidence, claims, and then interpretations
+
+### Architectural Notes
+
+- Interpretations remain inside the hypothesis-owned aggregate boundary
+- Domain validation is reused during restoration and generated events are cleared
+- No application API was introduced
+
+### Validation
+
+- Targeted SQLite investigation repository tests — 29 passed
+- pytest — 249 passed
+- Ruff lint — passed
+- Ruff format — 203 files already formatted
+- mypy — 75 source files checked
+
+---
+
 ## CORE-112 — Route Interpretation Through Investigation
 
 ### Added

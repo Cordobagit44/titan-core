@@ -17,6 +17,7 @@ from titan.core.hypothesis import (
     HypothesisId,
     HypothesisStatus,
 )
+from titan.core.interpretation import Interpretation, InterpretationId
 from titan.core.investigation import (
     Investigation,
     InvestigationId,
@@ -100,6 +101,21 @@ class SqliteInvestigationRepository(
             """
         )
 
+        self._connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS interpretations (
+                id TEXT PRIMARY KEY,
+                hypothesis_id TEXT NOT NULL,
+                claim_id TEXT NOT NULL,
+                rationale TEXT NOT NULL,
+                FOREIGN KEY (hypothesis_id)
+                    REFERENCES hypotheses (id),
+                FOREIGN KEY (claim_id)
+                    REFERENCES claims (id)
+            )
+            """
+        )
+
         self._migrate_investigation_schema()
         self._migrate_evidence_schema()
 
@@ -163,6 +179,18 @@ class SqliteInvestigationRepository(
         transaction = self._connection if self._manages_transaction else nullcontext()
 
         with transaction:
+            self._connection.execute(
+                """
+                DELETE FROM interpretations
+                WHERE hypothesis_id IN (
+                    SELECT id
+                    FROM hypotheses
+                    WHERE investigation_id = ?
+                )
+                """,
+                (investigation_id,),
+            )
+
             self._connection.execute(
                 """
                 DELETE FROM claims
@@ -283,6 +311,28 @@ class SqliteInvestigationRepository(
                     )
                     for hypothesis in investigation.hypotheses
                     for claim in hypothesis.claims
+                ),
+            )
+
+            self._connection.executemany(
+                """
+                INSERT INTO interpretations (
+                    id,
+                    hypothesis_id,
+                    claim_id,
+                    rationale
+                )
+                VALUES (?, ?, ?, ?)
+                """,
+                (
+                    (
+                        str(interpretation.id.value),
+                        str(hypothesis.id.value),
+                        str(interpretation.claim_id.value),
+                        interpretation.rationale,
+                    )
+                    for hypothesis in investigation.hypotheses
+                    for interpretation in hypothesis.interpretations
                 ),
             )
 
@@ -419,6 +469,33 @@ class SqliteInvestigationRepository(
             for row in cursor.fetchall()
         )
 
+    def _get_interpretations(
+        self,
+        hypothesis_id: HypothesisId,
+    ) -> tuple[Interpretation, ...]:
+        cursor = self._connection.execute(
+            """
+            SELECT
+                id,
+                claim_id,
+                rationale
+            FROM interpretations
+            WHERE hypothesis_id = ?
+            ORDER BY rowid
+            """,
+            (str(hypothesis_id.value),),
+        )
+
+        return tuple(
+            Interpretation(
+                id=InterpretationId(value=UUID(row[0])),
+                hypothesis_id=hypothesis_id,
+                claim_id=ClaimId(value=UUID(row[1])),
+                rationale=row[2],
+            )
+            for row in cursor.fetchall()
+        )
+
     def _to_evidence(
         self,
         row: tuple[str, str, str, str],
@@ -457,6 +534,13 @@ class SqliteInvestigationRepository(
         ):
             hypothesis.add_claim(
                 claim,
+            )
+
+        for interpretation in self._get_interpretations(
+            hypothesis_id,
+        ):
+            hypothesis.add_interpretation(
+                interpretation,
             )
 
         status = self._parse_hypothesis_status(row[0], row[2])

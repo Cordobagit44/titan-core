@@ -360,14 +360,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-110 | Introduce Interpretation | Done  |
 | CORE-111 | Attach Interpretations to Hypotheses | Done |
 | CORE-112 | Route Interpretation Through Investigation | Done |
+| CORE-113 | Persist Investigation Interpretations | Done |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-112 — Route Interpretation Through Investigation is complete.
+CORE-113 — Persist Investigation Interpretations is complete.
 
-The story routes interpretation attachment through the investigation lifecycle
-and delegates interpretation invariants to the selected hypothesis.
+The story preserves hypothesis-owned interpretations across SQLite aggregate
+save, get, and list operations without leaving reconstruction events.
 
-CORE-112 validation passed 247 tests, Ruff lint, Ruff format, and mypy.
+CORE-113 validation passed 249 tests, Ruff lint, Ruff format, and mypy.

@@ -9,6 +9,7 @@ from titan.core.evidence import (
     EvidenceRelationship,
 )
 from titan.core.hypothesis import Hypothesis
+from titan.core.interpretation import Interpretation
 from titan.core.investigation import Investigation
 from titan.infrastructure.sqlite.sqlite_investigation_repository import (
     SqliteInvestigationRepository,
@@ -773,3 +774,39 @@ def test_list_restores_investigation_claims() -> None:
 
     assert len(restored) == 1
     assert restored[0].hypotheses[0].claims == (claim,)
+
+
+def create_investigation_with_interpretation() -> tuple[Investigation, Interpretation]:
+    investigation, claim = create_investigation_with_claim()
+    hypothesis = investigation.hypotheses[0]
+    interpretation = Interpretation(
+        hypothesis_id=hypothesis.id,
+        claim_id=claim.id,
+        rationale="The visible geometry is unlikely to be random",
+    )
+    investigation.add_interpretation(hypothesis.id, interpretation)
+    return investigation, interpretation
+
+
+def test_get_restores_investigation_interpretations() -> None:
+    repository = SqliteInvestigationRepository(":memory:")
+    investigation, interpretation = create_investigation_with_interpretation()
+    repository.save(investigation)
+
+    restored = repository.get(investigation.id)
+
+    assert restored is not None
+    restored_hypothesis = restored.hypotheses[0]
+    assert restored_hypothesis.interpretations == (interpretation,)
+    assert restored_hypothesis.pull_events() == []
+
+
+def test_list_restores_investigation_interpretations() -> None:
+    repository = SqliteInvestigationRepository(":memory:")
+    investigation, interpretation = create_investigation_with_interpretation()
+    repository.save(investigation)
+
+    restored = repository.list()
+
+    assert len(restored) == 1
+    assert restored[0].hypotheses[0].interpretations == (interpretation,)
