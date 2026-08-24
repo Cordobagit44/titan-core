@@ -73,3 +73,37 @@ def test_investigation_add_evidence_requires_known_hypothesis() -> None:
             hypothesis_id=unknown_hypothesis.id,
             evidence=create_evidence(),
         )
+
+
+def test_investigation_rejects_evidence_owned_by_another_hypothesis() -> None:
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Evaluate evidence",
+    )
+    investigation.add_hypothesis(
+        "Seasonal methane variation indicates microbial activity",
+    )
+    investigation.add_hypothesis(
+        "Seasonal methane variation has an abiotic cause",
+    )
+    investigation.pull_events()
+    first, second = investigation.hypotheses
+    evidence = create_evidence()
+    investigation.add_evidence(
+        hypothesis_id=first.id,
+        evidence=evidence,
+    )
+    first.pull_events()
+
+    with pytest.raises(
+        ValueError,
+        match="evidence already belongs to another hypothesis",
+    ):
+        investigation.add_evidence(
+            hypothesis_id=second.id,
+            evidence=evidence,
+        )
+
+    assert first.evidences == (evidence,)
+    assert second.evidences == ()
+    assert second.pull_events() == []
