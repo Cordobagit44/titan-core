@@ -4,6 +4,34 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-115 — Add Interpretation Use Case
+
+### Added
+
+- Transactional `AddInterpretation` application use case
+- `add_interpretation` exposure from `TitanApplication` and `bootstrap()`
+- Application usage documentation for explicit claim interpretation
+
+### Changed
+
+- Interpretation aggregate state and `InterpretationAdded` persist in one Unit of Work
+- Failed interpretation operations roll back without committing
+
+### Architectural Notes
+
+- The application creates interpretations while the aggregate enforces ownership and lifecycle invariants
+- No automatic interpretation, scoring, HTTP, CLI, or AI integration was introduced
+
+### Validation
+
+- Targeted AddInterpretation and bootstrap tests — passed
+- pytest — 256 passed
+- Ruff lint — passed
+- Ruff format — 207 files already formatted
+- mypy — 77 source files checked
+
+---
+
 ## CORE-114 — Persist InterpretationAdded Domain Event
 
 ### Added
