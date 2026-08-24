@@ -577,14 +577,14 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-113 implementation:
+State after CORE-114 implementation:
 
-- last completed story: `CORE-113 — Persist Investigation Interpretations`;
-- latest integrated baseline before CORE-113: `5b1800e — CORE-112: route interpretation through investigation`;
+- last completed story: `CORE-114 — Persist InterpretationAdded Domain Event`;
+- latest integrated baseline before CORE-114: `aa02ad3 — CORE-113: persist investigation interpretations`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 249 passing tests;
+- current validated suite: 252 passing tests;
 - Ruff lint: passing;
-- Ruff format: passing on 203 files;
+- Ruff format: passing on 204 files;
 - mypy: passing on 75 source files;
 - application composition, SQLite persistence, Unit of Work transaction
   coordination, application lifecycle management, evidence provenance,
@@ -621,13 +621,15 @@ State after CORE-113 implementation:
   interpretation attachment routes through the owning investigation lifecycle;
   interpretations are saved and reconstructed by the SQLite investigation
   repository after their claims;
+  `InterpretationAdded` is serialized with hypothesis, interpretation, and
+  claim identities by the SQLite event repository;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
 - no confidence scoring, assessment, interpretation application
   use cases, thesis model,
   Event Bus, Outbox, CLI, HTTP API, or AI provider integration is implemented.
 
-CORE-113 persists interpretations as part of the SQLite investigation aggregate
+CORE-114 persists interpretation attachment history in the SQLite event store
 without adding application APIs, scoring, or automatic reasoning.
 
 ---
@@ -676,7 +678,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-113 is complete, do not infer CORE-114 solely from the conceptual
+After CORE-114 is complete, do not infer CORE-115 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -686,7 +688,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-114 explicitly;
+5. define CORE-115 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
