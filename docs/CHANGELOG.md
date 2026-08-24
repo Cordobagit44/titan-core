@@ -4,6 +4,31 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-124 — Reject Broken Persisted Claim References
+
+### Changed
+
+- Persisted claims referencing evidence outside their hypothesis are rejected
+- The rejection identifies the claim and missing evidence relationship
+- The original domain lookup failure remains available through exception
+  chaining
+
+### Architectural Notes
+
+- Reference validation remains at the SQLite reconstruction boundary
+- Valid claim grounding and aggregate behavior remain unchanged
+- No public API, schema, event type, or dependency changed
+
+### Validation
+
+- Targeted SQLite investigation repository test — passed
+- pytest — 267 passed
+- Ruff lint — passed
+- Ruff format — 216 files already formatted
+- mypy — 77 source files checked
+
+---
+
 ## CORE-123 — Validate Persisted Reasoning Text
 
 ### Changed
