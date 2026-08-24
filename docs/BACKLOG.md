@@ -379,11 +379,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 | ID       | Story                                          | Status      |
 | -------- | ---------------------------------------------- | ----------- |
-| CORE-119 | Prevent Cross-Hypothesis Interpretation Reuse  | In Progress |
+| CORE-119 | Prevent Cross-Hypothesis Interpretation Reuse  | Done        |
 
 ## Current Story
 
-CORE-119 — Prevent Cross-Hypothesis Interpretation Reuse is active.
+No CORE story is currently active.
+
+CORE-119 — Prevent Cross-Hypothesis Interpretation Reuse is complete.
 
 The story preserves exclusive interpretation identity ownership across
 hypotheses while modifying an investigation.
+
+CORE-119 validation passed 259 tests, Ruff lint, Ruff format, and mypy.
