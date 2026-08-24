@@ -4,6 +4,30 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-103 — Introduce Evidence-Grounded Claim
+
+### Added
+
+- Immutable `Claim` domain model with a non-blank statement
+- Generated and restorable `ClaimId`
+- Explicit `EvidenceId` provenance link on every claim
+
+### Architectural Notes
+
+- Claims remain domain-neutral and separate from evidence descriptions
+- No aggregate integration, persistence, event, or application API was added
+- No AI provider or automatic extraction behavior was introduced
+
+### Validation
+
+- Targeted claim domain tests — 4 passed
+- pytest — 213 passed
+- Ruff lint — passed
+- Ruff format — 185 files already formatted
+- mypy — 67 source files checked
+
+---
+
 ## CORE-102 — Reject Restored Evidence Reuse
 
 ### Changed
