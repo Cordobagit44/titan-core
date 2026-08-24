@@ -579,14 +579,14 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-117 implementation:
+State after CORE-118 implementation:
 
-- last completed story: `CORE-117 — Prevent Cross-Hypothesis Claim Reuse`;
-- latest integrated baseline before CORE-117: `b4061fb — CORE-116: cover interpretation workflow acceptance`;
+- last completed story: `CORE-118 — Reject Restored Claim Reuse`;
+- latest integrated baseline before CORE-118: `9d479f9 — CORE-117: prevent cross-hypothesis claim reuse`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 257 passing tests;
+- current validated suite: 258 passing tests;
 - Ruff lint: passing;
-- Ruff format: passing on 209 files;
+- Ruff format: passing on 210 files;
 - mypy: passing on 77 source files;
 - application composition, SQLite persistence, Unit of Work transaction
   coordination, application lifecycle management, evidence provenance,
@@ -609,7 +609,7 @@ State after CORE-117 implementation:
   restored investigations also enforce exclusive evidence identity ownership;
   an immutable evidence-grounded `Claim` model with explicit identity is
   available as the first richer reasoning structure; claim identities cannot
-  be reused across hypotheses during aggregate mutation; pending hypotheses own
+  be reused across hypotheses during aggregate mutation or restoration; pending hypotheses own
   claims grounded in evidence already in their collection and emit
   `ClaimAdded` when attachment succeeds; claim attachment routes through the
   owning investigation for lifecycle and hypothesis lookup protection; claims
@@ -634,8 +634,8 @@ State after CORE-117 implementation:
 - no confidence scoring, assessment, thesis model, Event Bus, Outbox, CLI,
   HTTP API, or AI provider integration is implemented.
 
-CORE-117 enforces exclusive claim identity ownership across hypotheses during
-aggregate mutation without changing persistence or application APIs.
+CORE-118 applies exclusive claim identity ownership consistently during
+aggregate restoration without changing SQLite or application APIs.
 
 ---
 
@@ -683,7 +683,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-117 is complete, do not infer CORE-118 solely from the conceptual
+After CORE-118 is complete, do not infer CORE-119 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -693,7 +693,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-118 explicitly;
+5. define CORE-119 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain

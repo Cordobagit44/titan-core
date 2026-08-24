@@ -2,6 +2,7 @@ from datetime import UTC, datetime
 
 import pytest
 
+from titan.core.claim import Claim
 from titan.core.evidence import Evidence, EvidenceRelationship
 from titan.core.hypothesis import Hypothesis
 from titan.core.investigation import (
@@ -505,6 +506,48 @@ def test_restore_rejects_evidence_reused_across_hypotheses() -> None:
     with pytest.raises(
         ValueError,
         match="evidence already belongs to another hypothesis",
+    ):
+        Investigation.restore(
+            investigation_id=InvestigationId.new(),
+            title="Mars anomaly",
+            purpose="Find evidence",
+            status=InvestigationStatus.DRAFT,
+            hypotheses=(first, second),
+        )
+
+
+def test_restore_rejects_claim_reused_across_hypotheses() -> None:
+    first = Hypothesis(statement="Artificial structure")
+    first_evidence = Evidence(
+        description="Orbital geometry",
+        source="Mars orbiter",
+        relationship=EvidenceRelationship.SUPPORTS,
+    )
+    first.add_evidence(first_evidence)
+    first_claim = Claim(
+        statement="Geometry is regular",
+        evidence_id=first_evidence.id,
+    )
+    first.add_claim(first_claim)
+
+    second = Hypothesis(statement="Natural structure")
+    second_evidence = Evidence(
+        description="Erosion patterns",
+        source="Mars rover",
+        relationship=EvidenceRelationship.SUPPORTS,
+    )
+    second.add_evidence(second_evidence)
+    second.add_claim(
+        Claim(
+            id=first_claim.id,
+            statement="Erosion explains the geometry",
+            evidence_id=second_evidence.id,
+        )
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="claim already belongs to another hypothesis",
     ):
         Investigation.restore(
             investigation_id=InvestigationId.new(),

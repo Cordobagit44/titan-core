@@ -4,6 +4,30 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-118 — Reject Restored Claim Reuse
+
+### Changed
+
+- Investigation restoration rejects claim identifiers reused across hypotheses
+- Rejection uses the established aggregate ownership error
+- Valid restored claim state remains unchanged
+
+### Architectural Notes
+
+- Claim identity ownership is enforced consistently for mutation and restoration
+- SQLite behavior remains unchanged because claim identifiers are already primary keys
+- No public API, schema, event type, or dependency changed
+
+### Validation
+
+- Targeted investigation restoration tests — passed
+- pytest — 258 passed
+- Ruff lint — passed
+- Ruff format — 210 files already formatted
+- mypy — 77 source files checked
+
+---
+
 ## CORE-117 — Prevent Cross-Hypothesis Claim Reuse
 
 ### Changed

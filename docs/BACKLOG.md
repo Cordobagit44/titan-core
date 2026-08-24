@@ -372,14 +372,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | ID       | Story                                  | Status      |
 | -------- | -------------------------------------- | ----------- |
 | CORE-117 | Prevent Cross-Hypothesis Claim Reuse   | Done        |
+| CORE-118 | Reject Restored Claim Reuse             | Done        |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-117 — Prevent Cross-Hypothesis Claim Reuse is complete.
+CORE-118 — Reject Restored Claim Reuse is complete.
 
-The story preserves exclusive claim identity ownership across hypotheses in one
+The story applies exclusive claim identity ownership while restoring an
 investigation.
 
-CORE-117 validation passed 257 tests, Ruff lint, Ruff format, and mypy.
+CORE-118 validation passed 258 tests, Ruff lint, Ruff format, and mypy.
