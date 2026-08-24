@@ -4,6 +4,30 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-102 — Reject Restored Evidence Reuse
+
+### Changed
+
+- Investigation restoration rejects evidence IDs reused across hypotheses
+- Rejection uses the established aggregate ownership error
+- Distinct restored evidence identities remain unchanged
+
+### Architectural Notes
+
+- Evidence ownership is enforced consistently for mutation and restoration
+- SQLite behavior remains unchanged because evidence IDs are already primary keys
+- No public signature, schema, event type, or dependency changed
+
+### Validation
+
+- Targeted investigation domain tests — 35 passed
+- pytest — 209 passed
+- Ruff lint — passed
+- Ruff format — 182 files already formatted
+- mypy — 65 source files checked
+
+---
+
 ## CORE-101 — Reject Persisted Duplicate Hypotheses
 
 ### Changed
