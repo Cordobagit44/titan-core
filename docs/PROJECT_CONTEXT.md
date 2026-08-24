@@ -577,30 +577,30 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-090 implementation:
+State after CORE-091 implementation:
 
-- last completed story: `CORE-090 — Migrate Minimal Domain Event Schema`;
-- latest integrated baseline before CORE-090: `c1f9875 — CORE-089: migrate investigation closure schema`;
+- last completed story: `CORE-091 — Prevent Duplicate Evidence`;
+- latest integrated baseline before CORE-091: `d08a25b — CORE-090: migrate minimal domain event schema`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 177 passing tests;
+- current validated suite: 179 passing tests;
 - Ruff lint: passing;
-- Ruff format: passing on 165 files;
+- Ruff format: passing on 171 files;
 - mypy: passing on 65 source files;
 - application composition, SQLite persistence, Unit of Work transaction
   coordination, application lifecycle management, evidence provenance,
   evidence relationship classification, closed-investigation aggregate
-  protections, non-empty investigation purpose validation, and repeated
-  hypothesis decision protection, decided-hypothesis removal protection, and
-  decided-hypothesis evidence protection, orphaned SQLite evidence cleanup, and
-  investigation closure-schema migration, and minimal event-store migration
-  are implemented;
+  protections, non-empty investigation purpose validation, repeated hypothesis
+  decision protection, decided-hypothesis removal and evidence protection,
+  orphaned SQLite evidence cleanup, investigation closure-schema migration,
+  minimal event-store migration, and evidence identity protection are
+  implemented;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
 - no confidence scoring, assessment, claims, interpretations, thesis model,
   Event Bus, Outbox, CLI, HTTP API, or AI provider integration is implemented.
 
-CORE-090 migrates minimal historical event tables without losing existing
-events or inventing absent optional payload values.
+CORE-091 prevents repeated evidence identifiers from producing duplicate
+collection entries or `EvidenceAdded` events.
 
 ---
 
@@ -648,7 +648,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-090 is complete, do not infer CORE-091 solely from the conceptual
+After CORE-091 is complete, do not infer CORE-092 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -658,7 +658,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-091 explicitly;
+5. define CORE-092 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
