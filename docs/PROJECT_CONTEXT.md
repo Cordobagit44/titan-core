@@ -577,14 +577,14 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-091 implementation:
+State after CORE-092 implementation:
 
-- last completed story: `CORE-091 — Prevent Duplicate Evidence`;
-- latest integrated baseline before CORE-091: `d08a25b — CORE-090: migrate minimal domain event schema`;
+- last completed story: `CORE-092 — Reject Unknown Persisted Domain Events`;
+- latest integrated baseline before CORE-092: `b4fb580 — CORE-091: prevent duplicate evidence`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 179 passing tests;
+- current validated suite: 180 passing tests;
 - Ruff lint: passing;
-- Ruff format: passing on 171 files;
+- Ruff format: passing on 172 files;
 - mypy: passing on 65 source files;
 - application composition, SQLite persistence, Unit of Work transaction
   coordination, application lifecycle management, evidence provenance,
@@ -593,14 +593,14 @@ State after CORE-091 implementation:
   decision protection, decided-hypothesis removal and evidence protection,
   orphaned SQLite evidence cleanup, investigation closure-schema migration,
   minimal event-store migration, and evidence identity protection are
-  implemented;
+  implemented, and unknown persisted event types are rejected explicitly;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
 - no confidence scoring, assessment, claims, interpretations, thesis model,
   Event Bus, Outbox, CLI, HTTP API, or AI provider integration is implemented.
 
-CORE-091 prevents repeated evidence identifiers from producing duplicate
-collection entries or `EvidenceAdded` events.
+CORE-092 prevents unsupported persisted event types from disappearing silently
+during historical reconstruction.
 
 ---
 
@@ -648,7 +648,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-091 is complete, do not infer CORE-092 solely from the conceptual
+After CORE-092 is complete, do not infer CORE-093 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -658,7 +658,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-092 explicitly;
+5. define CORE-093 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
