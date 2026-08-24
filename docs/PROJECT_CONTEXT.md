@@ -579,14 +579,14 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-122 implementation:
+State after CORE-123 implementation:
 
-- last completed story: `CORE-122 — Report Malformed Interpretation Records`;
-- latest integrated baseline before CORE-122: `00b7a50 — CORE-121: report malformed claim records`;
+- last completed story: `CORE-123 — Validate Persisted Reasoning Text`;
+- latest integrated baseline before CORE-123: `e055572 — CORE-122: report malformed interpretation records`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 264 passing tests;
+- current validated suite: 266 passing tests;
 - Ruff lint: passing;
-- Ruff format: passing on 214 files;
+- Ruff format: passing on 215 files;
 - mypy: passing on 77 source files;
 - application composition, SQLite persistence, Unit of Work transaction
   coordination, application lifecycle management, evidence provenance,
@@ -607,8 +607,8 @@ State after CORE-122 implementation:
   references receive equivalent contextual diagnostics; malformed persisted
   interpretation identifiers and claim references also receive contextual
   diagnostics; blank required
-  persisted text is rejected across investigation, hypothesis, and evidence
-  records; restored investigations enforce whitespace-normalized hypothesis
+  persisted text is rejected across investigation, hypothesis, evidence,
+  claim, and interpretation records; restored investigations enforce whitespace-normalized hypothesis
   statement uniqueness;
   restored investigations also enforce exclusive evidence identity ownership;
   an immutable evidence-grounded `Claim` model with explicit identity is
@@ -640,8 +640,8 @@ State after CORE-122 implementation:
 - no confidence scoring, assessment, thesis model, Event Bus, Outbox, CLI,
   HTTP API, or AI provider integration is implemented.
 
-CORE-122 adds contextual interpretation identity diagnostics at the SQLite
-deserialization boundary without changing schemas or public APIs.
+CORE-123 extends contextual required-text validation to persisted claim and
+interpretation records without changing schemas or public APIs.
 
 ---
 
@@ -689,7 +689,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-122 is complete, do not infer CORE-123 solely from the conceptual
+After CORE-123 is complete, do not infer CORE-124 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -699,7 +699,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-123 explicitly;
+5. define CORE-124 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
