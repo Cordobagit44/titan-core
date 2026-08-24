@@ -4,6 +4,30 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-095 — Prevent Cross-Hypothesis Evidence Reuse
+
+### Changed
+
+- An evidence identifier can belong to only one hypothesis in an investigation
+- Rejected cross-hypothesis reuse leaves both evidence collections unchanged
+- Rejected reuse emits no new `EvidenceAdded` event
+
+### Architectural Notes
+
+- Cross-hypothesis ownership remains an `Investigation` aggregate invariant
+- Local duplicate and decision-state protections remain inside `Hypothesis`
+- No public signature, schema, event type, or dependency changed
+
+### Validation
+
+- Targeted investigation evidence tests — 4 passed
+- pytest — 189 passed
+- Ruff lint — passed
+- Ruff format — 175 files already formatted
+- mypy — 65 source files checked
+
+---
+
 ## CORE-094 — Report Malformed Domain Event Payloads
 
 ### Changed
