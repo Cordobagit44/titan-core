@@ -58,6 +58,11 @@ class Hypothesis(Entity[HypothesisEvent]):
         self,
         evidence: Evidence,
     ) -> None:
+        if self.status is not HypothesisStatus.PENDING:
+            raise ValueError(
+                "decided hypothesis cannot accept evidence",
+            )
+
         self._evidences.append(
             evidence,
         )
