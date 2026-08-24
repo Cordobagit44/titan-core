@@ -4,6 +4,30 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-093 — Validate Persisted Domain Event Payloads
+
+### Changed
+
+- Required payload fields are validated before supported events are reconstructed
+- Incomplete events now raise a `ValueError` naming the event type and field
+- Investigation, closure, hypothesis, and evidence payload shapes are covered
+
+### Architectural Notes
+
+- Validation remains private to the SQLite deserialization boundary
+- Saving, ordering, migration, and unknown-type behavior remain unchanged
+- No public signature, schema, event type, or dependency changed
+
+### Validation
+
+- Targeted SQLite domain-event repository tests — 17 passed
+- pytest — 184 passed
+- Ruff lint — passed
+- Ruff format — 173 files already formatted
+- mypy — 65 source files checked
+
+---
+
 ## CORE-092 — Reject Unknown Persisted Domain Events
 
 ### Changed
