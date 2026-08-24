@@ -4,6 +4,30 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-109 — Cover Claim Workflow Acceptance
+
+### Changed
+
+- The complete application workflow now creates an evidence-grounded claim
+- Application restart coverage verifies claim identity, statement, and provenance
+- Existing investigation, hypothesis, evidence, decision, and closure coverage remains
+
+### Architectural Notes
+
+- Acceptance uses only the public `TitanApplication` surface
+- A real SQLite database is closed and reopened during verification
+- No production behavior, schema, API, or dependency changed
+
+### Validation
+
+- Claim-enabled acceptance workflow — 1 passed
+- pytest — 232 passed
+- Ruff lint — passed
+- Ruff format — 195 files already formatted
+- mypy — 71 source files checked
+
+---
+
 ## CORE-108 — Add Claim Use Case
 
 ### Added
