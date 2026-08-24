@@ -4,6 +4,29 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-092 — Reject Unknown Persisted Domain Events
+
+### Changed
+
+- Reading an unknown persisted event type now raises an explicit `ValueError`
+- Unknown event rows are no longer silently omitted from returned history
+- All supported event reconstruction and ordering remain unchanged
+
+### Architectural Notes
+
+- Explicit deserialization failure remains inside the SQLite event repository
+- No public signature, schema, event type, or dependency changed
+
+### Validation
+
+- Targeted SQLite domain-event repository tests — 13 passed
+- pytest — 180 passed
+- Ruff lint — passed
+- Ruff format — 172 files already formatted
+- mypy — 65 source files checked
+
+---
+
 ## CORE-091 — Prevent Duplicate Evidence
 
 ### Changed

@@ -249,13 +249,21 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | ------------------------- | ------ |
 | CORE-091 | Prevent Duplicate Evidence | Done  |
 
+---
+
+## Epic 23 — Historical Traceability
+
+| ID       | Story                                  | Status |
+| -------- | -------------------------------------- | ------ |
+| CORE-092 | Reject Unknown Persisted Domain Events | Done   |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-091 — Prevent Duplicate Evidence is complete.
+CORE-092 — Reject Unknown Persisted Domain Events is complete.
 
-The story ensures each evidence identifier appears at most once within a
-hypothesis while allowing distinct evidence with matching descriptive fields.
+The story prevents unknown persisted event types from being silently omitted
+when reconstructing the domain-event history.
 
-CORE-091 validation passed 179 tests, Ruff lint, Ruff format, and mypy.
+CORE-092 validation passed 180 tests, Ruff lint, Ruff format, and mypy.

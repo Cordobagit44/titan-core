@@ -1,6 +1,8 @@
 import sqlite3
 from pathlib import Path
 
+import pytest
+
 from titan.core.events import (
     EvidenceAdded,
     HypothesisConfirmed,
@@ -439,3 +441,23 @@ def test_minimal_domain_event_schema_is_migrated() -> None:
             evidence_id=evidence.id,
         ),
     ]
+
+
+def test_unknown_persisted_domain_event_is_rejected() -> None:
+    connection = sqlite3.connect(":memory:")
+    repository = SqliteDomainEventRepository(
+        connection=connection,
+    )
+    connection.execute(
+        """
+        INSERT INTO domain_events (event_type)
+        VALUES (?)
+        """,
+        ("FutureDomainEvent",),
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="unsupported persisted domain event type: FutureDomainEvent",
+    ):
+        repository.list_all()
