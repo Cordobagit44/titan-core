@@ -4,6 +4,30 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-110 — Introduce Interpretation
+
+### Added
+
+- Immutable `Interpretation` domain model
+- Generated and restorable `InterpretationId`
+- Explicit claim, hypothesis, and non-blank rationale fields
+
+### Architectural Notes
+
+- One interpretation connects one claim to one hypothesis
+- Multiple reasoning links can compose without introducing a graph prematurely
+- No ownership, persistence, event, application API, or AI behavior was added
+
+### Validation
+
+- Targeted interpretation domain tests — 4 passed
+- pytest — 236 passed
+- Ruff lint — passed
+- Ruff format — 198 files already formatted
+- mypy — 73 source files checked
+
+---
+
 ## CORE-109 — Cover Claim Workflow Acceptance
 
 ### Changed
