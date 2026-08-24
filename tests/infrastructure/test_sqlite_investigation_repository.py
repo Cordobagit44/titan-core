@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pytest
 
+from titan.core.claim import Claim
 from titan.core.evidence import (
     Evidence,
     EvidenceRelationship,
@@ -732,3 +733,43 @@ def test_get_rejects_persisted_duplicate_hypotheses() -> None:
 
     with pytest.raises(ValueError, match="hypothesis already exists"):
         repository.get(investigation.id)
+
+
+def create_investigation_with_claim() -> tuple[Investigation, Claim]:
+    investigation = Investigation.create("Mars anomaly", "Find evidence")
+    investigation.add_hypothesis("Artificial structure")
+    hypothesis = investigation.hypotheses[0]
+    evidence = Evidence(
+        description="Orbital imagery",
+        source="Mars orbiter",
+        relationship=EvidenceRelationship.SUPPORTS,
+    )
+    investigation.add_evidence(hypothesis.id, evidence)
+    claim = Claim(statement="A geometric structure is visible", evidence_id=evidence.id)
+    investigation.add_claim(hypothesis.id, claim)
+    return investigation, claim
+
+
+def test_get_restores_investigation_claims() -> None:
+    repository = SqliteInvestigationRepository(":memory:")
+    investigation, claim = create_investigation_with_claim()
+    repository.save(investigation)
+
+    restored = repository.get(investigation.id)
+
+    assert restored is not None
+    restored_claim = restored.hypotheses[0].claims[0]
+    assert restored_claim == claim
+    assert restored_claim.evidence_id == claim.evidence_id
+    assert restored.hypotheses[0].pull_events() == []
+
+
+def test_list_restores_investigation_claims() -> None:
+    repository = SqliteInvestigationRepository(":memory:")
+    investigation, claim = create_investigation_with_claim()
+    repository.save(investigation)
+
+    restored = repository.list()
+
+    assert len(restored) == 1
+    assert restored[0].hypotheses[0].claims == (claim,)

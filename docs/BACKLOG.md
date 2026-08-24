@@ -346,14 +346,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-103 | Introduce Evidence-Grounded Claim  | Done   |
 | CORE-104 | Attach Claims to Hypotheses        | Done   |
 | CORE-105 | Route Claim Attachment Through Investigation | Done |
+| CORE-106 | Persist Investigation Claims | Done |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-105 — Route Claim Attachment Through Investigation is complete.
+CORE-106 — Persist Investigation Claims is complete.
 
-The story protects claim attachment through the owning investigation lifecycle
-and delegates claim-specific invariants to the selected hypothesis.
+The story persists and reconstructs claims as part of their owning SQLite
+investigation aggregate.
 
-CORE-105 validation passed 223 tests, Ruff lint, Ruff format, and mypy.
+CORE-106 validation passed 225 tests, Ruff lint, Ruff format, and mypy.

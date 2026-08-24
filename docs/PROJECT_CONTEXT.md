@@ -577,14 +577,14 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-105 implementation:
+State after CORE-106 implementation:
 
-- last completed story: `CORE-105 — Route Claim Attachment Through Investigation`;
-- latest integrated baseline before CORE-105: `6e0e55b — CORE-104: attach claims to hypotheses`;
+- last completed story: `CORE-106 — Persist Investigation Claims`;
+- latest integrated baseline before CORE-106: `671139e — CORE-105: route claim attachment through investigation`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 223 passing tests;
+- current validated suite: 225 passing tests;
 - Ruff lint: passing;
-- Ruff format: passing on 189 files;
+- Ruff format: passing on 190 files;
 - mypy: passing on 69 source files;
 - application composition, SQLite persistence, Unit of Work transaction
   coordination, application lifecycle management, evidence provenance,
@@ -609,15 +609,16 @@ State after CORE-105 implementation:
   available as the first richer reasoning structure; pending hypotheses own
   claims grounded in evidence already in their collection and emit
   `ClaimAdded` when attachment succeeds; claim attachment routes through the
-  owning investigation for lifecycle and hypothesis lookup protection;
+  owning investigation for lifecycle and hypothesis lookup protection; claims
+  are saved and reconstructed by the SQLite investigation repository;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
-- no confidence scoring, assessment, claim persistence or application use
-  cases, interpretations, thesis model,
+- no confidence scoring, assessment, claim application use cases or
+  domain-event persistence, interpretations, thesis model,
   Event Bus, Outbox, CLI, HTTP API, or AI provider integration is implemented.
 
-CORE-105 routes claim attachment through the owning investigation without
-adding persistence, application use cases, or automatic extraction.
+CORE-106 persists claim aggregate state in SQLite without adding application
+use cases, domain-event serialization, or automatic extraction.
 
 ---
 
@@ -665,7 +666,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-105 is complete, do not infer CORE-106 solely from the conceptual
+After CORE-106 is complete, do not infer CORE-107 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -675,7 +676,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-106 explicitly;
+5. define CORE-107 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
