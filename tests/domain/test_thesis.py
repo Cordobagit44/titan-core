@@ -10,9 +10,7 @@ def test_create_provisional_thesis() -> None:
         statement="The observed anomaly is more likely geological than artificial.",
     )
 
-    assert thesis.statement == (
-        "The observed anomaly is more likely geological than artificial."
-    )
+    assert thesis.statement == ("The observed anomaly is more likely geological than artificial.")
     assert isinstance(thesis.id.value, UUID)
 
 
