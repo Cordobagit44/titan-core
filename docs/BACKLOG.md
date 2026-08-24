@@ -344,14 +344,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | ID       | Story                              | Status |
 | -------- | ---------------------------------- | ------ |
 | CORE-103 | Introduce Evidence-Grounded Claim  | Done   |
+| CORE-104 | Attach Claims to Hypotheses        | Done   |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-103 — Introduce Evidence-Grounded Claim is complete.
+CORE-104 — Attach Claims to Hypotheses is complete.
 
-The story introduces an immutable atomic claim with its own identity and an
-explicit link to supporting evidence.
+The story makes pending hypotheses own evidence-grounded claims and emits a
+domain event for each accepted attachment.
 
-CORE-103 validation passed 213 tests, Ruff lint, Ruff format, and mypy.
+CORE-104 validation passed 220 tests, Ruff lint, Ruff format, and mypy.
