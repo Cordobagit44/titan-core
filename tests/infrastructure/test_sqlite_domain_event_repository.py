@@ -3,7 +3,9 @@ from pathlib import Path
 
 import pytest
 
+from titan.core.claim import Claim
 from titan.core.events import (
+    ClaimAdded,
     EvidenceAdded,
     HypothesisConfirmed,
     HypothesisRejected,
@@ -632,5 +634,79 @@ def test_malformed_persisted_domain_event_payload_is_reported(
     with pytest.raises(
         ValueError,
         match=f"malformed persisted domain event {event_type}: invalid {malformed_field}",
+    ):
+        repository.list_all()
+
+
+def create_claim_added_event() -> ClaimAdded:
+    hypothesis = Hypothesis(statement="Methane indicates microbial activity")
+    evidence = Evidence(
+        description="Methane varies seasonally",
+        source="Mars orbiter",
+        relationship=EvidenceRelationship.SUPPORTS,
+    )
+    hypothesis.add_evidence(evidence)
+    hypothesis.pull_events()
+    claim = Claim(statement="Methane varies seasonally", evidence_id=evidence.id)
+    hypothesis.add_claim(claim)
+    event = hypothesis.pull_events()[0]
+    assert isinstance(event, ClaimAdded)
+    return event
+
+
+def test_save_and_list_claim_added_event() -> None:
+    repository = SqliteDomainEventRepository(":memory:")
+    event = create_claim_added_event()
+
+    repository.save(event)
+
+    assert repository.list_all() == [event]
+
+
+def test_incomplete_claim_added_event_is_rejected() -> None:
+    connection = sqlite3.connect(":memory:")
+    repository = SqliteDomainEventRepository(connection=connection)
+    event = create_claim_added_event()
+    connection.execute(
+        """
+        INSERT INTO domain_events (
+            event_type, hypothesis_id, evidence_id
+        ) VALUES (?, ?, ?)
+        """,
+        (
+            "ClaimAdded",
+            str(event.hypothesis_id.value),
+            str(event.evidence_id.value),
+        ),
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="incomplete persisted domain event ClaimAdded: missing claim_id",
+    ):
+        repository.list_all()
+
+
+def test_malformed_claim_added_id_is_reported() -> None:
+    connection = sqlite3.connect(":memory:")
+    repository = SqliteDomainEventRepository(connection=connection)
+    event = create_claim_added_event()
+    connection.execute(
+        """
+        INSERT INTO domain_events (
+            event_type, hypothesis_id, evidence_id, claim_id
+        ) VALUES (?, ?, ?, ?)
+        """,
+        (
+            "ClaimAdded",
+            str(event.hypothesis_id.value),
+            str(event.evidence_id.value),
+            "not-a-uuid",
+        ),
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="malformed persisted domain event ClaimAdded: invalid claim_id",
     ):
         repository.list_all()

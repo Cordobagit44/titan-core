@@ -25,7 +25,7 @@ Implemented capabilities include:
 - architecture guards for domain and application dependencies;
 - end-to-end acceptance coverage through the composed application.
 
-The current test suite contains 225 passing tests.
+The current test suite contains 228 passing tests.
 
 ## Architecture
 

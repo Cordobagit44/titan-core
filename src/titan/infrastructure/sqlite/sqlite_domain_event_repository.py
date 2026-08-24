@@ -6,7 +6,9 @@ from uuid import UUID
 from titan.application.domain_event_repository import (
     DomainEventRepository,
 )
+from titan.core.claim import ClaimId
 from titan.core.events import (
+    ClaimAdded,
     EvidenceAdded,
     HypothesisConfirmed,
     HypothesisRejected,
@@ -98,6 +100,7 @@ class SqliteDomainEventRepository(
             "hypothesis_statement",
             "hypothesis_id",
             "evidence_id",
+            "claim_id",
         }
         columns_missing = bool(current_columns - columns.keys())
 
@@ -121,7 +124,8 @@ class SqliteDomainEventRepository(
                 closed_at TEXT,
                 hypothesis_statement TEXT,
                 hypothesis_id TEXT,
-                evidence_id TEXT
+                evidence_id TEXT,
+                claim_id TEXT
             )
             """
         )
@@ -148,6 +152,7 @@ class SqliteDomainEventRepository(
         hypothesis_statement_expression = optional_column("hypothesis_statement")
         hypothesis_id_expression = optional_column("hypothesis_id")
         evidence_id_expression = optional_column("evidence_id")
+        claim_id_expression = optional_column("claim_id")
 
         transaction = self._connection if self._manages_transaction else nullcontext()
 
@@ -172,7 +177,8 @@ class SqliteDomainEventRepository(
                     closed_at,
                     hypothesis_statement,
                     hypothesis_id,
-                    evidence_id
+                    evidence_id,
+                    claim_id
                 )
                 SELECT
                     id,
@@ -182,7 +188,8 @@ class SqliteDomainEventRepository(
                     {closed_at_expression},
                     {hypothesis_statement_expression},
                     {hypothesis_id_expression},
-                    {evidence_id_expression}
+                    {evidence_id_expression},
+                    {claim_id_expression}
                 FROM domain_events
                 ORDER BY id
                 """
@@ -215,7 +222,8 @@ class SqliteDomainEventRepository(
             | HypothesisRemoved
             | HypothesisConfirmed
             | HypothesisRejected
-            | EvidenceAdded,
+            | EvidenceAdded
+            | ClaimAdded,
         ):
             raise ValueError(
                 "unsupported domain event",
@@ -266,7 +274,11 @@ class SqliteDomainEventRepository(
             str(event.hypothesis_id.value)
             if isinstance(
                 event,
-                HypothesisRemoved | HypothesisConfirmed | HypothesisRejected | EvidenceAdded,
+                HypothesisRemoved
+                | HypothesisConfirmed
+                | HypothesisRejected
+                | EvidenceAdded
+                | ClaimAdded,
             )
             else None
         )
@@ -275,7 +287,16 @@ class SqliteDomainEventRepository(
             str(event.evidence_id.value)
             if isinstance(
                 event,
-                EvidenceAdded,
+                EvidenceAdded | ClaimAdded,
+            )
+            else None
+        )
+
+        claim_id = (
+            str(event.claim_id.value)
+            if isinstance(
+                event,
+                ClaimAdded,
             )
             else None
         )
@@ -292,9 +313,10 @@ class SqliteDomainEventRepository(
                     closed_at,
                     hypothesis_statement,
                     hypothesis_id,
-                    evidence_id
+                    evidence_id,
+                    claim_id
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     type(event).__name__,
@@ -304,6 +326,7 @@ class SqliteDomainEventRepository(
                     hypothesis_statement,
                     hypothesis_id,
                     evidence_id,
+                    claim_id,
                 ),
             )
 
@@ -319,7 +342,8 @@ class SqliteDomainEventRepository(
                 closed_at,
                 hypothesis_statement,
                 hypothesis_id,
-                evidence_id
+                evidence_id,
+                claim_id
             FROM domain_events
             ORDER BY id
             """
@@ -336,6 +360,11 @@ class SqliteDomainEventRepository(
             "HypothesisConfirmed": ((5, "hypothesis_id"),),
             "HypothesisRejected": ((5, "hypothesis_id"),),
             "EvidenceAdded": ((5, "hypothesis_id"), (6, "evidence_id")),
+            "ClaimAdded": (
+                (5, "hypothesis_id"),
+                (7, "claim_id"),
+                (6, "evidence_id"),
+            ),
         }
         uuid_fields = {
             "InvestigationCreated": ((1, "investigation_id"),),
@@ -347,6 +376,11 @@ class SqliteDomainEventRepository(
             "HypothesisConfirmed": ((5, "hypothesis_id"),),
             "HypothesisRejected": ((5, "hypothesis_id"),),
             "EvidenceAdded": ((5, "hypothesis_id"), (6, "evidence_id")),
+            "ClaimAdded": (
+                (5, "hypothesis_id"),
+                (7, "claim_id"),
+                (6, "evidence_id"),
+            ),
         }
         datetime_fields = {
             "InvestigationClosed": ((3, "closed_at"),),
@@ -445,6 +479,20 @@ class SqliteDomainEventRepository(
                     EvidenceAdded(
                         hypothesis_id=HypothesisId(
                             value=parsed_uuids[5],
+                        ),
+                        evidence_id=EvidenceId(
+                            value=parsed_uuids[6],
+                        ),
+                    )
+                )
+            elif event_type == "ClaimAdded":
+                events.append(
+                    ClaimAdded(
+                        hypothesis_id=HypothesisId(
+                            value=parsed_uuids[5],
+                        ),
+                        claim_id=ClaimId(
+                            value=parsed_uuids[7],
                         ),
                         evidence_id=EvidenceId(
                             value=parsed_uuids[6],

@@ -4,6 +4,35 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-107 — Persist ClaimAdded Domain Event
+
+### Added
+
+- Nullable `claim_id` column in the SQLite event schema
+- `ClaimAdded` serialization and ordered reconstruction
+- Required-field and malformed-UUID diagnostics for claim events
+
+### Changed
+
+- Legacy event tables migrate while preserving existing rows
+- Hypothesis and evidence identities are stored alongside claim identity
+
+### Architectural Notes
+
+- The domain-event store remains append-only and backward-compatible
+- Existing event types retain their payload shapes
+- No application use case or automatic extraction was introduced
+
+### Validation
+
+- Targeted SQLite domain-event repository tests — 24 passed
+- pytest — 228 passed
+- Ruff lint — passed
+- Ruff format — 191 files already formatted
+- mypy — 69 source files checked
+
+---
+
 ## CORE-106 — Persist Investigation Claims
 
 ### Added
