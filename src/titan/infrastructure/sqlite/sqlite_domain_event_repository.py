@@ -326,9 +326,26 @@ class SqliteDomainEventRepository(
         )
 
         events: list[object] = []
+        required_fields = {
+            "InvestigationCreated": ((1, "investigation_id"), (2, "title")),
+            "InvestigationActivated": ((1, "investigation_id"),),
+            "InvestigationClosed": ((1, "investigation_id"), (3, "closed_at")),
+            "InvestigationReopened": ((1, "investigation_id"),),
+            "HypothesisAdded": ((1, "investigation_id"), (4, "hypothesis_statement")),
+            "HypothesisRemoved": ((1, "investigation_id"), (5, "hypothesis_id")),
+            "HypothesisConfirmed": ((5, "hypothesis_id"),),
+            "HypothesisRejected": ((5, "hypothesis_id"),),
+            "EvidenceAdded": ((5, "hypothesis_id"), (6, "evidence_id")),
+        }
 
         for row in cursor.fetchall():
             event_type = row[0]
+
+            for index, field in required_fields.get(event_type, ()):
+                if row[index] is None:
+                    raise ValueError(
+                        f"incomplete persisted domain event {event_type}: missing {field}",
+                    )
 
             if event_type == "InvestigationCreated":
                 events.append(

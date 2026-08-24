@@ -257,13 +257,21 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | -------------------------------------- | ------ |
 | CORE-092 | Reject Unknown Persisted Domain Events | Done   |
 
+---
+
+## Epic 24 — Event Payload Integrity
+
+| ID       | Story                                     | Status |
+| -------- | ----------------------------------------- | ------ |
+| CORE-093 | Validate Persisted Domain Event Payloads  | Done   |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-092 — Reject Unknown Persisted Domain Events is complete.
+CORE-093 — Validate Persisted Domain Event Payloads is complete.
 
-The story prevents unknown persisted event types from being silently omitted
-when reconstructing the domain-event history.
+The story validates required payload fields before reconstructing supported
+persisted events and identifies incomplete data explicitly.
 
-CORE-092 validation passed 180 tests, Ruff lint, Ruff format, and mypy.
+CORE-093 validation passed 184 tests, Ruff lint, Ruff format, and mypy.
