@@ -341,18 +341,19 @@ class SqliteInvestigationRepository(
             (str(hypothesis_id.value),),
         )
 
-        return tuple(
-            Evidence(
-                id=EvidenceId(
-                    value=UUID(row[0]),
-                ),
-                description=row[1],
-                source=row[2],
-                relationship=EvidenceRelationship(
-                    row[3],
-                ),
-            )
-            for row in cursor.fetchall()
+        return tuple(self._to_evidence(row) for row in cursor.fetchall())
+
+    def _to_evidence(
+        self,
+        row: tuple[str, str, str, str],
+    ) -> Evidence:
+        return Evidence(
+            id=EvidenceId(
+                value=self._parse_evidence_id(row[0]),
+            ),
+            description=row[1],
+            source=row[2],
+            relationship=self._parse_evidence_relationship(row[0], row[3]),
         )
 
     def _to_hypothesis(
@@ -442,4 +443,27 @@ class SqliteInvestigationRepository(
         except ValueError as error:
             raise ValueError(
                 f"malformed persisted hypothesis {hypothesis_id}: invalid status",
+            ) from error
+
+    @staticmethod
+    def _parse_evidence_id(
+        value: str,
+    ) -> UUID:
+        try:
+            return UUID(value)
+        except ValueError as error:
+            raise ValueError(
+                "malformed persisted evidence record: invalid id",
+            ) from error
+
+    @staticmethod
+    def _parse_evidence_relationship(
+        evidence_id: str,
+        value: str,
+    ) -> EvidenceRelationship:
+        try:
+            return EvidenceRelationship(value)
+        except ValueError as error:
+            raise ValueError(
+                f"malformed persisted evidence {evidence_id}: invalid relationship",
             ) from error
