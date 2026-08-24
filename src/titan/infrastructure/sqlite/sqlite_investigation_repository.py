@@ -569,9 +569,15 @@ class SqliteInvestigationRepository(
         for interpretation in self._get_interpretations(
             hypothesis_id,
         ):
-            hypothesis.add_interpretation(
-                interpretation,
-            )
+            try:
+                hypothesis.add_interpretation(
+                    interpretation,
+                )
+            except LookupError as error:
+                raise ValueError(
+                    f"malformed persisted interpretation "
+                    f"{interpretation.id.value}: claim not found",
+                ) from error
 
         status = self._parse_hypothesis_status(row[0], row[2])
 
