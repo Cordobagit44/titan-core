@@ -4,6 +4,35 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-106 — Persist Investigation Claims
+
+### Added
+
+- SQLite `claims` table beneath hypothesis ownership
+- Claim save and ordered reconstruction in `get()` and `list()`
+- Preservation of `ClaimId`, statement, and `EvidenceId`
+
+### Changed
+
+- Aggregate replacement removes previous claim rows before owner rows
+- Evidence is restored before claims so provenance is revalidated
+
+### Architectural Notes
+
+- Claim state is part of investigation aggregate persistence
+- Restored `ClaimAdded` events are cleared with other reconstruction events
+- No application use case or event-store serialization was introduced
+
+### Validation
+
+- Targeted SQLite investigation repository tests — 27 passed
+- pytest — 225 passed
+- Ruff lint — passed
+- Ruff format — 190 files already formatted
+- mypy — 69 source files checked
+
+---
+
 ## CORE-105 — Route Claim Attachment Through Investigation
 
 ### Added
