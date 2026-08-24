@@ -1,6 +1,6 @@
 import pytest
 
-from titan.core.hypothesis import HypothesisId
+from titan.core.hypothesis import HypothesisId, HypothesisStatus
 from titan.core.investigation import (
     HypothesisRemoved,
     Investigation,
@@ -67,3 +67,36 @@ def test_remove_hypothesis_raises_if_not_found() -> None:
         investigation.remove_hypothesis(
             HypothesisId.new(),
         )
+
+
+@pytest.mark.parametrize(
+    "status",
+    [HypothesisStatus.CONFIRMED, HypothesisStatus.REJECTED],
+)
+def test_remove_hypothesis_rejects_decided_hypothesis(
+    status: HypothesisStatus,
+) -> None:
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Evaluate evidence",
+    )
+    investigation.add_hypothesis(
+        "Seasonal methane variation indicates microbial activity",
+    )
+    investigation.pull_events()
+    hypothesis = investigation.hypotheses[0]
+
+    if status is HypothesisStatus.CONFIRMED:
+        hypothesis.confirm()
+    else:
+        hypothesis.reject()
+    hypothesis.pull_events()
+
+    with pytest.raises(
+        ValueError,
+        match="decided hypothesis cannot be removed",
+    ):
+        investigation.remove_hypothesis(hypothesis.id)
+
+    assert investigation.hypotheses == (hypothesis,)
+    assert investigation.pull_events() == []
