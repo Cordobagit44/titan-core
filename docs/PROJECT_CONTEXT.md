@@ -342,7 +342,9 @@ Current application operations include:
 - removing hypotheses;
 - confirming hypotheses;
 - rejecting hypotheses;
-- adding evidence.
+- adding evidence;
+- adding claims;
+- adding interpretations.
 
 Mutating use cases operate through `UnitOfWork`.
 
@@ -577,15 +579,15 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-114 implementation:
+State after CORE-115 implementation:
 
-- last completed story: `CORE-114 — Persist InterpretationAdded Domain Event`;
-- latest integrated baseline before CORE-114: `aa02ad3 — CORE-113: persist investigation interpretations`;
+- last completed story: `CORE-115 — Add Interpretation Use Case`;
+- latest integrated baseline before CORE-115: `b85afc3 — CORE-114: persist interpretation added domain event`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 252 passing tests;
+- current validated suite: 256 passing tests;
 - Ruff lint: passing;
-- Ruff format: passing on 204 files;
-- mypy: passing on 75 source files;
+- Ruff format: passing on 207 files;
+- mypy: passing on 77 source files;
 - application composition, SQLite persistence, Unit of Work transaction
   coordination, application lifecycle management, evidence provenance,
   evidence relationship classification, closed-investigation aggregate
@@ -622,15 +624,16 @@ State after CORE-114 implementation:
   interpretations are saved and reconstructed by the SQLite investigation
   repository after their claims;
   `InterpretationAdded` is serialized with hypothesis, interpretation, and
-  claim identities by the SQLite event repository;
+  claim identities by the SQLite event repository; `AddInterpretation`
+  coordinates aggregate and event persistence through Unit of Work and is
+  exposed by `bootstrap()`;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
-- no confidence scoring, assessment, interpretation application
-  use cases, thesis model,
-  Event Bus, Outbox, CLI, HTTP API, or AI provider integration is implemented.
+- no confidence scoring, assessment, thesis model, Event Bus, Outbox, CLI,
+  HTTP API, or AI provider integration is implemented.
 
-CORE-114 persists interpretation attachment history in the SQLite event store
-without adding application APIs, scoring, or automatic reasoning.
+CORE-115 exposes explicit interpretation creation through the application layer
+without adding automatic reasoning, scoring, or provider integration.
 
 ---
 
@@ -678,7 +681,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-114 is complete, do not infer CORE-115 solely from the conceptual
+After CORE-115 is complete, do not infer CORE-116 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -688,7 +691,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-115 explicitly;
+5. define CORE-116 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain

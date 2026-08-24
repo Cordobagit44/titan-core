@@ -362,14 +362,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-112 | Route Interpretation Through Investigation | Done |
 | CORE-113 | Persist Investigation Interpretations | Done |
 | CORE-114 | Persist InterpretationAdded Domain Event | Done |
+| CORE-115 | Add Interpretation Use Case | Done |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-114 — Persist InterpretationAdded Domain Event is complete.
+CORE-115 — Add Interpretation Use Case is complete.
 
-The story preserves interpretation attachment history with its hypothesis,
-interpretation, and source-claim identities in the SQLite event store.
+The story exposes transactional interpretation creation through the application
+layer while preserving aggregate validation and Unit of Work coordination.
 
-CORE-114 validation passed 252 tests, Ruff lint, Ruff format, and mypy.
+CORE-115 validation passed 256 tests, Ruff lint, Ruff format, and mypy.
