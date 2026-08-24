@@ -461,3 +461,93 @@ def test_unknown_persisted_domain_event_is_rejected() -> None:
         match="unsupported persisted domain event type: FutureDomainEvent",
     ):
         repository.list_all()
+
+
+@pytest.mark.parametrize(
+    (
+        "event_type",
+        "investigation_id",
+        "title",
+        "closed_at",
+        "hypothesis_statement",
+        "hypothesis_id",
+        "evidence_id",
+        "missing_field",
+    ),
+    [
+        ("InvestigationCreated", None, "Mars anomaly", None, None, None, None, "investigation_id"),
+        (
+            "InvestigationClosed",
+            str(InvestigationId.new().value),
+            None,
+            None,
+            None,
+            None,
+            None,
+            "closed_at",
+        ),
+        (
+            "HypothesisAdded",
+            str(InvestigationId.new().value),
+            None,
+            None,
+            None,
+            None,
+            None,
+            "hypothesis_statement",
+        ),
+        (
+            "EvidenceAdded",
+            None,
+            None,
+            None,
+            None,
+            str(InvestigationId.new().value),
+            None,
+            "evidence_id",
+        ),
+    ],
+)
+def test_incomplete_persisted_domain_event_is_rejected(
+    event_type: str,
+    investigation_id: str | None,
+    title: str | None,
+    closed_at: str | None,
+    hypothesis_statement: str | None,
+    hypothesis_id: str | None,
+    evidence_id: str | None,
+    missing_field: str,
+) -> None:
+    connection = sqlite3.connect(":memory:")
+    repository = SqliteDomainEventRepository(
+        connection=connection,
+    )
+    connection.execute(
+        """
+        INSERT INTO domain_events (
+            event_type,
+            investigation_id,
+            title,
+            closed_at,
+            hypothesis_statement,
+            hypothesis_id,
+            evidence_id
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            event_type,
+            investigation_id,
+            title,
+            closed_at,
+            hypothesis_statement,
+            hypothesis_id,
+            evidence_id,
+        ),
+    )
+
+    with pytest.raises(
+        ValueError,
+        match=f"incomplete persisted domain event {event_type}: missing {missing_field}",
+    ):
+        repository.list_all()
