@@ -577,12 +577,12 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-085 implementation:
+State after CORE-086 implementation:
 
-- last completed story: `CORE-085 — Prevent Repeated Hypothesis Decisions`;
-- latest integrated baseline before CORE-085: `c16b9a4 — CORE-084: reconcile project documentation`;
+- last completed story: `CORE-086 — Protect Decided Hypotheses from Removal`;
+- latest integrated baseline before CORE-086: `ba76186 — CORE-085: prevent repeated hypothesis decisions`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 166 passing tests;
+- current validated suite: 170 passing tests;
 - Ruff lint: passing;
 - Ruff format: passing on 165 files;
 - mypy: passing on 65 source files;
@@ -590,14 +590,15 @@ State after CORE-085 implementation:
   coordination, application lifecycle management, evidence provenance,
   evidence relationship classification, closed-investigation aggregate
   protections, non-empty investigation purpose validation, and repeated
-  hypothesis decision protection are implemented;
+  hypothesis decision protection, and decided-hypothesis removal protection
+  are implemented;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
 - no confidence scoring, assessment, claims, interpretations, thesis model,
   Event Bus, Outbox, CLI, HTTP API, or AI provider integration is implemented.
 
-CORE-085 prevents duplicate confirmation and rejection decisions from emitting
-repeated domain events while preserving Unit of Work rollback behavior.
+CORE-086 preserves terminal hypothesis decisions by allowing only pending
+hypotheses to be removed while preserving Unit of Work rollback behavior.
 
 ---
 
@@ -645,7 +646,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-085 is complete, do not infer CORE-086 solely from the conceptual
+After CORE-086 is complete, do not infer CORE-087 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -655,7 +656,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-086 explicitly;
+5. define CORE-087 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain

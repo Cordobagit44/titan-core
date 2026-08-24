@@ -4,6 +4,31 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-086 — Protect Decided Hypotheses from Removal
+
+### Changed
+
+- Confirmed hypotheses can no longer be removed from an investigation
+- Rejected hypotheses can no longer be removed from an investigation
+- Pending hypotheses remain removable
+- Failed removals leave aggregate membership unchanged and emit no removal event
+- Application failures roll back and do not commit
+
+### Architectural Notes
+
+- Aggregate-membership protection remains inside `Investigation`
+- No persistence schema, event type, or dependency changed
+
+### Validation
+
+- Targeted hypothesis-removal tests — 13 passed
+- pytest — 170 passed
+- Ruff lint — passed
+- Ruff format — 166 files already formatted
+- mypy — 65 source files checked
+
+---
+
 ## CORE-085 — Prevent Repeated Hypothesis Decisions
 
 ### Changed
