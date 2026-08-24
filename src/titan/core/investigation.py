@@ -242,6 +242,16 @@ class Investigation(Entity[DomainEvent]):
         if hypothesis is None:
             raise LookupError("hypothesis not found")
 
+        if any(
+            existing.id == interpretation.id
+            for owner in self._hypotheses
+            if owner.id != hypothesis.id
+            for existing in owner.interpretations
+        ):
+            raise ValueError(
+                "interpretation already belongs to another hypothesis",
+            )
+
         hypothesis.add_interpretation(interpretation)
 
         return hypothesis
