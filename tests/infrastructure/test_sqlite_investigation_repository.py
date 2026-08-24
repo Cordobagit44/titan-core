@@ -225,6 +225,55 @@ def test_get_restores_weakening_hypothesis_evidence() -> None:
     assert restored_evidence.relationship is EvidenceRelationship.WEAKENS
 
 
+def test_save_removes_evidence_for_removed_hypothesis() -> None:
+    connection = sqlite3.connect(":memory:")
+    repository = SqliteInvestigationRepository(
+        connection=connection,
+    )
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+    investigation.add_hypothesis(
+        "Artificial structure",
+    )
+    hypothesis = investigation.hypotheses[0]
+    hypothesis.add_evidence(
+        Evidence(
+            description="High-resolution orbital imagery",
+            source="Mars Reconnaissance Orbiter imagery",
+            relationship=EvidenceRelationship.SUPPORTS,
+        )
+    )
+    repository.save(investigation)
+
+    other_investigation = Investigation.create(
+        title="Ocean signal",
+        purpose="Identify its origin",
+    )
+    other_investigation.add_hypothesis(
+        "The signal is artificial",
+    )
+    other_hypothesis = other_investigation.hypotheses[0]
+    other_hypothesis.add_evidence(
+        Evidence(
+            description="The signal repeats at exact intervals",
+            source="Hydrophone array",
+            relationship=EvidenceRelationship.SUPPORTS,
+        )
+    )
+    repository.save(other_investigation)
+
+    investigation.remove_hypothesis(hypothesis.id)
+    repository.save(investigation)
+
+    evidence_rows = connection.execute(
+        "SELECT hypothesis_id FROM evidences",
+    ).fetchall()
+
+    assert evidence_rows == [(str(other_hypothesis.id.value),)]
+
+
 def test_legacy_evidence_schema_is_migrated(
     tmp_path: Path,
 ) -> None:
