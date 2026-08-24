@@ -31,3 +31,12 @@ Persist and reconstruct `ThesisAdded` with investigation and thesis identity.
 
 The event store records the identity transition, while aggregate persistence
 remains the source of the thesis statement.
+
+## Validation
+
+- Thesis event persistence tests — 4 passed
+- pytest — 284 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
