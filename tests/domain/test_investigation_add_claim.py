@@ -54,3 +54,36 @@ def test_investigation_add_claim_requires_known_hypothesis() -> None:
 
     assert unknown.claims == ()
     assert unknown.pull_events() == []
+
+
+def test_investigation_rejects_claim_reused_across_hypotheses() -> None:
+    investigation, first, first_evidence = create_grounded_investigation()
+    investigation.add_hypothesis("Methane has a geological source")
+    second = investigation.hypotheses[1]
+    second_evidence = Evidence(
+        description="Methane appears near geological fractures",
+        source="Mars orbiter",
+        relationship=EvidenceRelationship.SUPPORTS,
+    )
+    investigation.add_evidence(second.id, second_evidence)
+    second.pull_events()
+    first_claim = Claim(
+        statement="Methane varies seasonally",
+        evidence_id=first_evidence.id,
+    )
+    investigation.add_claim(first.id, first_claim)
+    first.pull_events()
+    reused_claim = Claim(
+        id=first_claim.id,
+        statement="Methane appears near geological fractures",
+        evidence_id=second_evidence.id,
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="claim already belongs to another hypothesis",
+    ):
+        investigation.add_claim(second.id, reused_claim)
+
+    assert second.claims == ()
+    assert second.pull_events() == []
