@@ -345,14 +345,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | ---------------------------------- | ------ |
 | CORE-103 | Introduce Evidence-Grounded Claim  | Done   |
 | CORE-104 | Attach Claims to Hypotheses        | Done   |
+| CORE-105 | Route Claim Attachment Through Investigation | Done |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-104 — Attach Claims to Hypotheses is complete.
+CORE-105 — Route Claim Attachment Through Investigation is complete.
 
-The story makes pending hypotheses own evidence-grounded claims and emits a
-domain event for each accepted attachment.
+The story protects claim attachment through the owning investigation lifecycle
+and delegates claim-specific invariants to the selected hypothesis.
 
-CORE-104 validation passed 220 tests, Ruff lint, Ruff format, and mypy.
+CORE-105 validation passed 223 tests, Ruff lint, Ruff format, and mypy.
