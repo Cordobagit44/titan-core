@@ -4,6 +4,31 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-096 — Reject Whitespace-Equivalent Hypotheses
+
+### Changed
+
+- Leading and trailing whitespace no longer bypass hypothesis duplicate detection
+- Rejected duplicates add no hypothesis and emit no `HypothesisAdded` event
+- Application rejection rolls back and does not commit
+- Accepted statement text remains unchanged and comparison remains case-sensitive
+
+### Architectural Notes
+
+- Trimmed text is used only for aggregate uniqueness comparison
+- `Hypothesis` continues to preserve the supplied validated statement
+- No public signature, schema, event type, or dependency changed
+
+### Validation
+
+- Targeted investigation and add-hypothesis tests — 37 passed
+- pytest — 192 passed
+- Ruff lint — passed
+- Ruff format — 176 files already formatted
+- mypy — 65 source files checked
+
+---
+
 ## CORE-095 — Prevent Cross-Hypothesis Evidence Reuse
 
 ### Changed

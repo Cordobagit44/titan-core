@@ -226,7 +226,10 @@ class Investigation(Entity[DomainEvent]):
 
         hypothesis = Hypothesis(statement=statement)
 
-        if any(existing.statement == hypothesis.statement for existing in self._hypotheses):
+        if any(
+            existing.statement.strip() == hypothesis.statement.strip()
+            for existing in self._hypotheses
+        ):
             raise ValueError("hypothesis already exists")
 
         self._hypotheses.append(hypothesis)

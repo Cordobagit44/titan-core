@@ -179,6 +179,37 @@ def test_add_hypothesis_rejects_duplicate_statement() -> None:
     assert investigation.pull_events() == []
 
 
+def test_add_hypothesis_rejects_whitespace_equivalent_statement() -> None:
+    investigation = Investigation.create(
+        title="Network Intrusion",
+        purpose="Determine attack vector",
+    )
+    investigation.pull_events()
+    investigation.add_hypothesis("Credentials were compromised")
+    investigation.pull_events()
+
+    with pytest.raises(
+        ValueError,
+        match="hypothesis already exists",
+    ):
+        investigation.add_hypothesis("  Credentials were compromised  ")
+
+    assert len(investigation.hypotheses) == 1
+    assert investigation.pull_events() == []
+
+
+def test_add_hypothesis_duplicate_comparison_remains_case_sensitive() -> None:
+    investigation = Investigation.create(
+        title="Network Intrusion",
+        purpose="Determine attack vector",
+    )
+
+    investigation.add_hypothesis("Credentials were compromised")
+    investigation.add_hypothesis("credentials were compromised")
+
+    assert len(investigation.hypotheses) == 2
+
+
 def test_find_hypothesis_returns_matching_hypothesis() -> None:
     investigation = Investigation.create(
         title="Mars anomaly",

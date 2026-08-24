@@ -281,13 +281,21 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | ------------------------------------------ | ------ |
 | CORE-095 | Prevent Cross-Hypothesis Evidence Reuse    | Done   |
 
+---
+
+## Epic 27 — Hypothesis Identity
+
+| ID       | Story                                    | Status |
+| -------- | ---------------------------------------- | ------ |
+| CORE-096 | Reject Whitespace-Equivalent Hypotheses  | Done   |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-095 — Prevent Cross-Hypothesis Evidence Reuse is complete.
+CORE-096 — Reject Whitespace-Equivalent Hypotheses is complete.
 
-The story ensures an evidence identifier belongs to at most one hypothesis
-within an investigation.
+The story prevents leading or trailing whitespace from bypassing hypothesis
+duplicate detection while preserving original statement text.
 
-CORE-095 validation passed 189 tests, Ruff lint, Ruff format, and mypy.
+CORE-096 validation passed 192 tests, Ruff lint, Ruff format, and mypy.
