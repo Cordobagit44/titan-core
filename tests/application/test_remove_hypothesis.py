@@ -16,7 +16,7 @@ from titan.application.remove_hypothesis import (
     RemoveHypothesis,
 )
 from titan.application.unit_of_work import UnitOfWork
-from titan.core.hypothesis import HypothesisId
+from titan.core.hypothesis import HypothesisId, HypothesisStatus
 from titan.core.investigation import (
     HypothesisRemoved,
     Investigation,
@@ -259,3 +259,45 @@ def test_remove_hypothesis_raises_if_hypothesis_not_found() -> None:
             investigation.id,
             HypothesisId.new(),
         )
+
+
+@pytest.mark.parametrize(
+    "status",
+    [HypothesisStatus.CONFIRMED, HypothesisStatus.REJECTED],
+)
+def test_remove_hypothesis_rolls_back_if_hypothesis_is_decided(
+    status: HypothesisStatus,
+) -> None:
+    unit_of_work = SpyUnitOfWork()
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+    investigation.pull_events()
+    investigation.add_hypothesis(
+        statement="The signal is artificial",
+    )
+    investigation.pull_events()
+    hypothesis = investigation.hypotheses[0]
+
+    if status is HypothesisStatus.CONFIRMED:
+        hypothesis.confirm()
+    else:
+        hypothesis.reject()
+    hypothesis.pull_events()
+
+    unit_of_work.investigations.save(investigation)
+
+    with pytest.raises(
+        ValueError,
+        match="decided hypothesis cannot be removed",
+    ):
+        RemoveHypothesis(unit_of_work)(
+            investigation.id,
+            hypothesis.id,
+        )
+
+    assert investigation.hypotheses == (hypothesis,)
+    assert unit_of_work.domain_events.list_all() == []
+    assert unit_of_work.committed is False
+    assert unit_of_work.rolled_back is True
