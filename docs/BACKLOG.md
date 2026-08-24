@@ -201,13 +201,21 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | ------------------------------------- | ----------- |
 | CORE-085 | Prevent Repeated Hypothesis Decisions | Done        |
 
+---
+
+## Epic 17 — Decision Integrity
+
+| ID       | Story                                   | Status |
+| -------- | --------------------------------------- | ------ |
+| CORE-086 | Protect Decided Hypotheses from Removal | Done   |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-085 — Prevent Repeated Hypothesis Decisions is complete.
+CORE-086 — Protect Decided Hypotheses from Removal is complete.
 
-The story prevents duplicate confirmation or rejection of a hypothesis from
-emitting repeated domain events while preserving existing valid transitions.
+The story preserves terminal hypothesis decisions by allowing only pending
+hypotheses to be removed from an investigation.
 
-CORE-085 validation passed 166 tests, Ruff lint, Ruff format, and mypy.
+CORE-086 validation passed 170 tests, Ruff lint, Ruff format, and mypy.
