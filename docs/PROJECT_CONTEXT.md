@@ -577,15 +577,15 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-107 implementation:
+State after CORE-108 implementation:
 
-- last completed story: `CORE-107 — Persist ClaimAdded Domain Event`;
-- latest integrated baseline before CORE-107: `95e467f — CORE-106: persist investigation claims`;
+- last completed story: `CORE-108 — Add Claim Use Case`;
+- latest integrated baseline before CORE-108: `6db58c2 — CORE-107: persist ClaimAdded domain event`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 228 passing tests;
+- current validated suite: 232 passing tests;
 - Ruff lint: passing;
-- Ruff format: passing on 191 files;
-- mypy: passing on 69 source files;
+- Ruff format: passing on 194 files;
+- mypy: passing on 71 source files;
 - application composition, SQLite persistence, Unit of Work transaction
   coordination, application lifecycle management, evidence provenance,
   evidence relationship classification, closed-investigation aggregate
@@ -612,14 +612,15 @@ State after CORE-107 implementation:
   owning investigation for lifecycle and hypothesis lookup protection; claims
   are saved and reconstructed by the SQLite investigation repository;
   `ClaimAdded` is serialized with hypothesis, claim, and evidence identities;
+  `AddClaim` coordinates both persistence paths through Unit of Work and is
+  exposed by `bootstrap()`;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
-- no confidence scoring, assessment, claim application use cases,
-  interpretations, thesis model,
+- no confidence scoring, assessment, interpretations, thesis model,
   Event Bus, Outbox, CLI, HTTP API, or AI provider integration is implemented.
 
-CORE-107 persists `ClaimAdded` in the SQLite event store without adding an
-application use case or automatic extraction.
+CORE-108 exposes transactional claim creation without adding automatic
+extraction, interpretation, or AI integration.
 
 ---
 
@@ -667,7 +668,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-107 is complete, do not infer CORE-108 solely from the conceptual
+After CORE-108 is complete, do not infer CORE-109 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -677,7 +678,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-108 explicitly;
+5. define CORE-109 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
