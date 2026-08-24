@@ -413,5 +413,9 @@ class SqliteDomainEventRepository(
                         ),
                     )
                 )
+            else:
+                raise ValueError(
+                    f"unsupported persisted domain event type: {event_type}",
+                )
 
         return events
