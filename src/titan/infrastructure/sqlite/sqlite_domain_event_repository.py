@@ -89,13 +89,23 @@ class SqliteDomainEventRepository(
 
         columns = {row[1]: row for row in cursor.fetchall()}
 
-        evidence_id_missing = "evidence_id" not in columns
+        current_columns = {
+            "id",
+            "event_type",
+            "investigation_id",
+            "title",
+            "closed_at",
+            "hypothesis_statement",
+            "hypothesis_id",
+            "evidence_id",
+        }
+        columns_missing = bool(current_columns - columns.keys())
 
         investigation_id_not_nullable = (
             "investigation_id" in columns and columns["investigation_id"][3] == 1
         )
 
-        return evidence_id_missing or investigation_id_not_nullable
+        return columns_missing or investigation_id_not_nullable
 
     def _create_domain_events_table(
         self,
@@ -127,7 +137,17 @@ class SqliteDomainEventRepository(
 
         existing_columns = {row[1] for row in cursor.fetchall()}
 
-        evidence_id_expression = "evidence_id" if "evidence_id" in existing_columns else "NULL"
+        def optional_column(
+            name: str,
+        ) -> str:
+            return name if name in existing_columns else "NULL"
+
+        investigation_id_expression = optional_column("investigation_id")
+        title_expression = optional_column("title")
+        closed_at_expression = optional_column("closed_at")
+        hypothesis_statement_expression = optional_column("hypothesis_statement")
+        hypothesis_id_expression = optional_column("hypothesis_id")
+        evidence_id_expression = optional_column("evidence_id")
 
         transaction = self._connection if self._manages_transaction else nullcontext()
 
@@ -157,11 +177,11 @@ class SqliteDomainEventRepository(
                 SELECT
                     id,
                     event_type,
-                    investigation_id,
-                    title,
-                    closed_at,
-                    hypothesis_statement,
-                    hypothesis_id,
+                    {investigation_id_expression},
+                    {title_expression},
+                    {closed_at_expression},
+                    {hypothesis_statement_expression},
+                    {hypothesis_id_expression},
                     {evidence_id_expression}
                 FROM domain_events
                 ORDER BY id
