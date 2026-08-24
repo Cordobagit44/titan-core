@@ -87,6 +87,49 @@ def test_add_evidence_emits_domain_event() -> None:
     assert events[0].evidence_id == evidence.id
 
 
+def test_add_evidence_rejects_duplicate_identifier() -> None:
+    hypothesis = Hypothesis(
+        statement="Credentials were compromised",
+    )
+    evidence = Evidence(
+        description="Firewall logs show repeated failed logins.",
+        source="Authentication server logs",
+        relationship=EvidenceRelationship.SUPPORTS,
+    )
+    hypothesis.add_evidence(evidence)
+    hypothesis.pull_events()
+
+    with pytest.raises(
+        ValueError,
+        match="evidence already exists",
+    ):
+        hypothesis.add_evidence(evidence)
+
+    assert hypothesis.evidences == (evidence,)
+    assert hypothesis.pull_events() == []
+
+
+def test_add_evidence_accepts_matching_description_with_distinct_identifier() -> None:
+    hypothesis = Hypothesis(
+        statement="Credentials were compromised",
+    )
+    first = Evidence(
+        description="Firewall logs show repeated failed logins.",
+        source="Authentication server logs",
+        relationship=EvidenceRelationship.SUPPORTS,
+    )
+    second = Evidence(
+        description=first.description,
+        source=first.source,
+        relationship=first.relationship,
+    )
+
+    hypothesis.add_evidence(first)
+    hypothesis.add_evidence(second)
+
+    assert hypothesis.evidences == (first, second)
+
+
 @pytest.mark.parametrize(
     "status",
     [HypothesisStatus.CONFIRMED, HypothesisStatus.REJECTED],
