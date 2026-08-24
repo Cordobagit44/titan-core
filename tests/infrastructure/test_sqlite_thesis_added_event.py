@@ -49,7 +49,8 @@ def test_existing_event_schema_gains_thesis_id_column() -> None:
     SqliteDomainEventRepository(connection=connection)
 
     columns = {
-        row[1] for row in connection.execute("PRAGMA table_info(domain_events)").fetchall()
+        row[1]
+        for row in connection.execute("PRAGMA table_info(domain_events)").fetchall()
     }
     assert "thesis_id" in columns
 
