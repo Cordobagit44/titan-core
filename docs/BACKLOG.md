@@ -404,11 +404,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | ID       | Story                                    | Status      |
 | -------- | ---------------------------------------- | ----------- |
 | CORE-124 | Reject Broken Persisted Claim References          | Done        |
-| CORE-125 | Reject Broken Persisted Interpretation References | In Progress |
+| CORE-125 | Reject Broken Persisted Interpretation References | Done        |
 
 ## Current Story
 
-CORE-125 — Reject Broken Persisted Interpretation References is active.
+No CORE story is currently active.
+
+CORE-125 — Reject Broken Persisted Interpretation References is complete.
 
 The story adds contextual rejection for interpretations whose persisted claim
 reference is not owned by their hypothesis.
+
+CORE-125 validation passed 268 tests, Ruff lint, Ruff format, and mypy.
