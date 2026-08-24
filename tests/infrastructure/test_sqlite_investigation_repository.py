@@ -7,6 +7,7 @@ from titan.core.evidence import (
     Evidence,
     EvidenceRelationship,
 )
+from titan.core.hypothesis import Hypothesis
 from titan.core.investigation import Investigation
 from titan.infrastructure.sqlite.sqlite_investigation_repository import (
     SqliteInvestigationRepository,
@@ -707,4 +708,27 @@ def test_get_rejects_blank_required_persisted_text(
         ValueError,
         match=(f"malformed persisted {record_type} {record_id}: invalid {column}"),
     ):
+        repository.get(investigation.id)
+
+
+def test_get_rejects_persisted_duplicate_hypotheses() -> None:
+    repository = SqliteInvestigationRepository(":memory:")
+    investigation = Investigation.create("Mars anomaly", "Find evidence")
+    investigation.add_hypothesis("Artificial structure")
+    repository.save(investigation)
+    duplicate = Hypothesis(statement="  Artificial structure  ")
+    repository._connection.execute(
+        """
+        INSERT INTO hypotheses (id, investigation_id, statement, status)
+        VALUES (?, ?, ?, ?)
+        """,
+        (
+            str(duplicate.id.value),
+            str(investigation.id.value),
+            duplicate.statement,
+            duplicate.status.value,
+        ),
+    )
+
+    with pytest.raises(ValueError, match="hypothesis already exists"):
         repository.get(investigation.id)
