@@ -4,6 +4,31 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-087 — Protect Decided Hypotheses from Evidence Addition
+
+### Changed
+
+- Confirmed hypotheses can no longer accept new evidence
+- Rejected hypotheses can no longer accept new evidence
+- Pending hypotheses continue to accept evidence
+- Failed additions leave evidence unchanged and emit no `EvidenceAdded` event
+- Application failures roll back and do not commit
+
+### Architectural Notes
+
+- Evidence-collection protection remains inside `Hypothesis`
+- No persistence schema, event type, or dependency changed
+
+### Validation
+
+- Targeted hypothesis and evidence-addition tests — 30 passed
+- pytest — 174 passed
+- Ruff lint — passed
+- Ruff format — 167 files already formatted
+- mypy — 65 source files checked
+
+---
+
 ## CORE-086 — Protect Decided Hypotheses from Removal
 
 ### Changed
