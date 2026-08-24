@@ -4,6 +4,34 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-105 — Route Claim Attachment Through Investigation
+
+### Added
+
+- `Investigation.add_claim()` aggregate operation
+- Aggregate lookup and delegation to the selected hypothesis
+
+### Changed
+
+- Closed investigations reject claim attachment before mutation
+- Unknown hypothesis identifiers are rejected consistently
+
+### Architectural Notes
+
+- Investigation owns lifecycle and lookup protections
+- Hypothesis retains claim provenance, identity, and decision-state invariants
+- No application use case or persistence was introduced
+
+### Validation
+
+- Targeted investigation claim tests — 3 passed
+- pytest — 223 passed
+- Ruff lint — passed
+- Ruff format — 189 files already formatted
+- mypy — 69 source files checked
+
+---
+
 ## CORE-104 — Attach Claims to Hypotheses
 
 ### Added
