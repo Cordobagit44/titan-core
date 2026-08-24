@@ -889,3 +889,24 @@ def test_get_reports_malformed_interpretation_claim_id() -> None:
         match=(f"malformed persisted interpretation {interpretation.id.value}: invalid claim_id"),
     ):
         repository.get(investigation.id)
+
+
+def test_get_rejects_claim_with_unknown_evidence_reference() -> None:
+    repository = SqliteInvestigationRepository(":memory:")
+    investigation, claim = create_investigation_with_claim()
+    repository.save(investigation)
+    unknown_evidence = Evidence(
+        description="Unknown evidence",
+        source="Unknown source",
+        relationship=EvidenceRelationship.SUPPORTS,
+    )
+    repository._connection.execute(
+        "UPDATE claims SET evidence_id = ? WHERE id = ?",
+        (str(unknown_evidence.id.value), str(claim.id.value)),
+    )
+
+    with pytest.raises(
+        ValueError,
+        match=f"malformed persisted claim {claim.id.value}: evidence not found",
+    ):
+        repository.get(investigation.id)
