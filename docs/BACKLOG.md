@@ -209,13 +209,21 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | --------------------------------------- | ------ |
 | CORE-086 | Protect Decided Hypotheses from Removal | Done   |
 
+---
+
+## Epic 18 — Evidence-Basis Integrity
+
+| ID       | Story                                            | Status |
+| -------- | ------------------------------------------------ | ------ |
+| CORE-087 | Protect Decided Hypotheses from Evidence Addition | Done  |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-086 — Protect Decided Hypotheses from Removal is complete.
+CORE-087 — Protect Decided Hypotheses from Evidence Addition is complete.
 
-The story preserves terminal hypothesis decisions by allowing only pending
-hypotheses to be removed from an investigation.
+The story preserves the historical basis of terminal decisions by allowing
+evidence additions only while a hypothesis is pending.
 
-CORE-086 validation passed 170 tests, Ruff lint, Ruff format, and mypy.
+CORE-087 validation passed 174 tests, Ruff lint, Ruff format, and mypy.

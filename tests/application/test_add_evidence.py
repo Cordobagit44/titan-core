@@ -16,7 +16,7 @@ from titan.application.investigation_repository import (
 from titan.application.unit_of_work import UnitOfWork
 from titan.core.events import EvidenceAdded
 from titan.core.evidence import EvidenceRelationship
-from titan.core.hypothesis import Hypothesis
+from titan.core.hypothesis import Hypothesis, HypothesisStatus
 from titan.core.investigation import Investigation
 
 
@@ -435,5 +435,51 @@ def test_add_evidence_rejects_unspecified_relationship() -> None:
             relationship=EvidenceRelationship.UNSPECIFIED,
         )
 
+    assert unit_of_work.committed is False
+    assert unit_of_work.rolled_back is True
+
+
+@pytest.mark.parametrize(
+    "status",
+    [HypothesisStatus.CONFIRMED, HypothesisStatus.REJECTED],
+)
+def test_add_evidence_rolls_back_if_hypothesis_is_decided(
+    status: HypothesisStatus,
+) -> None:
+    unit_of_work = SpyUnitOfWork()
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+    investigation.pull_events()
+    investigation.add_hypothesis(
+        "Methane indicates microbial life",
+    )
+    investigation.pull_events()
+    hypothesis = investigation.hypotheses[0]
+
+    if status is HypothesisStatus.CONFIRMED:
+        hypothesis.confirm()
+    else:
+        hypothesis.reject()
+    hypothesis.pull_events()
+
+    unit_of_work.investigations.save(investigation)
+
+    with pytest.raises(
+        ValueError,
+        match="decided hypothesis cannot accept evidence",
+    ):
+        AddEvidence(unit_of_work)(
+            investigation_id=investigation.id,
+            hypothesis_id=hypothesis.id,
+            description="Methane levels vary seasonally",
+            source="NASA Curiosity methane measurements",
+            relationship=EvidenceRelationship.SUPPORTS,
+        )
+
+    assert hypothesis.evidences == ()
+    assert hypothesis.pull_events() == []
+    assert unit_of_work.domain_events.list_all() == []
     assert unit_of_work.committed is False
     assert unit_of_work.rolled_back is True
