@@ -212,6 +212,40 @@ def test_confirm_hypothesis_rolls_back_if_persistence_fails() -> None:
     assert unit_of_work.rolled_back is True
 
 
+def test_confirm_hypothesis_rolls_back_if_already_confirmed() -> None:
+    unit_of_work = SpyUnitOfWork()
+
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+    investigation.pull_events()
+    investigation.add_hypothesis(
+        "Methane indicates microbial life",
+    )
+    investigation.pull_events()
+
+    hypothesis = investigation.hypotheses[0]
+    hypothesis.confirm()
+    hypothesis.pull_events()
+    unit_of_work.investigations.save(investigation)
+
+    confirm_hypothesis = ConfirmHypothesis(unit_of_work)
+
+    with pytest.raises(
+        ValueError,
+        match="hypothesis is already confirmed",
+    ):
+        confirm_hypothesis(
+            investigation_id=investigation.id,
+            hypothesis_id=hypothesis.id,
+        )
+
+    assert unit_of_work.committed is False
+    assert unit_of_work.rolled_back is True
+    assert unit_of_work.domain_events.list_all() == []
+
+
 def test_confirm_hypothesis_raises_if_investigation_not_found() -> None:
     unit_of_work = SpyUnitOfWork()
 
