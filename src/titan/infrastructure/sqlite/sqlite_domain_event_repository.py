@@ -25,7 +25,9 @@ from titan.core.investigation import (
     InvestigationCreated,
     InvestigationId,
     InvestigationReopened,
+    ThesisAdded,
 )
+from titan.core.thesis import ThesisId
 
 
 class SqliteDomainEventRepository(
@@ -104,6 +106,7 @@ class SqliteDomainEventRepository(
             "evidence_id",
             "claim_id",
             "interpretation_id",
+            "thesis_id",
         }
         columns_missing = bool(current_columns - columns.keys())
 
@@ -129,7 +132,8 @@ class SqliteDomainEventRepository(
                 hypothesis_id TEXT,
                 evidence_id TEXT,
                 claim_id TEXT,
-                interpretation_id TEXT
+                interpretation_id TEXT,
+                thesis_id TEXT
             )
             """
         )
@@ -158,6 +162,7 @@ class SqliteDomainEventRepository(
         evidence_id_expression = optional_column("evidence_id")
         claim_id_expression = optional_column("claim_id")
         interpretation_id_expression = optional_column("interpretation_id")
+        thesis_id_expression = optional_column("thesis_id")
 
         transaction = self._connection if self._manages_transaction else nullcontext()
 
@@ -184,7 +189,8 @@ class SqliteDomainEventRepository(
                     hypothesis_id,
                     evidence_id,
                     claim_id,
-                    interpretation_id
+                    interpretation_id,
+                    thesis_id
                 )
                 SELECT
                     id,
@@ -196,7 +202,8 @@ class SqliteDomainEventRepository(
                     {hypothesis_id_expression},
                     {evidence_id_expression},
                     {claim_id_expression},
-                    {interpretation_id_expression}
+                    {interpretation_id_expression},
+                    {thesis_id_expression}
                 FROM domain_events
                 ORDER BY id
                 """
@@ -231,7 +238,8 @@ class SqliteDomainEventRepository(
             | HypothesisRejected
             | EvidenceAdded
             | ClaimAdded
-            | InterpretationAdded,
+            | InterpretationAdded
+            | ThesisAdded,
         ):
             raise ValueError(
                 "unsupported domain event",
@@ -246,7 +254,8 @@ class SqliteDomainEventRepository(
                 | InvestigationClosed
                 | InvestigationReopened
                 | HypothesisAdded
-                | HypothesisRemoved,
+                | HypothesisRemoved
+                | ThesisAdded,
             )
             else None
         )
@@ -313,6 +322,7 @@ class SqliteDomainEventRepository(
         interpretation_id = (
             str(event.interpretation_id.value) if isinstance(event, InterpretationAdded) else None
         )
+        thesis_id = str(event.thesis_id.value) if isinstance(event, ThesisAdded) else None
 
         transaction = self._connection if self._manages_transaction else nullcontext()
 
@@ -328,9 +338,10 @@ class SqliteDomainEventRepository(
                     hypothesis_id,
                     evidence_id,
                     claim_id,
-                    interpretation_id
+                    interpretation_id,
+                    thesis_id
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     type(event).__name__,
@@ -342,6 +353,7 @@ class SqliteDomainEventRepository(
                     evidence_id,
                     claim_id,
                     interpretation_id,
+                    thesis_id,
                 ),
             )
 
@@ -359,7 +371,8 @@ class SqliteDomainEventRepository(
                 hypothesis_id,
                 evidence_id,
                 claim_id,
-                interpretation_id
+                interpretation_id,
+                thesis_id
             FROM domain_events
             ORDER BY id
             """
@@ -386,6 +399,7 @@ class SqliteDomainEventRepository(
                 (8, "interpretation_id"),
                 (7, "claim_id"),
             ),
+            "ThesisAdded": ((1, "investigation_id"), (9, "thesis_id")),
         }
         uuid_fields = {
             "InvestigationCreated": ((1, "investigation_id"),),
@@ -407,6 +421,7 @@ class SqliteDomainEventRepository(
                 (8, "interpretation_id"),
                 (7, "claim_id"),
             ),
+            "ThesisAdded": ((1, "investigation_id"), (9, "thesis_id")),
         }
         datetime_fields = {
             "InvestigationClosed": ((3, "closed_at"),),
@@ -537,6 +552,13 @@ class SqliteDomainEventRepository(
                         claim_id=ClaimId(
                             value=parsed_uuids[7],
                         ),
+                    )
+                )
+            elif event_type == "ThesisAdded":
+                events.append(
+                    ThesisAdded(
+                        investigation_id=InvestigationId(value=parsed_uuids[1]),
+                        thesis_id=ThesisId(value=parsed_uuids[9]),
                     )
                 )
             else:
