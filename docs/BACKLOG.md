@@ -391,11 +391,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 | ID       | Story                                   | Status      |
 | -------- | --------------------------------------- | ----------- |
-| CORE-122 | Report Malformed Interpretation Records | In Progress |
+| CORE-122 | Report Malformed Interpretation Records | Done        |
 
 ## Current Story
 
-CORE-122 — Report Malformed Interpretation Records is active.
+No CORE story is currently active.
+
+CORE-122 — Report Malformed Interpretation Records is complete.
 
 The story adds contextual SQLite deserialization errors for malformed
 interpretation identity fields.
+
+CORE-122 validation passed 264 tests, Ruff lint, Ruff format, and mypy.
