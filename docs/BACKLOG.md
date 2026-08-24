@@ -351,13 +351,21 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-108 | Add Claim Use Case | Done |
 | CORE-109 | Cover Claim Workflow Acceptance | Done |
 
+---
+
+## Epic 35 — Interpretations
+
+| ID       | Story                   | Status |
+| -------- | ----------------------- | ------ |
+| CORE-110 | Introduce Interpretation | Done  |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-109 — Cover Claim Workflow Acceptance is complete.
+CORE-110 — Introduce Interpretation is complete.
 
-The story verifies evidence-grounded claim creation and reconstruction across a
-real composed application restart.
+The story introduces an immutable reasoning link between one claim and one
+hypothesis with an explicit rationale.
 
-CORE-109 validation passed 232 tests, Ruff lint, Ruff format, and mypy.
+CORE-110 validation passed 236 tests, Ruff lint, Ruff format, and mypy.
