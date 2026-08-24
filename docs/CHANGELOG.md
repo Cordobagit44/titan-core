@@ -4,6 +4,31 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-123 — Validate Persisted Reasoning Text
+
+### Changed
+
+- Blank persisted claim statements now raise contextual deserialization errors
+- Blank persisted interpretation rationales now raise contextual
+  deserialization errors
+- Existing required-text validation now covers every current reasoning record
+
+### Architectural Notes
+
+- Validation remains at the SQLite deserialization boundary
+- Valid claim and interpretation reconstruction remains unchanged
+- No public API, schema, event type, or dependency changed
+
+### Validation
+
+- Parameterized persisted text tests — passed
+- pytest — 266 passed
+- Ruff lint — passed
+- Ruff format — 215 files already formatted
+- mypy — 77 source files checked
+
+---
+
 ## CORE-122 — Report Malformed Interpretation Records
 
 ### Changed
