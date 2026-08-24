@@ -577,14 +577,14 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-108 implementation:
+State after CORE-109 implementation:
 
-- last completed story: `CORE-108 — Add Claim Use Case`;
-- latest integrated baseline before CORE-108: `6db58c2 — CORE-107: persist ClaimAdded domain event`;
+- last completed story: `CORE-109 — Cover Claim Workflow Acceptance`;
+- latest integrated baseline before CORE-109: `1d8a4f1 — CORE-108: add claim use case`;
 - GitHub's configured default branch is `main`;
 - current validated suite: 232 passing tests;
 - Ruff lint: passing;
-- Ruff format: passing on 194 files;
+- Ruff format: passing on 195 files;
 - mypy: passing on 71 source files;
 - application composition, SQLite persistence, Unit of Work transaction
   coordination, application lifecycle management, evidence provenance,
@@ -613,14 +613,15 @@ State after CORE-108 implementation:
   are saved and reconstructed by the SQLite investigation repository;
   `ClaimAdded` is serialized with hypothesis, claim, and evidence identities;
   `AddClaim` coordinates both persistence paths through Unit of Work and is
-  exposed by `bootstrap()`;
+  exposed by `bootstrap()`; the composed acceptance workflow verifies claim
+  reconstruction after a real SQLite-backed application restart;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
 - no confidence scoring, assessment, interpretations, thesis model,
   Event Bus, Outbox, CLI, HTTP API, or AI provider integration is implemented.
 
-CORE-108 exposes transactional claim creation without adding automatic
-extraction, interpretation, or AI integration.
+CORE-109 verifies the complete persisted claim workflow without adding new
+production behavior.
 
 ---
 
@@ -668,7 +669,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-108 is complete, do not infer CORE-109 solely from the conceptual
+After CORE-109 is complete, do not infer CORE-110 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -678,7 +679,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-109 explicitly;
+5. define CORE-110 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
