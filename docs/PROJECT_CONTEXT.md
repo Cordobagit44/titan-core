@@ -608,8 +608,8 @@ State after CORE-123 implementation:
   interpretation identifiers and claim references also receive contextual
   diagnostics; blank required
   persisted text is rejected across investigation, hypothesis, evidence,
-  claim, and interpretation records; restored investigations enforce whitespace-normalized hypothesis
-  statement uniqueness;
+  claim, and interpretation records; restored investigations enforce
+  whitespace-normalized hypothesis statement uniqueness;
   restored investigations also enforce exclusive evidence identity ownership;
   an immutable evidence-grounded `Claim` model with explicit identity is
   available as the first richer reasoning structure; claim identities cannot
