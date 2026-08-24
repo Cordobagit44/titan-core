@@ -39,6 +39,13 @@ def test_complete_investigation_workflow_is_persisted(
         relationship=EvidenceRelationship.SUPPORTS,
     )
 
+    claim = application.add_claim(
+        investigation_id=investigation.id,
+        hypothesis_id=hypothesis.id,
+        evidence_id=evidence.id,
+        statement="Methane concentration varies seasonally",
+    )
+
     application.confirm_hypothesis(
         investigation_id=investigation.id,
         hypothesis_id=hypothesis.id,
@@ -82,6 +89,14 @@ def test_complete_investigation_workflow_is_persisted(
     assert restored_evidence.description == "Methane concentration varies seasonally"
     assert restored_evidence.source == "NASA Curiosity methane measurements"
     assert restored_evidence.relationship is EvidenceRelationship.SUPPORTS
+
+    assert len(restored_hypothesis.claims) == 1
+
+    restored_claim = restored_hypothesis.claims[0]
+
+    assert restored_claim.id == claim.id
+    assert restored_claim.statement == "Methane concentration varies seasonally"
+    assert restored_claim.evidence_id == evidence.id
 
     listed = restarted_application.list_investigations()
 
