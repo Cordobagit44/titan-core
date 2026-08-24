@@ -34,3 +34,12 @@ Persist and restore investigation-owned theses as SQLite aggregate state.
 Theses are stored directly beneath their owning investigation. Repository
 reconstruction supplies them to the aggregate restore path without replaying
 mutation events.
+
+## Validation
+
+- Thesis persistence tests — 3 passed
+- pytest — 280 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
