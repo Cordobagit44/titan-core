@@ -361,14 +361,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-111 | Attach Interpretations to Hypotheses | Done |
 | CORE-112 | Route Interpretation Through Investigation | Done |
 | CORE-113 | Persist Investigation Interpretations | Done |
+| CORE-114 | Persist InterpretationAdded Domain Event | Done |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-113 — Persist Investigation Interpretations is complete.
+CORE-114 — Persist InterpretationAdded Domain Event is complete.
 
-The story preserves hypothesis-owned interpretations across SQLite aggregate
-save, get, and list operations without leaving reconstruction events.
+The story preserves interpretation attachment history with its hypothesis,
+interpretation, and source-claim identities in the SQLite event store.
 
-CORE-113 validation passed 249 tests, Ruff lint, Ruff format, and mypy.
+CORE-114 validation passed 252 tests, Ruff lint, Ruff format, and mypy.
