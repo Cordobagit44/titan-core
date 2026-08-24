@@ -577,14 +577,14 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-095 implementation:
+State after CORE-096 implementation:
 
-- last completed story: `CORE-095 — Prevent Cross-Hypothesis Evidence Reuse`;
-- latest integrated baseline before CORE-095: `a6afac8 — CORE-094: report malformed domain event payloads`;
+- last completed story: `CORE-096 — Reject Whitespace-Equivalent Hypotheses`;
+- latest integrated baseline before CORE-096: `6c7e532 — CORE-095: prevent cross-hypothesis evidence reuse`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 189 passing tests;
+- current validated suite: 192 passing tests;
 - Ruff lint: passing;
-- Ruff format: passing on 175 files;
+- Ruff format: passing on 176 files;
 - mypy: passing on 65 source files;
 - application composition, SQLite persistence, Unit of Work transaction
   coordination, application lifecycle management, evidence provenance,
@@ -595,14 +595,15 @@ State after CORE-095 implementation:
   minimal event-store migration, and evidence identity protection are
   implemented; unknown persisted event types and incomplete event payloads are
   rejected explicitly, and malformed UUID and datetime payloads include event
-  and field context; cross-hypothesis evidence identity ownership is enforced;
+  and field context; cross-hypothesis evidence identity ownership and
+  whitespace-normalized hypothesis uniqueness are enforced;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
 - no confidence scoring, assessment, claims, interpretations, thesis model,
   Event Bus, Outbox, CLI, HTTP API, or AI provider integration is implemented.
 
-CORE-095 prevents one evidence identifier from being owned by multiple
-hypotheses in the same investigation.
+CORE-096 prevents leading or trailing whitespace from creating visually
+duplicate hypotheses while preserving stored statement text.
 
 ---
 
@@ -650,7 +651,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-095 is complete, do not infer CORE-096 solely from the conceptual
+After CORE-096 is complete, do not infer CORE-097 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -660,7 +661,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-096 explicitly;
+5. define CORE-097 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
