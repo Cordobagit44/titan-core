@@ -678,6 +678,8 @@ def test_get_reports_malformed_evidence_relationship() -> None:
         ("hypotheses", "statement", "hypothesis"),
         ("evidences", "description", "evidence"),
         ("evidences", "source", "evidence"),
+        ("claims", "statement", "claim"),
+        ("interpretations", "rationale", "interpretation"),
     ],
 )
 def test_get_rejects_blank_required_persisted_text(
@@ -695,11 +697,24 @@ def test_get_rejects_blank_required_persisted_text(
         relationship=EvidenceRelationship.SUPPORTS,
     )
     hypothesis.add_evidence(evidence)
+    claim = Claim(
+        statement="A geometric structure is visible",
+        evidence_id=evidence.id,
+    )
+    hypothesis.add_claim(claim)
+    interpretation = Interpretation(
+        hypothesis_id=hypothesis.id,
+        claim_id=claim.id,
+        rationale="Regular geometry suggests deliberate construction.",
+    )
+    hypothesis.add_interpretation(interpretation)
     repository.save(investigation)
     record_id = {
         "investigation": investigation.id.value,
         "hypothesis": hypothesis.id.value,
         "evidence": evidence.id.value,
+        "claim": claim.id.value,
+        "interpretation": interpretation.id.value,
     }[record_type]
     repository._connection.execute(
         f"UPDATE {table} SET {column} = ? WHERE id = ?",
