@@ -615,8 +615,7 @@ State after CORE-116 implementation:
   are saved and reconstructed by the SQLite investigation repository;
   `ClaimAdded` is serialized with hypothesis, claim, and evidence identities;
   `AddClaim` coordinates both persistence paths through Unit of Work and is
-  exposed by `bootstrap()`; the composed acceptance workflow verifies
-  interpretation reconstruction after a real SQLite-backed application restart; the composed acceptance workflow verifies claim
+  exposed by `bootstrap()`; the composed acceptance workflow verifies claim
   reconstruction after a real SQLite-backed application restart;
   an immutable `Interpretation` model connects one claim to one hypothesis with
   an explicit rationale; pending hypotheses own interpretations and validate
@@ -627,7 +626,8 @@ State after CORE-116 implementation:
   `InterpretationAdded` is serialized with hypothesis, interpretation, and
   claim identities by the SQLite event repository; `AddInterpretation`
   coordinates aggregate and event persistence through Unit of Work and is
-  exposed by `bootstrap()`;
+  exposed by `bootstrap()`; the composed acceptance workflow verifies
+  interpretation reconstruction after a real SQLite-backed application restart;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
 - no confidence scoring, assessment, thesis model, Event Bus, Outbox, CLI,
