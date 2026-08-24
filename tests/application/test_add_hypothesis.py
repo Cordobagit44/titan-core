@@ -181,6 +181,35 @@ def test_add_hypothesis_rolls_back_if_persistence_fails() -> None:
     assert unit_of_work.rolled_back is True
 
 
+def test_add_hypothesis_rolls_back_for_whitespace_equivalent_duplicate() -> None:
+    unit_of_work = SpyUnitOfWork()
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+    investigation.pull_events()
+    investigation.add_hypothesis(
+        "Methane indicates microbial life",
+    )
+    investigation.pull_events()
+    unit_of_work.investigations.save(investigation)
+
+    with pytest.raises(
+        ValueError,
+        match="hypothesis already exists",
+    ):
+        AddHypothesis(unit_of_work)(
+            investigation_id=investigation.id,
+            statement="  Methane indicates microbial life  ",
+        )
+
+    assert len(investigation.hypotheses) == 1
+    assert investigation.pull_events() == []
+    assert unit_of_work.domain_events.list_all() == []
+    assert unit_of_work.committed is False
+    assert unit_of_work.rolled_back is True
+
+
 def test_add_hypothesis_raises_if_investigation_not_found() -> None:
     unit_of_work = SpyUnitOfWork()
 
