@@ -4,6 +4,34 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-112 — Route Interpretation Through Investigation
+
+### Added
+
+- `Investigation.add_interpretation()` aggregate operation
+- Aggregate lookup and delegation to the selected hypothesis
+
+### Changed
+
+- Closed investigations reject interpretation attachment before mutation
+- Unknown hypothesis identifiers are rejected consistently
+
+### Architectural Notes
+
+- Investigation owns lifecycle and lookup protections
+- Hypothesis retains interpretation reference, identity, and state invariants
+- No persistence or application API was introduced
+
+### Validation
+
+- Targeted investigation interpretation tests — 3 passed
+- pytest — 247 passed
+- Ruff lint — passed
+- Ruff format — 202 files already formatted
+- mypy — 75 source files checked
+
+---
+
 ## CORE-111 — Attach Interpretations to Hypotheses
 
 ### Added
