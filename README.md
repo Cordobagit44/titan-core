@@ -174,6 +174,17 @@ claim = application.add_claim(
 )
 ```
 
+Add an interpretation that explains the claim's relevance:
+
+```python
+interpretation = application.add_interpretation(
+    investigation_id=investigation.id,
+    hypothesis_id=hypothesis.id,
+    claim_id=claim.id,
+    rationale="Seasonality makes a biological mechanism plausible",
+)
+```
+
 Confirm the hypothesis:
 
 ```python
@@ -231,6 +242,7 @@ The composition root currently exposes:
 - `reject_hypothesis`
 - `add_evidence`
 - `add_claim`
+- `add_interpretation`
 
 ## Requirements
 
