@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import TYPE_CHECKING
 from uuid import UUID, uuid4
 
 from titan.core.claim import Claim
@@ -9,10 +12,16 @@ from titan.core.events import (
     EvidenceAdded,
     HypothesisConfirmed,
     HypothesisRejected,
+    InterpretationAdded,
 )
 from titan.core.evidence import Evidence
 
-type HypothesisEvent = EvidenceAdded | ClaimAdded | HypothesisConfirmed | HypothesisRejected
+if TYPE_CHECKING:
+    from titan.core.interpretation import Interpretation
+
+type HypothesisEvent = (
+    EvidenceAdded | ClaimAdded | InterpretationAdded | HypothesisConfirmed | HypothesisRejected
+)
 
 
 class HypothesisStatus(Enum):
@@ -26,7 +35,7 @@ class HypothesisId:
     value: UUID
 
     @classmethod
-    def new(cls) -> "HypothesisId":
+    def new(cls) -> HypothesisId:
         return cls(value=uuid4())
 
 
@@ -48,6 +57,11 @@ class Hypothesis(Entity[HypothesisEvent]):
         init=False,
         repr=False,
     )
+    _interpretations: list[Interpretation] = field(
+        default_factory=list,
+        init=False,
+        repr=False,
+    )
 
     def __post_init__(self) -> None:
         super().__init__()
@@ -64,6 +78,10 @@ class Hypothesis(Entity[HypothesisEvent]):
     @property
     def claims(self) -> tuple[Claim, ...]:
         return tuple(self._claims)
+
+    @property
+    def interpretations(self) -> tuple[Interpretation, ...]:
+        return tuple(self._interpretations)
 
     def add_evidence(
         self,
@@ -116,6 +134,40 @@ class Hypothesis(Entity[HypothesisEvent]):
                 hypothesis_id=self.id,
                 claim_id=claim.id,
                 evidence_id=claim.evidence_id,
+            )
+        )
+
+    def add_interpretation(
+        self,
+        interpretation: Interpretation,
+    ) -> None:
+        if self.status is not HypothesisStatus.PENDING:
+            raise ValueError(
+                "decided hypothesis cannot accept interpretations",
+            )
+
+        if interpretation.hypothesis_id != self.id:
+            raise LookupError(
+                "interpretation hypothesis does not match",
+            )
+
+        if not any(claim.id == interpretation.claim_id for claim in self._claims):
+            raise LookupError(
+                "interpretation claim not found",
+            )
+
+        if any(existing.id == interpretation.id for existing in self._interpretations):
+            raise ValueError(
+                "interpretation already exists",
+            )
+
+        self._interpretations.append(interpretation)
+
+        self._record_event(
+            InterpretationAdded(
+                hypothesis_id=self.id,
+                interpretation_id=interpretation.id,
+                claim_id=interpretation.claim_id,
             )
         )
 
