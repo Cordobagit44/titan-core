@@ -4,6 +4,35 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-108 — Add Claim Use Case
+
+### Added
+
+- Transactional `AddClaim` application use case
+- `add_claim` exposure from `TitanApplication` and `bootstrap()`
+- Application usage documentation for evidence-grounded claims
+
+### Changed
+
+- Claim aggregate state and `ClaimAdded` persist in one Unit of Work
+- All failed claim operations roll back and do not commit
+
+### Architectural Notes
+
+- Application creates claims while the aggregate enforces domain invariants
+- Unit of Work coordinates investigation and domain-event repositories
+- No HTTP, CLI, automatic extraction, or AI integration was introduced
+
+### Validation
+
+- Targeted AddClaim and bootstrap tests — 7 passed
+- pytest — 232 passed
+- Ruff lint — passed
+- Ruff format — 194 files already formatted
+- mypy — 71 source files checked
+
+---
+
 ## CORE-107 — Persist ClaimAdded Domain Event
 
 ### Added
