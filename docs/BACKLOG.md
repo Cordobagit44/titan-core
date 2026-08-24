@@ -403,11 +403,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 | ID       | Story                                    | Status      |
 | -------- | ---------------------------------------- | ----------- |
-| CORE-124 | Reject Broken Persisted Claim References | In Progress |
+| CORE-124 | Reject Broken Persisted Claim References | Done        |
 
 ## Current Story
 
-CORE-124 — Reject Broken Persisted Claim References is active.
+No CORE story is currently active.
+
+CORE-124 — Reject Broken Persisted Claim References is complete.
 
 The story adds contextual rejection for claims whose persisted evidence
 reference is not owned by their hypothesis.
+
+CORE-124 validation passed 267 tests, Ruff lint, Ruff format, and mypy.
