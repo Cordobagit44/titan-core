@@ -17,7 +17,7 @@ Implemented capabilities include:
 - validation that new investigations include a non-empty purpose;
 - hypothesis creation, pending-hypothesis removal, confirmation, and rejection;
 - evidence attached to pending hypotheses with explicit provenance and relationship classification;
-- immutable evidence-grounded claims owned by pending hypotheses;
+- SQLite-persisted evidence-grounded claims owned by pending hypotheses;
 - domain event emission and persistence;
 - SQLite persistence for investigations and domain events;
 - transaction coordination through Unit of Work;
@@ -25,7 +25,7 @@ Implemented capabilities include:
 - architecture guards for domain and application dependencies;
 - end-to-end acceptance coverage through the composed application.
 
-The current test suite contains 223 passing tests.
+The current test suite contains 225 passing tests.
 
 ## Architecture
 
@@ -99,6 +99,7 @@ Contains concrete infrastructure implementations.
 The current implementation provides SQLite-backed:
 
 - investigation persistence;
+- hypothesis, evidence, and claim persistence;
 - domain event persistence;
 - Unit of Work.
 
