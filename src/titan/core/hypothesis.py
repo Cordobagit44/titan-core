@@ -2,15 +2,17 @@ from dataclasses import dataclass, field
 from enum import Enum
 from uuid import UUID, uuid4
 
+from titan.core.claim import Claim
 from titan.core.entity import Entity
 from titan.core.events import (
+    ClaimAdded,
     EvidenceAdded,
     HypothesisConfirmed,
     HypothesisRejected,
 )
 from titan.core.evidence import Evidence
 
-type HypothesisEvent = EvidenceAdded | HypothesisConfirmed | HypothesisRejected
+type HypothesisEvent = EvidenceAdded | ClaimAdded | HypothesisConfirmed | HypothesisRejected
 
 
 class HypothesisStatus(Enum):
@@ -41,6 +43,11 @@ class Hypothesis(Entity[HypothesisEvent]):
         init=False,
         repr=False,
     )
+    _claims: list[Claim] = field(
+        default_factory=list,
+        init=False,
+        repr=False,
+    )
 
     def __post_init__(self) -> None:
         super().__init__()
@@ -53,6 +60,10 @@ class Hypothesis(Entity[HypothesisEvent]):
     @property
     def evidences(self) -> tuple[Evidence, ...]:
         return tuple(self._evidences)
+
+    @property
+    def claims(self) -> tuple[Claim, ...]:
+        return tuple(self._claims)
 
     def add_evidence(
         self,
@@ -76,6 +87,35 @@ class Hypothesis(Entity[HypothesisEvent]):
             EvidenceAdded(
                 hypothesis_id=self.id,
                 evidence_id=evidence.id,
+            )
+        )
+
+    def add_claim(
+        self,
+        claim: Claim,
+    ) -> None:
+        if self.status is not HypothesisStatus.PENDING:
+            raise ValueError(
+                "decided hypothesis cannot accept claims",
+            )
+
+        if not any(evidence.id == claim.evidence_id for evidence in self._evidences):
+            raise LookupError(
+                "claim evidence not found",
+            )
+
+        if any(existing.id == claim.id for existing in self._claims):
+            raise ValueError(
+                "claim already exists",
+            )
+
+        self._claims.append(claim)
+
+        self._record_event(
+            ClaimAdded(
+                hypothesis_id=self.id,
+                claim_id=claim.id,
+                evidence_id=claim.evidence_id,
             )
         )
 
