@@ -273,13 +273,21 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | -------------------------------------- | ------ |
 | CORE-094 | Report Malformed Domain Event Payloads | Done   |
 
+---
+
+## Epic 26 — Evidence Ownership
+
+| ID       | Story                                      | Status |
+| -------- | ------------------------------------------ | ------ |
+| CORE-095 | Prevent Cross-Hypothesis Evidence Reuse    | Done   |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-094 — Report Malformed Domain Event Payloads is complete.
+CORE-095 — Prevent Cross-Hypothesis Evidence Reuse is complete.
 
-The story reports malformed UUID and datetime values with their persisted event
-type and payload-field context.
+The story ensures an evidence identifier belongs to at most one hypothesis
+within an investigation.
 
-CORE-094 validation passed 188 tests, Ruff lint, Ruff format, and mypy.
+CORE-095 validation passed 189 tests, Ruff lint, Ruff format, and mypy.
