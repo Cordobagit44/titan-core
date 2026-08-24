@@ -125,21 +125,20 @@ class SqliteInvestigationRepository(
             investigation.id.value,
         )
 
-        hypothesis_ids = tuple(str(hypothesis.id.value) for hypothesis in investigation.hypotheses)
-
         transaction = self._connection if self._manages_transaction else nullcontext()
 
         with transaction:
-            if hypothesis_ids:
-                placeholders = ", ".join("?" for _ in hypothesis_ids)
-
-                self._connection.execute(
-                    f"""
-                    DELETE FROM evidences
-                    WHERE hypothesis_id IN ({placeholders})
-                    """,
-                    hypothesis_ids,
+            self._connection.execute(
+                """
+                DELETE FROM evidences
+                WHERE hypothesis_id IN (
+                    SELECT id
+                    FROM hypotheses
+                    WHERE investigation_id = ?
                 )
+                """,
+                (investigation_id,),
+            )
 
             self._connection.execute(
                 """
