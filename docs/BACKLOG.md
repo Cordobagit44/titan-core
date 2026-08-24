@@ -347,14 +347,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-104 | Attach Claims to Hypotheses        | Done   |
 | CORE-105 | Route Claim Attachment Through Investigation | Done |
 | CORE-106 | Persist Investigation Claims | Done |
+| CORE-107 | Persist ClaimAdded Domain Event | Done |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-106 — Persist Investigation Claims is complete.
+CORE-107 — Persist ClaimAdded Domain Event is complete.
 
-The story persists and reconstructs claims as part of their owning SQLite
-investigation aggregate.
+The story serializes and reconstructs `ClaimAdded` with hypothesis, claim, and
+evidence identities in the SQLite event store.
 
-CORE-106 validation passed 225 tests, Ruff lint, Ruff format, and mypy.
+CORE-107 validation passed 228 tests, Ruff lint, Ruff format, and mypy.
