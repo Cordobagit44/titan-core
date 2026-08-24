@@ -118,6 +118,11 @@ class Investigation(Entity[DomainEvent]):
         hypotheses: tuple[Hypothesis, ...],
         closed_at: datetime | None = None,
     ) -> "Investigation":
+        normalized_statements = [hypothesis.statement.strip() for hypothesis in hypotheses]
+
+        if len(normalized_statements) != len(set(normalized_statements)):
+            raise ValueError("hypothesis already exists")
+
         investigation = cls(
             investigation_id=investigation_id,
             title=title,

@@ -4,6 +4,30 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-101 — Reject Persisted Duplicate Hypotheses
+
+### Changed
+
+- Investigation restoration rejects exact duplicate hypothesis statements
+- Leading and trailing whitespace cannot bypass uniqueness during restoration
+- Case-distinct statements remain valid and restored text remains unchanged
+
+### Architectural Notes
+
+- Statement uniqueness is enforced consistently for mutation and restoration
+- Rejection occurs before a restored aggregate can emit or expose state
+- No public signature, schema, event type, or dependency changed
+
+### Validation
+
+- Targeted domain and SQLite repository tests — 59 passed
+- pytest — 208 passed
+- Ruff lint — passed
+- Ruff format — 181 files already formatted
+- mypy — 65 source files checked
+
+---
+
 ## CORE-100 — Validate Persisted Record Text
 
 ### Changed

@@ -321,13 +321,21 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | ----------------------------- | ------ |
 | CORE-100 | Validate Persisted Record Text | Done   |
 
+---
+
+## Epic 32 — Restored Aggregate Integrity
+
+| ID       | Story                                 | Status |
+| -------- | ------------------------------------- | ------ |
+| CORE-101 | Reject Persisted Duplicate Hypotheses | Done   |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-100 — Validate Persisted Record Text is complete.
+CORE-101 — Reject Persisted Duplicate Hypotheses is complete.
 
-The story rejects blank required text throughout persisted investigation,
-hypothesis, and evidence records with explicit context.
+The story applies whitespace-normalized hypothesis uniqueness consistently
+during aggregate restoration.
 
-CORE-100 validation passed 204 tests, Ruff lint, Ruff format, and mypy.
+CORE-101 validation passed 208 tests, Ruff lint, Ruff format, and mypy.

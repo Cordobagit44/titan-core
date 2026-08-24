@@ -448,3 +448,43 @@ def test_restore_closed_investigation_preserves_closure_timestamp() -> None:
 
     assert investigation.status is InvestigationStatus.CLOSED
     assert investigation.closed_at == closed_at
+
+
+@pytest.mark.parametrize(
+    "duplicate_statement",
+    ["Artificial structure", "  Artificial structure  "],
+)
+def test_restore_rejects_whitespace_equivalent_hypotheses(
+    duplicate_statement: str,
+) -> None:
+    hypotheses = (
+        Hypothesis(statement="Artificial structure"),
+        Hypothesis(statement=duplicate_statement),
+    )
+
+    with pytest.raises(ValueError, match="hypothesis already exists"):
+        Investigation.restore(
+            investigation_id=InvestigationId.new(),
+            title="Mars anomaly",
+            purpose="Find evidence",
+            status=InvestigationStatus.DRAFT,
+            hypotheses=hypotheses,
+        )
+
+
+def test_restore_accepts_case_distinct_hypotheses() -> None:
+    hypotheses = (
+        Hypothesis(statement="Artificial structure"),
+        Hypothesis(statement="artificial structure"),
+    )
+
+    investigation = Investigation.restore(
+        investigation_id=InvestigationId.new(),
+        title="Mars anomaly",
+        purpose="Find evidence",
+        status=InvestigationStatus.DRAFT,
+        hypotheses=hypotheses,
+    )
+
+    assert investigation.hypotheses == hypotheses
+    assert investigation.pull_events() == []
