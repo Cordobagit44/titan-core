@@ -577,15 +577,15 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-103 implementation:
+State after CORE-104 implementation:
 
-- last completed story: `CORE-103 — Introduce Evidence-Grounded Claim`;
-- latest integrated baseline before CORE-103: `4f5e311 — CORE-102: reject restored evidence reuse`;
+- last completed story: `CORE-104 — Attach Claims to Hypotheses`;
+- latest integrated baseline before CORE-104: `457bea6 — CORE-103: introduce evidence-grounded claim`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 213 passing tests;
+- current validated suite: 220 passing tests;
 - Ruff lint: passing;
-- Ruff format: passing on 185 files;
-- mypy: passing on 67 source files;
+- Ruff format: passing on 187 files;
+- mypy: passing on 68 source files;
 - application composition, SQLite persistence, Unit of Work transaction
   coordination, application lifecycle management, evidence provenance,
   evidence relationship classification, closed-investigation aggregate
@@ -606,15 +606,17 @@ State after CORE-103 implementation:
   enforce whitespace-normalized hypothesis statement uniqueness;
   restored investigations also enforce exclusive evidence identity ownership;
   an immutable evidence-grounded `Claim` model with explicit identity is
-  available as the first richer reasoning structure;
+  available as the first richer reasoning structure; pending hypotheses own
+  claims grounded in evidence already in their collection and emit
+  `ClaimAdded` when attachment succeeds;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
-- no confidence scoring, assessment, claim aggregate integration,
-  interpretations, thesis model,
+- no confidence scoring, assessment, claim persistence or application use
+  cases, interpretations, thesis model,
   Event Bus, Outbox, CLI, HTTP API, or AI provider integration is implemented.
 
-CORE-103 introduces the minimum evidence-grounded claim model without adding
-aggregate integration, persistence, events, or automatic extraction.
+CORE-104 establishes hypothesis ownership for evidence-grounded claims without
+adding persistence, application use cases, or automatic extraction.
 
 ---
 
@@ -662,7 +664,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-103 is complete, do not infer CORE-104 solely from the conceptual
+After CORE-104 is complete, do not infer CORE-105 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -672,7 +674,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-104 explicitly;
+5. define CORE-105 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
