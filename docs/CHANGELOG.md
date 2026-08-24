@@ -4,6 +4,31 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-129 — Persist ThesisAdded Domain Event
+
+### Added
+
+- Nullable `thesis_id` event-schema storage and safe migration
+- SQLite serialization and reconstruction of `ThesisAdded`
+- Contextual missing-field and malformed-UUID diagnostics
+
+### Architectural Notes
+
+- Event history stores investigation and thesis identity only
+- Aggregate persistence remains the source of thesis statements
+- Application orchestration remains unchanged
+
+### Validation
+
+- Thesis event persistence tests — 4 passed
+- pytest — 284 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
+
+---
+
 ## CORE-128 — Persist Investigation Theses
 
 ### Added
