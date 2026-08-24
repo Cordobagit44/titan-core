@@ -4,6 +4,31 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-126 — Introduce Provisional Thesis
+
+### Added
+
+- Immutable `ThesisId` identity value
+- Immutable provisional `Thesis` domain model
+- Non-blank thesis statement validation and explicit identity reconstruction
+
+### Architectural Notes
+
+- Thesis begins as a domain-neutral conclusion value
+- Aggregate ownership, grounding, persistence, status, and assessment remain
+  intentionally undefined
+- No public API, schema, event type, or dependency changed
+
+### Validation
+
+- Thesis domain tests — 4 passed
+- pytest — 272 passed
+- Ruff lint — passed
+- Ruff format — 220 files already formatted
+- mypy — 79 source files checked
+
+---
+
 ## CORE-125 — Reject Broken Persisted Interpretation References
 
 ### Changed
