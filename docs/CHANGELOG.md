@@ -4,6 +4,30 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-088 — Remove Orphaned SQLite Evidence
+
+### Changed
+
+- SQLite saves now remove evidence for all previously persisted hypotheses of
+  the investigation before replacing those hypotheses
+- Removing and saving a hypothesis no longer leaves orphaned evidence rows
+- Evidence belonging to other investigations remains untouched
+
+### Architectural Notes
+
+- Cleanup remains inside the repository's existing transaction boundary
+- No public API, domain rule, schema, event type, or dependency changed
+
+### Validation
+
+- Targeted SQLite investigation repository tests — 11 passed
+- pytest — 175 passed
+- Ruff lint — passed
+- Ruff format — 168 files already formatted
+- mypy — 65 source files checked
+
+---
+
 ## CORE-087 — Protect Decided Hypotheses from Evidence Addition
 
 ### Changed
