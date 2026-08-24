@@ -479,10 +479,7 @@ class SqliteInvestigationRepository(
             (str(hypothesis_id.value),),
         )
 
-        return tuple(
-            self._to_interpretation(hypothesis_id, row)
-            for row in cursor.fetchall()
-        )
+        return tuple(self._to_interpretation(hypothesis_id, row) for row in cursor.fetchall())
 
     def _to_interpretation(
         self,
@@ -696,8 +693,7 @@ class SqliteInvestigationRepository(
             return UUID(value)
         except ValueError as error:
             raise ValueError(
-                f"malformed persisted interpretation {interpretation_id}: "
-                "invalid claim_id",
+                f"malformed persisted interpretation {interpretation_id}: invalid claim_id",
             ) from error
 
     @staticmethod
