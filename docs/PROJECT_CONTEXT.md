@@ -579,14 +579,14 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-120 implementation:
+State after CORE-121 implementation:
 
-- last completed story: `CORE-120 — Reject Restored Interpretation Reuse`;
-- latest integrated baseline before CORE-120: `1546541 — CORE-119: prevent cross-hypothesis interpretation reuse`;
+- last completed story: `CORE-121 — Report Malformed Claim Records`;
+- latest integrated baseline before CORE-121: `5388bb8 — CORE-120: reject restored interpretation reuse`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 260 passing tests;
+- current validated suite: 262 passing tests;
 - Ruff lint: passing;
-- Ruff format: passing on 212 files;
+- Ruff format: passing on 213 files;
 - mypy: passing on 77 source files;
 - application composition, SQLite persistence, Unit of Work transaction
   coordination, application lifecycle management, evidence provenance,
@@ -603,7 +603,8 @@ State after CORE-120 implementation:
   reported with record and field context; malformed persisted hypothesis
   identifiers and statuses receive equivalent contextual diagnostics;
   malformed persisted evidence identifiers and relationships also receive
-  contextual diagnostics; blank required persisted text is rejected across
+  contextual diagnostics; malformed persisted claim identifiers and evidence
+  references receive equivalent contextual diagnostics; blank required persisted text is rejected across
   investigation, hypothesis, and evidence records; restored investigations
   enforce whitespace-normalized hypothesis statement uniqueness;
   restored investigations also enforce exclusive evidence identity ownership;
@@ -636,8 +637,8 @@ State after CORE-120 implementation:
 - no confidence scoring, assessment, thesis model, Event Bus, Outbox, CLI,
   HTTP API, or AI provider integration is implemented.
 
-CORE-120 applies exclusive interpretation identity ownership consistently during
-aggregate restoration without changing SQLite or application APIs.
+CORE-121 adds contextual claim identity diagnostics at the SQLite
+deserialization boundary without changing schemas or public APIs.
 
 ---
 
@@ -685,7 +686,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-120 is complete, do not infer CORE-121 solely from the conceptual
+After CORE-121 is complete, do not infer CORE-122 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -695,7 +696,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-121 explicitly;
+5. define CORE-122 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
