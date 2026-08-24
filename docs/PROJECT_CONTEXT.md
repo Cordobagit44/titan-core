@@ -609,8 +609,8 @@ State after CORE-124 implementation:
   diagnostics; blank required
   persisted text is rejected across investigation, hypothesis, evidence,
   claim, and interpretation records; persisted claims whose evidence reference
-  is not owned by their hypothesis are rejected with claim context; restored investigations enforce
-  whitespace-normalized hypothesis statement uniqueness;
+  is not owned by their hypothesis are rejected with claim context; restored
+  investigations enforce whitespace-normalized hypothesis statement uniqueness;
   restored investigations also enforce exclusive evidence identity ownership;
   an immutable evidence-grounded `Claim` model with explicit identity is
   available as the first richer reasoning structure; claim identities cannot
