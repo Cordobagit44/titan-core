@@ -3,6 +3,7 @@ from datetime import UTC, datetime
 from enum import Enum
 from uuid import UUID, uuid4
 
+from titan.core.claim import Claim
 from titan.core.entity import Entity
 from titan.core.evidence import Evidence
 from titan.core.hypothesis import Hypothesis, HypothesisId, HypothesisStatus
@@ -185,6 +186,29 @@ class Investigation(Entity[DomainEvent]):
 
         hypothesis.add_evidence(
             evidence,
+        )
+
+        return hypothesis
+
+    def add_claim(
+        self,
+        hypothesis_id: HypothesisId,
+        claim: Claim,
+    ) -> Hypothesis:
+        if self.status is InvestigationStatus.CLOSED:
+            raise ValueError("investigation is closed")
+
+        hypothesis = self.find_hypothesis(
+            hypothesis_id,
+        )
+
+        if hypothesis is None:
+            raise LookupError(
+                "hypothesis not found",
+            )
+
+        hypothesis.add_claim(
+            claim,
         )
 
         return hypothesis
