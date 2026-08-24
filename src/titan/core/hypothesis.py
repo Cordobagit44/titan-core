@@ -63,6 +63,11 @@ class Hypothesis(Entity[HypothesisEvent]):
                 "decided hypothesis cannot accept evidence",
             )
 
+        if any(existing.id == evidence.id for existing in self._evidences):
+            raise ValueError(
+                "evidence already exists",
+            )
+
         self._evidences.append(
             evidence,
         )
