@@ -579,15 +579,15 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-125 implementation:
+State after CORE-126 implementation:
 
-- last completed story: `CORE-125 — Reject Broken Persisted Interpretation References`;
-- latest integrated baseline before CORE-125: `6fa2b7e — CORE-124: reject broken persisted claim references`;
+- last completed story: `CORE-126 — Introduce Provisional Thesis`;
+- latest integrated baseline before CORE-126: `9b68321 — CORE-125: reject broken persisted interpretation references`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 268 passing tests;
+- current validated suite: 272 passing tests;
 - Ruff lint: passing;
-- Ruff format: passing on 217 files;
-- mypy: passing on 77 source files;
+- Ruff format: passing on 220 files;
+- mypy: passing on 79 source files;
 - application composition, SQLite persistence, Unit of Work transaction
   coordination, application lifecycle management, evidence provenance,
   evidence relationship classification, closed-investigation aggregate
@@ -637,14 +637,17 @@ State after CORE-125 implementation:
   exposed by `bootstrap()`; the composed acceptance workflow verifies
   interpretation reconstruction after a real SQLite-backed application restart;
   interpretation identities cannot be reused across hypotheses during aggregate
-  mutation or restoration;
+  mutation or restoration; an immutable provisional `Thesis` model with
+  explicit identity and non-blank statement is available without aggregate
+  ownership or persistence;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
-- no confidence scoring, assessment, thesis model, Event Bus, Outbox, CLI,
+- no confidence scoring, assessment, thesis ownership or persistence, Event
+  Bus, Outbox, CLI,
   HTTP API, or AI provider integration is implemented.
 
-CORE-125 rejects broken persisted interpretation-to-claim references at the
-SQLite reconstruction boundary without changing schemas or public APIs.
+CORE-126 introduces the minimum provisional thesis domain model without
+aggregate, persistence, event, or application integration.
 
 ---
 
@@ -692,7 +695,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-125 is complete, do not infer CORE-126 solely from the conceptual
+After CORE-126 is complete, do not infer CORE-127 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -702,7 +705,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-126 explicitly;
+5. define CORE-127 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain

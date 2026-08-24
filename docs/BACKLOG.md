@@ -406,13 +406,19 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-124 | Reject Broken Persisted Claim References            | Done   |
 | CORE-125 | Reject Broken Persisted Interpretation References   | Done   |
 
+## Epic 42 — Thesis
+
+| ID       | Story                         | Status      |
+| -------- | ----------------------------- | ----------- |
+| CORE-126 | Introduce Provisional Thesis  | Done        |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-125 — Reject Broken Persisted Interpretation References is complete.
+CORE-126 — Introduce Provisional Thesis is complete.
 
-The story adds contextual rejection for interpretations whose persisted claim
-reference is not owned by their hypothesis.
+The story introduces the minimum immutable domain model for a provisional
+conclusion without aggregate or persistence integration.
 
-CORE-125 validation passed 268 tests, Ruff lint, Ruff format, and mypy.
+CORE-126 validation passed 272 tests, Ruff lint, Ruff format, and mypy.
