@@ -611,8 +611,8 @@ State after CORE-125 implementation:
   claim, and interpretation records; persisted claims whose evidence reference
   is not owned by their hypothesis are rejected with claim context; persisted
   interpretations whose claim reference is not owned by their hypothesis are
-  rejected with interpretation context; restored
-  investigations enforce whitespace-normalized hypothesis statement uniqueness;
+  rejected with interpretation context; restored investigations enforce
+  whitespace-normalized hypothesis statement uniqueness;
   restored investigations also enforce exclusive evidence identity ownership;
   an immutable evidence-grounded `Claim` model with explicit identity is
   available as the first richer reasoning structure; claim identities cannot
