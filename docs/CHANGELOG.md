@@ -4,6 +4,30 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-116 — Cover Interpretation Workflow Acceptance
+
+### Changed
+
+- The complete application workflow now creates an explicit interpretation
+- Application restart coverage verifies interpretation identity, rationale, claim reference, and hypothesis reference
+- Existing investigation, hypothesis, evidence, claim, decision, and closure coverage remains
+
+### Architectural Notes
+
+- Acceptance uses only the public `TitanApplication` surface
+- A real SQLite database is closed and reopened during verification
+- No production behavior, schema, API, or dependency changed
+
+### Validation
+
+- Interpretation-enabled acceptance workflow — passed
+- pytest — 256 passed
+- Ruff lint — passed
+- Ruff format — 208 files already formatted
+- mypy — 77 source files checked
+
+---
+
 ## CORE-115 — Add Interpretation Use Case
 
 ### Added

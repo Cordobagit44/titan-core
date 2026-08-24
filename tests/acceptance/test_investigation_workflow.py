@@ -46,6 +46,13 @@ def test_complete_investigation_workflow_is_persisted(
         statement="Methane concentration varies seasonally",
     )
 
+    interpretation = application.add_interpretation(
+        investigation_id=investigation.id,
+        hypothesis_id=hypothesis.id,
+        claim_id=claim.id,
+        rationale="Seasonality makes a biological mechanism plausible",
+    )
+
     application.confirm_hypothesis(
         investigation_id=investigation.id,
         hypothesis_id=hypothesis.id,
@@ -97,6 +104,15 @@ def test_complete_investigation_workflow_is_persisted(
     assert restored_claim.id == claim.id
     assert restored_claim.statement == "Methane concentration varies seasonally"
     assert restored_claim.evidence_id == evidence.id
+
+    assert len(restored_hypothesis.interpretations) == 1
+
+    restored_interpretation = restored_hypothesis.interpretations[0]
+
+    assert restored_interpretation.id == interpretation.id
+    assert restored_interpretation.rationale == "Seasonality makes a biological mechanism plausible"
+    assert restored_interpretation.claim_id == claim.id
+    assert restored_interpretation.hypothesis_id == hypothesis.id
 
     listed = restarted_application.list_investigations()
 

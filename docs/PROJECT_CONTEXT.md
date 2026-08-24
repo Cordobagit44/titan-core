@@ -579,14 +579,14 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-115 implementation:
+State after CORE-116 implementation:
 
-- last completed story: `CORE-115 — Add Interpretation Use Case`;
-- latest integrated baseline before CORE-115: `b85afc3 — CORE-114: persist interpretation added domain event`;
+- last completed story: `CORE-116 — Cover Interpretation Workflow Acceptance`;
+- latest integrated baseline before CORE-116: `425a1c7 — CORE-115: add interpretation use case`;
 - GitHub's configured default branch is `main`;
 - current validated suite: 256 passing tests;
 - Ruff lint: passing;
-- Ruff format: passing on 207 files;
+- Ruff format: passing on 208 files;
 - mypy: passing on 77 source files;
 - application composition, SQLite persistence, Unit of Work transaction
   coordination, application lifecycle management, evidence provenance,
@@ -626,14 +626,15 @@ State after CORE-115 implementation:
   `InterpretationAdded` is serialized with hypothesis, interpretation, and
   claim identities by the SQLite event repository; `AddInterpretation`
   coordinates aggregate and event persistence through Unit of Work and is
-  exposed by `bootstrap()`;
+  exposed by `bootstrap()`; the composed acceptance workflow verifies
+  interpretation reconstruction after a real SQLite-backed application restart;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
 - no confidence scoring, assessment, thesis model, Event Bus, Outbox, CLI,
   HTTP API, or AI provider integration is implemented.
 
-CORE-115 exposes explicit interpretation creation through the application layer
-without adding automatic reasoning, scoring, or provider integration.
+CORE-116 verifies the complete interpretation workflow through application
+restart without adding production behavior.
 
 ---
 
@@ -681,7 +682,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-115 is complete, do not infer CORE-116 solely from the conceptual
+After CORE-116 is complete, do not infer CORE-117 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -691,7 +692,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-116 explicitly;
+5. define CORE-117 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
