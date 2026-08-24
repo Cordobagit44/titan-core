@@ -557,9 +557,14 @@ class SqliteInvestigationRepository(
         for claim in self._get_claims(
             hypothesis_id,
         ):
-            hypothesis.add_claim(
-                claim,
-            )
+            try:
+                hypothesis.add_claim(
+                    claim,
+                )
+            except LookupError as error:
+                raise ValueError(
+                    f"malformed persisted claim {claim.id.value}: evidence not found",
+                ) from error
 
         for interpretation in self._get_interpretations(
             hypothesis_id,

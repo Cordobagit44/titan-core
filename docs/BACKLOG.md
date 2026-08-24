@@ -399,13 +399,19 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | ---------------------------------- | ----------- |
 | CORE-123 | Validate Persisted Reasoning Text  | Done        |
 
+## Epic 41 — Persisted Reasoning References
+
+| ID       | Story                                    | Status      |
+| -------- | ---------------------------------------- | ----------- |
+| CORE-124 | Reject Broken Persisted Claim References | Done        |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-123 — Validate Persisted Reasoning Text is complete.
+CORE-124 — Reject Broken Persisted Claim References is complete.
 
-The story extends contextual required-text validation to persisted claims and
-interpretations.
+The story adds contextual rejection for claims whose persisted evidence
+reference is not owned by their hypothesis.
 
-CORE-123 validation passed 266 tests, Ruff lint, Ruff format, and mypy.
+CORE-124 validation passed 267 tests, Ruff lint, Ruff format, and mypy.

@@ -579,14 +579,14 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-123 implementation:
+State after CORE-124 implementation:
 
-- last completed story: `CORE-123 — Validate Persisted Reasoning Text`;
-- latest integrated baseline before CORE-123: `e055572 — CORE-122: report malformed interpretation records`;
+- last completed story: `CORE-124 — Reject Broken Persisted Claim References`;
+- latest integrated baseline before CORE-124: `44c0d5e — CORE-123: validate persisted reasoning text`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 266 passing tests;
+- current validated suite: 267 passing tests;
 - Ruff lint: passing;
-- Ruff format: passing on 215 files;
+- Ruff format: passing on 216 files;
 - mypy: passing on 77 source files;
 - application composition, SQLite persistence, Unit of Work transaction
   coordination, application lifecycle management, evidence provenance,
@@ -608,8 +608,9 @@ State after CORE-123 implementation:
   interpretation identifiers and claim references also receive contextual
   diagnostics; blank required
   persisted text is rejected across investigation, hypothesis, evidence,
-  claim, and interpretation records; restored investigations enforce
-  whitespace-normalized hypothesis statement uniqueness;
+  claim, and interpretation records; persisted claims whose evidence reference
+  is not owned by their hypothesis are rejected with claim context; restored
+  investigations enforce whitespace-normalized hypothesis statement uniqueness;
   restored investigations also enforce exclusive evidence identity ownership;
   an immutable evidence-grounded `Claim` model with explicit identity is
   available as the first richer reasoning structure; claim identities cannot
@@ -640,8 +641,8 @@ State after CORE-123 implementation:
 - no confidence scoring, assessment, thesis model, Event Bus, Outbox, CLI,
   HTTP API, or AI provider integration is implemented.
 
-CORE-123 extends contextual required-text validation to persisted claim and
-interpretation records without changing schemas or public APIs.
+CORE-124 rejects broken persisted claim-to-evidence references at the SQLite
+reconstruction boundary without changing schemas or public APIs.
 
 ---
 
@@ -689,7 +690,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-123 is complete, do not infer CORE-124 solely from the conceptual
+After CORE-124 is complete, do not infer CORE-125 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -699,7 +700,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-124 explicitly;
+5. define CORE-125 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
