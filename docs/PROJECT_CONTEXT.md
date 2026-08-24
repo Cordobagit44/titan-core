@@ -629,9 +629,8 @@ State after CORE-115 implementation:
   exposed by `bootstrap()`;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
-- no confidence scoring, assessment, interpretation application
-  use cases, thesis model,
-  Event Bus, Outbox, CLI, HTTP API, or AI provider integration is implemented.
+- no confidence scoring, assessment, thesis model, Event Bus, Outbox, CLI,
+  HTTP API, or AI provider integration is implemented.
 
 CORE-115 exposes explicit interpretation creation through the application layer
 without adding automatic reasoning, scoring, or provider integration.
