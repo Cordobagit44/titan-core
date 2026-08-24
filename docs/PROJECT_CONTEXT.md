@@ -577,14 +577,14 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-100 implementation:
+State after CORE-101 implementation:
 
-- last completed story: `CORE-100 — Validate Persisted Record Text`;
-- latest integrated baseline before CORE-100: `471fec1 — CORE-099: report malformed evidence records`;
+- last completed story: `CORE-101 — Reject Persisted Duplicate Hypotheses`;
+- latest integrated baseline before CORE-101: `53dcdca — CORE-100: validate persisted record text`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 204 passing tests;
+- current validated suite: 208 passing tests;
 - Ruff lint: passing;
-- Ruff format: passing on 180 files;
+- Ruff format: passing on 181 files;
 - mypy: passing on 65 source files;
 - application composition, SQLite persistence, Unit of Work transaction
   coordination, application lifecycle management, evidence provenance,
@@ -602,14 +602,15 @@ State after CORE-100 implementation:
   identifiers and statuses receive equivalent contextual diagnostics;
   malformed persisted evidence identifiers and relationships also receive
   contextual diagnostics; blank required persisted text is rejected across
-  investigation, hypothesis, and evidence records;
+  investigation, hypothesis, and evidence records; restored investigations
+  enforce whitespace-normalized hypothesis statement uniqueness;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
 - no confidence scoring, assessment, claims, interpretations, thesis model,
   Event Bus, Outbox, CLI, HTTP API, or AI provider integration is implemented.
 
-CORE-100 validates required persisted text consistently at the SQLite
-deserialization boundary without rewriting valid content.
+CORE-101 applies the established hypothesis statement uniqueness invariant to
+aggregate restoration without changing case-sensitive comparison.
 
 ---
 
@@ -657,7 +658,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-100 is complete, do not infer CORE-101 solely from the conceptual
+After CORE-101 is complete, do not infer CORE-102 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -667,7 +668,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-101 explicitly;
+5. define CORE-102 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
