@@ -84,10 +84,29 @@ class SqliteInvestigationRepository(
             """
         )
 
+        self._migrate_investigation_schema()
         self._migrate_evidence_schema()
 
         if self._manages_transaction:
             self._connection.commit()
+
+    def _migrate_investigation_schema(
+        self,
+    ) -> None:
+        columns = {
+            row[1]
+            for row in self._connection.execute(
+                "PRAGMA table_info(investigations)",
+            ).fetchall()
+        }
+
+        if "closed_at" not in columns:
+            self._connection.execute(
+                """
+                ALTER TABLE investigations
+                ADD COLUMN closed_at TEXT
+                """
+            )
 
     def _migrate_evidence_schema(
         self,

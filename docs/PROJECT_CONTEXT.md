@@ -577,12 +577,12 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-088 implementation:
+State after CORE-089 implementation:
 
-- last completed story: `CORE-088 — Remove Orphaned SQLite Evidence`;
-- latest integrated baseline before CORE-088: `c5c5c57 — CORE-087: protect decided hypotheses from evidence addition`;
+- last completed story: `CORE-089 — Migrate Investigation Closure Schema`;
+- latest integrated baseline before CORE-089: `16ab30a — CORE-088: remove orphaned SQLite evidence`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 175 passing tests;
+- current validated suite: 176 passing tests;
 - Ruff lint: passing;
 - Ruff format: passing on 165 files;
 - mypy: passing on 65 source files;
@@ -591,15 +591,15 @@ State after CORE-088 implementation:
   evidence relationship classification, closed-investigation aggregate
   protections, non-empty investigation purpose validation, and repeated
   hypothesis decision protection, decided-hypothesis removal protection, and
-  decided-hypothesis evidence protection, and orphaned SQLite evidence cleanup
-  are implemented;
+  decided-hypothesis evidence protection, orphaned SQLite evidence cleanup, and
+  investigation closure-schema migration are implemented;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
 - no confidence scoring, assessment, claims, interpretations, thesis model,
   Event Bus, Outbox, CLI, HTTP API, or AI provider integration is implemented.
 
-CORE-088 prevents removed hypotheses from leaving orphaned SQLite evidence while
-preserving evidence belonging to other investigations.
+CORE-089 migrates legacy investigation tables to support closure timestamps
+without replacing existing rows or inventing historical timestamps.
 
 ---
 
@@ -647,7 +647,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-088 is complete, do not infer CORE-089 solely from the conceptual
+After CORE-089 is complete, do not infer CORE-090 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -657,7 +657,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-089 explicitly;
+5. define CORE-090 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
