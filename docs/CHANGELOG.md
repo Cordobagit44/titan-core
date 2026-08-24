@@ -4,6 +4,118 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-084 — Reconcile Project Documentation
+
+### Changed
+
+- Reconciled the README test count and investigation-purpose capability
+- Added missing changelog coverage through CORE-083
+- Refreshed the current development state and next-step continuity guidance
+- Recorded CORE-084 in the backlog
+
+### Architectural Notes
+
+- Documentation-only continuity repair
+- No production, test, persistence, or dependency behavior changed
+- No future reasoning concept was accepted implicitly
+
+### Validation
+
+- pytest — 162 passed
+- Ruff lint — passed
+- Ruff format — 164 files already formatted
+- mypy — 65 source files checked
+
+---
+
+## CORE-083 — Add Safe Local Synchronization
+
+### Added
+
+- Guarded `scripts/sync-titan.ps1` synchronization workflow
+- VS Code tasks for safe synchronization and optional full validation
+
+### Architectural Notes
+
+- Updates require a clean local `main` and fast-forward-only history
+- No automatic stashing, reset, branch switching, conflict resolution, or push
+
+---
+
+## CORE-082 — Validate Investigation Purpose
+
+### Changed
+
+- New investigations reject empty or whitespace-only purposes
+- Valid purpose text remains unchanged
+- Application validation failures use the existing Unit of Work rollback path
+- Historical restoration behavior remains unchanged
+
+### Validation
+
+- pytest — 162 passed
+- Ruff lint and format — passed
+- mypy — 65 source files checked
+
+---
+
+## CORE-081 — Reconcile CORE-080 Continuity
+
+### Changed
+
+- Reconciled the CORE-080 specification and backlog after integration
+- Restored accurate development continuity without changing production behavior
+
+---
+
+## CORE-080 — Close SQLite Test Resources
+
+### Changed
+
+- Closed bootstrap-created applications deterministically in tests
+- Centralized tracked SQLite connection cleanup in test fixtures
+- Removed resource-warning noise without changing application behavior
+
+---
+
+## CORE-079 — Protect Hypothesis Decisions on Closed Investigations
+
+### Changed
+
+- Closed investigations reject hypothesis confirmation and rejection
+- Application use cases route hypothesis decisions through the aggregate
+- Failed mutations preserve Unit of Work rollback behavior
+
+---
+
+## CORE-078 — Protect Evidence Addition on Closed Investigations
+
+### Changed
+
+- Closed investigations reject evidence addition
+- Evidence mutation is routed through the investigation aggregate
+- Failed application mutations preserve Unit of Work rollback behavior
+
+---
+
+## CORE-077 — Refresh Project Context
+
+### Changed
+
+- Refreshed the continuity reference through CORE-076
+- Recorded current architecture, validation state, and GitHub workflow
+
+---
+
+## CORE-076 — Update README for Evidence Relationships
+
+### Changed
+
+- Documented explicit evidence relationship usage and persistence
+- Updated the documented validation state through CORE-075
+
+---
+
 ## CORE-075 — Classify Evidence Relationship
 
 ### Added
