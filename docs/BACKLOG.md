@@ -185,19 +185,23 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | ------------------------------ | ----------- |
 | CORE-083 | Add Safe Local Synchronization | Done        |
 
+---
+
+## Epic 15 — Documentation Continuity
+
+| ID       | Story                           | Status      |
+| -------- | ------------------------------- | ----------- |
+| CORE-084 | Reconcile Project Documentation | Done        |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-082 — Validate Investigation Purpose is complete.
+CORE-084 — Reconcile Project Documentation is complete.
 
-New investigations now reject empty or whitespace-only purposes while preserving
-valid purpose text unchanged. Application validation failures use the existing
-Unit of Work rollback path, and restoration of historical persisted data remains
-unchanged.
+The story aligns the README, changelog, project context, and backlog with the
+implemented and validated repository state through CORE-083. It introduces no
+production or test behavior.
 
-CORE-083 — Add Safe Local Synchronization remains complete. Its guarded PowerShell
-script and VS Code tasks are available from `main`.
-
-CORE-082 validation passed the complete pytest suite, Ruff lint, Ruff format, and
-mypy quality gates.
+CORE-084 validation passed the complete pytest suite, Ruff lint, Ruff format,
+and mypy quality gates.
