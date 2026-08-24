@@ -225,13 +225,21 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | ------------------------------------- | ------ |
 | CORE-088 | Remove Orphaned SQLite Evidence       | Done   |
 
+---
+
+## Epic 20 — Schema Compatibility
+
+| ID       | Story                                  | Status |
+| -------- | -------------------------------------- | ------ |
+| CORE-089 | Migrate Investigation Closure Schema   | Done   |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-088 — Remove Orphaned SQLite Evidence is complete.
+CORE-089 — Migrate Investigation Closure Schema is complete.
 
-The story ensures that replacing an investigation's persisted hypotheses also
-removes evidence belonging to hypotheses removed from that investigation.
+The story migrates legacy SQLite investigation tables by adding the nullable
+`closed_at` column without replacing existing rows.
 
-CORE-088 validation passed 175 tests, Ruff lint, Ruff format, and mypy.
+CORE-089 validation passed 176 tests, Ruff lint, Ruff format, and mypy.
