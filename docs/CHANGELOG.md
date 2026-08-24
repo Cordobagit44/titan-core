@@ -4,6 +4,34 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-114 — Persist InterpretationAdded Domain Event
+
+### Added
+
+- SQLite serialization and reconstruction for `InterpretationAdded`
+- Event-store schema migration for interpretation identifiers
+- Missing and malformed interpretation identifier diagnostics
+
+### Changed
+
+- Interpretation events preserve hypothesis, interpretation, and claim identity
+
+### Architectural Notes
+
+- The event store records interpretation lineage while aggregate persistence owns rationale
+- Existing event histories migrate through the established copy-and-replace path
+- No application API was introduced
+
+### Validation
+
+- Targeted SQLite domain event repository tests — 27 passed
+- pytest — 252 passed
+- Ruff lint — passed
+- Ruff format — 204 files already formatted
+- mypy — 75 source files checked
+
+---
+
 ## CORE-113 — Persist Investigation Interpretations
 
 ### Added
