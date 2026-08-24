@@ -5,7 +5,7 @@ from uuid import UUID, uuid4
 
 from titan.core.entity import Entity
 from titan.core.evidence import Evidence
-from titan.core.hypothesis import Hypothesis, HypothesisId
+from titan.core.hypothesis import Hypothesis, HypothesisId, HypothesisStatus
 
 
 class InvestigationStatus(Enum):
@@ -242,6 +242,11 @@ class Investigation(Entity[DomainEvent]):
         if hypothesis is None:
             raise LookupError(
                 "hypothesis not found",
+            )
+
+        if hypothesis.status is not HypothesisStatus.PENDING:
+            raise ValueError(
+                "decided hypothesis cannot be removed",
             )
 
         self._hypotheses.remove(
