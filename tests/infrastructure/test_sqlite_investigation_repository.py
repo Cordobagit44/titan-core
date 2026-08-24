@@ -613,3 +613,55 @@ def test_get_reports_malformed_hypothesis_status() -> None:
         match=(f"malformed persisted hypothesis {hypothesis.id.value}: invalid status"),
     ):
         repository.get(investigation.id)
+
+
+def test_get_reports_malformed_evidence_id() -> None:
+    repository = SqliteInvestigationRepository(":memory:")
+    investigation = Investigation.create("Mars anomaly", "Find evidence")
+    investigation.add_hypothesis("Artificial structure")
+    hypothesis = investigation.hypotheses[0]
+    repository.save(investigation)
+    repository._connection.execute(
+        """
+        INSERT INTO evidences (
+            id, hypothesis_id, description, source, relationship
+        ) VALUES (?, ?, ?, ?, ?)
+        """,
+        (
+            "not-a-uuid",
+            str(hypothesis.id.value),
+            "Orbital imagery",
+            "Mars orbiter",
+            "supports",
+        ),
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="malformed persisted evidence record: invalid id",
+    ):
+        repository.get(investigation.id)
+
+
+def test_get_reports_malformed_evidence_relationship() -> None:
+    repository = SqliteInvestigationRepository(":memory:")
+    investigation = Investigation.create("Mars anomaly", "Find evidence")
+    investigation.add_hypothesis("Artificial structure")
+    hypothesis = investigation.hypotheses[0]
+    evidence = Evidence(
+        description="Orbital imagery",
+        source="Mars orbiter",
+        relationship=EvidenceRelationship.SUPPORTS,
+    )
+    hypothesis.add_evidence(evidence)
+    repository.save(investigation)
+    repository._connection.execute(
+        "UPDATE evidences SET relationship = ? WHERE id = ?",
+        ("unknown", str(evidence.id.value)),
+    )
+
+    with pytest.raises(
+        ValueError,
+        match=(f"malformed persisted evidence {evidence.id.value}: invalid relationship"),
+    ):
+        repository.get(investigation.id)

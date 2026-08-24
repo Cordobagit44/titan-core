@@ -305,13 +305,21 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | ----------------------------------- | ------ |
 | CORE-098 | Report Malformed Hypothesis Records | Done   |
 
+---
+
+## Epic 30 — Evidence Record Diagnostics
+
+| ID       | Story                             | Status |
+| -------- | --------------------------------- | ------ |
+| CORE-099 | Report Malformed Evidence Records | Done   |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-098 — Report Malformed Hypothesis Records is complete.
+CORE-099 — Report Malformed Evidence Records is complete.
 
-The story reports malformed persisted hypothesis identifiers and statuses with
-explicit record and field context.
+The story reports malformed persisted evidence identifiers and relationships
+with explicit record and field context.
 
-CORE-098 validation passed 197 tests, Ruff lint, Ruff format, and mypy.
+CORE-099 validation passed 199 tests, Ruff lint, Ruff format, and mypy.
