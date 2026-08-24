@@ -265,13 +265,21 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | ----------------------------------------- | ------ |
 | CORE-093 | Validate Persisted Domain Event Payloads  | Done   |
 
+---
+
+## Epic 25 — Event Payload Diagnostics
+
+| ID       | Story                                  | Status |
+| -------- | -------------------------------------- | ------ |
+| CORE-094 | Report Malformed Domain Event Payloads | Done   |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-093 — Validate Persisted Domain Event Payloads is complete.
+CORE-094 — Report Malformed Domain Event Payloads is complete.
 
-The story validates required payload fields before reconstructing supported
-persisted events and identifies incomplete data explicitly.
+The story reports malformed UUID and datetime values with their persisted event
+type and payload-field context.
 
-CORE-093 validation passed 184 tests, Ruff lint, Ruff format, and mypy.
+CORE-094 validation passed 188 tests, Ruff lint, Ruff format, and mypy.

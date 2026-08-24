@@ -337,6 +337,20 @@ class SqliteDomainEventRepository(
             "HypothesisRejected": ((5, "hypothesis_id"),),
             "EvidenceAdded": ((5, "hypothesis_id"), (6, "evidence_id")),
         }
+        uuid_fields = {
+            "InvestigationCreated": ((1, "investigation_id"),),
+            "InvestigationActivated": ((1, "investigation_id"),),
+            "InvestigationClosed": ((1, "investigation_id"),),
+            "InvestigationReopened": ((1, "investigation_id"),),
+            "HypothesisAdded": ((1, "investigation_id"),),
+            "HypothesisRemoved": ((1, "investigation_id"), (5, "hypothesis_id")),
+            "HypothesisConfirmed": ((5, "hypothesis_id"),),
+            "HypothesisRejected": ((5, "hypothesis_id"),),
+            "EvidenceAdded": ((5, "hypothesis_id"), (6, "evidence_id")),
+        }
+        datetime_fields = {
+            "InvestigationClosed": ((3, "closed_at"),),
+        }
 
         for row in cursor.fetchall():
             event_type = row[0]
@@ -347,11 +361,20 @@ class SqliteDomainEventRepository(
                         f"incomplete persisted domain event {event_type}: missing {field}",
                     )
 
+            parsed_uuids = {
+                index: self._parse_uuid(event_type, field, row[index])
+                for index, field in uuid_fields.get(event_type, ())
+            }
+            parsed_datetimes = {
+                index: self._parse_datetime(event_type, field, row[index])
+                for index, field in datetime_fields.get(event_type, ())
+            }
+
             if event_type == "InvestigationCreated":
                 events.append(
                     InvestigationCreated(
                         investigation_id=InvestigationId(
-                            value=UUID(row[1]),
+                            value=parsed_uuids[1],
                         ),
                         title=row[2],
                     )
@@ -360,7 +383,7 @@ class SqliteDomainEventRepository(
                 events.append(
                     InvestigationActivated(
                         investigation_id=InvestigationId(
-                            value=UUID(row[1]),
+                            value=parsed_uuids[1],
                         ),
                     )
                 )
@@ -368,18 +391,16 @@ class SqliteDomainEventRepository(
                 events.append(
                     InvestigationClosed(
                         investigation_id=InvestigationId(
-                            value=UUID(row[1]),
+                            value=parsed_uuids[1],
                         ),
-                        closed_at=datetime.fromisoformat(
-                            row[3],
-                        ),
+                        closed_at=parsed_datetimes[3],
                     )
                 )
             elif event_type == "InvestigationReopened":
                 events.append(
                     InvestigationReopened(
                         investigation_id=InvestigationId(
-                            value=UUID(row[1]),
+                            value=parsed_uuids[1],
                         ),
                     )
                 )
@@ -387,7 +408,7 @@ class SqliteDomainEventRepository(
                 events.append(
                     HypothesisAdded(
                         investigation_id=InvestigationId(
-                            value=UUID(row[1]),
+                            value=parsed_uuids[1],
                         ),
                         hypothesis_statement=row[4],
                     )
@@ -396,10 +417,10 @@ class SqliteDomainEventRepository(
                 events.append(
                     HypothesisRemoved(
                         investigation_id=InvestigationId(
-                            value=UUID(row[1]),
+                            value=parsed_uuids[1],
                         ),
                         hypothesis_id=HypothesisId(
-                            value=UUID(row[5]),
+                            value=parsed_uuids[5],
                         ),
                     )
                 )
@@ -407,7 +428,7 @@ class SqliteDomainEventRepository(
                 events.append(
                     HypothesisConfirmed(
                         hypothesis_id=HypothesisId(
-                            value=UUID(row[5]),
+                            value=parsed_uuids[5],
                         ),
                     )
                 )
@@ -415,7 +436,7 @@ class SqliteDomainEventRepository(
                 events.append(
                     HypothesisRejected(
                         hypothesis_id=HypothesisId(
-                            value=UUID(row[5]),
+                            value=parsed_uuids[5],
                         ),
                     )
                 )
@@ -423,10 +444,10 @@ class SqliteDomainEventRepository(
                 events.append(
                     EvidenceAdded(
                         hypothesis_id=HypothesisId(
-                            value=UUID(row[5]),
+                            value=parsed_uuids[5],
                         ),
                         evidence_id=EvidenceId(
-                            value=UUID(row[6]),
+                            value=parsed_uuids[6],
                         ),
                     )
                 )
@@ -436,3 +457,29 @@ class SqliteDomainEventRepository(
                 )
 
         return events
+
+    @staticmethod
+    def _parse_uuid(
+        event_type: str,
+        field: str,
+        value: str,
+    ) -> UUID:
+        try:
+            return UUID(value)
+        except ValueError as error:
+            raise ValueError(
+                f"malformed persisted domain event {event_type}: invalid {field}",
+            ) from error
+
+    @staticmethod
+    def _parse_datetime(
+        event_type: str,
+        field: str,
+        value: str,
+    ) -> datetime:
+        try:
+            return datetime.fromisoformat(value)
+        except ValueError as error:
+            raise ValueError(
+                f"malformed persisted domain event {event_type}: invalid {field}",
+            ) from error

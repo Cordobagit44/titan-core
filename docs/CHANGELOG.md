@@ -4,6 +4,30 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-094 — Report Malformed Domain Event Payloads
+
+### Changed
+
+- Malformed persisted UUIDs now identify their event type and payload field
+- Malformed closure timestamps now identify their event type and field
+- Original UUID and datetime parser failures remain chained as causes
+
+### Architectural Notes
+
+- Parsing diagnostics remain private to the SQLite deserialization boundary
+- Missing-field, unknown-type, saving, ordering, and migration behavior remain unchanged
+- No public signature, schema, event type, or dependency changed
+
+### Validation
+
+- Targeted SQLite domain-event repository tests — 21 passed
+- pytest — 188 passed
+- Ruff lint — passed
+- Ruff format — 174 files already formatted
+- mypy — 65 source files checked
+
+---
+
 ## CORE-093 — Validate Persisted Domain Event Payloads
 
 ### Changed
