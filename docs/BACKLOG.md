@@ -365,13 +365,17 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-115 | Add Interpretation Use Case | Done |
 | CORE-116 | Cover Interpretation Workflow Acceptance | Done |
 
+---
+
+## Epic 36 — Claim Ownership
+
+| ID       | Story                                  | Status      |
+| -------- | -------------------------------------- | ----------- |
+| CORE-117 | Prevent Cross-Hypothesis Claim Reuse   | In Progress |
+
 ## Current Story
 
-No CORE story is currently active.
+CORE-117 — Prevent Cross-Hypothesis Claim Reuse is active.
 
-CORE-116 — Cover Interpretation Workflow Acceptance is complete.
-
-The story verifies interpretation creation and reconstruction through the
-composed SQLite-backed application without changing production behavior.
-
-CORE-116 validation passed 256 tests, Ruff lint, Ruff format, and mypy.
+The story preserves exclusive claim identity ownership across hypotheses in one
+investigation.
