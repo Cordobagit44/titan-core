@@ -579,14 +579,14 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-119 implementation:
+State after CORE-120 implementation:
 
-- last completed story: `CORE-119 — Prevent Cross-Hypothesis Interpretation Reuse`;
-- latest integrated baseline before CORE-119: `2040210 — CORE-118: reject restored claim reuse`;
+- last completed story: `CORE-120 — Reject Restored Interpretation Reuse`;
+- latest integrated baseline before CORE-120: `1546541 — CORE-119: prevent cross-hypothesis interpretation reuse`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 259 passing tests;
+- current validated suite: 260 passing tests;
 - Ruff lint: passing;
-- Ruff format: passing on 211 files;
+- Ruff format: passing on 212 files;
 - mypy: passing on 77 source files;
 - application composition, SQLite persistence, Unit of Work transaction
   coordination, application lifecycle management, evidence provenance,
@@ -630,14 +630,14 @@ State after CORE-119 implementation:
   exposed by `bootstrap()`; the composed acceptance workflow verifies
   interpretation reconstruction after a real SQLite-backed application restart;
   interpretation identities cannot be reused across hypotheses during aggregate
-  mutation;
+  mutation or restoration;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
 - no confidence scoring, assessment, thesis model, Event Bus, Outbox, CLI,
   HTTP API, or AI provider integration is implemented.
 
-CORE-119 enforces exclusive interpretation identity ownership across hypotheses
-during aggregate mutation without changing persistence or application APIs.
+CORE-120 applies exclusive interpretation identity ownership consistently during
+aggregate restoration without changing SQLite or application APIs.
 
 ---
 
@@ -685,7 +685,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-119 is complete, do not infer CORE-120 solely from the conceptual
+After CORE-120 is complete, do not infer CORE-121 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -695,7 +695,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-120 explicitly;
+5. define CORE-121 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
