@@ -7,6 +7,7 @@ from titan.core.claim import Claim
 from titan.core.entity import Entity
 from titan.core.evidence import Evidence
 from titan.core.hypothesis import Hypothesis, HypothesisId, HypothesisStatus
+from titan.core.interpretation import Interpretation
 
 
 class InvestigationStatus(Enum):
@@ -210,6 +211,23 @@ class Investigation(Entity[DomainEvent]):
         hypothesis.add_claim(
             claim,
         )
+
+        return hypothesis
+
+    def add_interpretation(
+        self,
+        hypothesis_id: HypothesisId,
+        interpretation: Interpretation,
+    ) -> Hypothesis:
+        if self.status is InvestigationStatus.CLOSED:
+            raise ValueError("investigation is closed")
+
+        hypothesis = self.find_hypothesis(hypothesis_id)
+
+        if hypothesis is None:
+            raise LookupError("hypothesis not found")
+
+        hypothesis.add_interpretation(interpretation)
 
         return hypothesis
 

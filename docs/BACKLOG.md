@@ -359,14 +359,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | ----------------------- | ------ |
 | CORE-110 | Introduce Interpretation | Done  |
 | CORE-111 | Attach Interpretations to Hypotheses | Done |
+| CORE-112 | Route Interpretation Through Investigation | Done |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-111 — Attach Interpretations to Hypotheses is complete.
+CORE-112 — Route Interpretation Through Investigation is complete.
 
-The story makes pending hypotheses own interpretations and validates their
-hypothesis and claim references before attachment.
+The story routes interpretation attachment through the investigation lifecycle
+and delegates interpretation invariants to the selected hypothesis.
 
-CORE-111 validation passed 244 tests, Ruff lint, Ruff format, and mypy.
+CORE-112 validation passed 247 tests, Ruff lint, Ruff format, and mypy.

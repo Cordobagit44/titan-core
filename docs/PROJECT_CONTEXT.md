@@ -577,15 +577,15 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-111 implementation:
+State after CORE-112 implementation:
 
-- last completed story: `CORE-111 — Attach Interpretations to Hypotheses`;
-- latest integrated baseline before CORE-111: `dab9970 — CORE-110: introduce interpretation`;
+- last completed story: `CORE-112 — Route Interpretation Through Investigation`;
+- latest integrated baseline before CORE-112: `891d2d9 — CORE-111: attach interpretations to hypotheses`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 244 passing tests;
+- current validated suite: 247 passing tests;
 - Ruff lint: passing;
-- Ruff format: passing on 200 files;
-- mypy: passing on 74 source files;
+- Ruff format: passing on 202 files;
+- mypy: passing on 75 source files;
 - application composition, SQLite persistence, Unit of Work transaction
   coordination, application lifecycle management, evidence provenance,
   evidence relationship classification, closed-investigation aggregate
@@ -618,14 +618,15 @@ State after CORE-111 implementation:
   an immutable `Interpretation` model connects one claim to one hypothesis with
   an explicit rationale; pending hypotheses own interpretations and validate
   both hypothesis and claim references before emitting `InterpretationAdded`;
+  interpretation attachment routes through the owning investigation lifecycle;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
 - no confidence scoring, assessment, interpretation persistence or application
   use cases, thesis model,
   Event Bus, Outbox, CLI, HTTP API, or AI provider integration is implemented.
 
-CORE-111 establishes hypothesis ownership for interpretations without adding
-persistence, application APIs, scoring, or automatic reasoning.
+CORE-112 routes interpretation attachment through the owning investigation
+without adding persistence, application APIs, scoring, or automatic reasoning.
 
 ---
 
@@ -673,7 +674,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-111 is complete, do not infer CORE-112 solely from the conceptual
+After CORE-112 is complete, do not infer CORE-113 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -683,7 +684,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-112 explicitly;
+5. define CORE-113 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
