@@ -385,11 +385,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 
 | ID       | Story                          | Status      |
 | -------- | ------------------------------ | ----------- |
-| CORE-121 | Report Malformed Claim Records | In Progress |
+| CORE-121 | Report Malformed Claim Records | Done        |
 
 ## Current Story
 
-CORE-121 — Report Malformed Claim Records is active.
+No CORE story is currently active.
+
+CORE-121 — Report Malformed Claim Records is complete.
 
 The story adds contextual SQLite deserialization errors for malformed claim
 identity fields.
+
+CORE-121 validation passed 262 tests, Ruff lint, Ruff format, and mypy.
