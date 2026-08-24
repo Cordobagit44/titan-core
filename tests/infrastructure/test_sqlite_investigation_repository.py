@@ -1,6 +1,8 @@
 import sqlite3
 from pathlib import Path
 
+import pytest
+
 from titan.core.evidence import (
     Evidence,
     EvidenceRelationship,
@@ -508,3 +510,58 @@ def test_get_restores_closed_at() -> None:
 
     assert found is not None
     assert found.closed_at == investigation.closed_at
+
+
+def test_list_reports_malformed_investigation_id() -> None:
+    repository = SqliteInvestigationRepository(":memory:")
+    repository._connection.execute(
+        """
+        INSERT INTO investigations (id, title, purpose, status)
+        VALUES (?, ?, ?, ?)
+        """,
+        ("not-a-uuid", "Mars anomaly", "Find evidence", "draft"),
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="malformed persisted investigation record: invalid id",
+    ):
+        repository.list()
+
+
+def test_get_reports_malformed_investigation_status() -> None:
+    repository = SqliteInvestigationRepository(":memory:")
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+    repository.save(investigation)
+    repository._connection.execute(
+        "UPDATE investigations SET status = ? WHERE id = ?",
+        ("unknown", str(investigation.id.value)),
+    )
+
+    with pytest.raises(
+        ValueError,
+        match=(f"malformed persisted investigation {investigation.id.value}: invalid status"),
+    ):
+        repository.get(investigation.id)
+
+
+def test_get_reports_malformed_investigation_closed_at() -> None:
+    repository = SqliteInvestigationRepository(":memory:")
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+    repository.save(investigation)
+    repository._connection.execute(
+        "UPDATE investigations SET closed_at = ? WHERE id = ?",
+        ("not-a-datetime", str(investigation.id.value)),
+    )
+
+    with pytest.raises(
+        ValueError,
+        match=(f"malformed persisted investigation {investigation.id.value}: invalid closed_at"),
+    ):
+        repository.get(investigation.id)
