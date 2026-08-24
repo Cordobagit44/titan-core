@@ -4,6 +4,35 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-111 — Attach Interpretations to Hypotheses
+
+### Added
+
+- Immutable interpretation collection owned by `Hypothesis`
+- Hypothesis and claim reference validation before attachment
+- `InterpretationAdded` event preserving all reasoning identities
+
+### Changed
+
+- Decided hypotheses reject new interpretations
+- Duplicate interpretation identities are rejected without mutation or events
+
+### Architectural Notes
+
+- Hypothesis owns evidence, claims, and interpretations in one reasoning boundary
+- Equal rationale does not collapse distinct interpretation identities
+- No persistence or application API was introduced
+
+### Validation
+
+- Targeted hypothesis interpretation tests — 8 passed
+- pytest — 244 passed
+- Ruff lint — passed
+- Ruff format — 200 files already formatted
+- mypy — 74 source files checked
+
+---
+
 ## CORE-110 — Introduce Interpretation
 
 ### Added
