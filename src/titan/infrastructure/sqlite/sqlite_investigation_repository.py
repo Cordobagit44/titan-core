@@ -480,13 +480,24 @@ class SqliteInvestigationRepository(
         )
 
         return tuple(
-            Interpretation(
-                id=InterpretationId(value=UUID(row[0])),
-                hypothesis_id=hypothesis_id,
-                claim_id=ClaimId(value=UUID(row[1])),
-                rationale=row[2],
-            )
+            self._to_interpretation(hypothesis_id, row)
             for row in cursor.fetchall()
+        )
+
+    def _to_interpretation(
+        self,
+        hypothesis_id: HypothesisId,
+        row: tuple[str, str, str],
+    ) -> Interpretation:
+        return Interpretation(
+            id=InterpretationId(
+                value=self._parse_interpretation_id(row[0]),
+            ),
+            hypothesis_id=hypothesis_id,
+            claim_id=ClaimId(
+                value=self._parse_interpretation_claim_id(row[0], row[1]),
+            ),
+            rationale=row[2],
         )
 
     def _to_claim(
@@ -663,6 +674,30 @@ class SqliteInvestigationRepository(
         except ValueError as error:
             raise ValueError(
                 f"malformed persisted claim {claim_id}: invalid evidence_id",
+            ) from error
+
+    @staticmethod
+    def _parse_interpretation_id(
+        value: str,
+    ) -> UUID:
+        try:
+            return UUID(value)
+        except ValueError as error:
+            raise ValueError(
+                "malformed persisted interpretation record: invalid id",
+            ) from error
+
+    @staticmethod
+    def _parse_interpretation_claim_id(
+        interpretation_id: str,
+        value: str,
+    ) -> UUID:
+        try:
+            return UUID(value)
+        except ValueError as error:
+            raise ValueError(
+                f"malformed persisted interpretation {interpretation_id}: "
+                "invalid claim_id",
             ) from error
 
     @staticmethod
