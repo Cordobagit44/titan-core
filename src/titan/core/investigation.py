@@ -137,6 +137,15 @@ class Investigation(Entity[DomainEvent]):
         if len(claim_ids) != len(set(claim_ids)):
             raise ValueError("claim already belongs to another hypothesis")
 
+        interpretation_ids = [
+            interpretation.id
+            for hypothesis in hypotheses
+            for interpretation in hypothesis.interpretations
+        ]
+
+        if len(interpretation_ids) != len(set(interpretation_ids)):
+            raise ValueError("interpretation already belongs to another hypothesis")
+
         investigation = cls(
             investigation_id=investigation_id,
             title=title,
