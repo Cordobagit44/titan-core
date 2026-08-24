@@ -416,6 +416,52 @@ def test_legacy_evidence_schema_is_migrated(
     assert restored_evidence.relationship is EvidenceRelationship.UNSPECIFIED
 
 
+def test_legacy_investigation_schema_is_migrated() -> None:
+    investigation = Investigation.create(
+        title="Mars anomaly",
+        purpose="Find evidence",
+    )
+    connection = sqlite3.connect(":memory:")
+    connection.execute(
+        """
+        CREATE TABLE investigations (
+            id TEXT PRIMARY KEY,
+            title TEXT NOT NULL,
+            purpose TEXT NOT NULL,
+            status TEXT NOT NULL
+        )
+        """
+    )
+    connection.execute(
+        """
+        INSERT INTO investigations (id, title, purpose, status)
+        VALUES (?, ?, ?, ?)
+        """,
+        (
+            str(investigation.id.value),
+            investigation.title,
+            investigation.purpose,
+            investigation.status.value,
+        ),
+    )
+
+    repository = SqliteInvestigationRepository(
+        connection=connection,
+    )
+    restored = repository.get(investigation.id)
+    columns = {
+        row[1]
+        for row in connection.execute(
+            "PRAGMA table_info(investigations)",
+        ).fetchall()
+    }
+
+    assert "closed_at" in columns
+    assert restored is not None
+    assert restored.id == investigation.id
+    assert restored.closed_at is None
+
+
 def test_get_restores_closed_investigation_status() -> None:
     repository = SqliteInvestigationRepository(
         ":memory:",
