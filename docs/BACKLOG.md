@@ -217,13 +217,21 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | ------------------------------------------------ | ------ |
 | CORE-087 | Protect Decided Hypotheses from Evidence Addition | Done  |
 
+---
+
+## Epic 19 — Persistence Integrity
+
+| ID       | Story                                 | Status |
+| -------- | ------------------------------------- | ------ |
+| CORE-088 | Remove Orphaned SQLite Evidence       | Done   |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-087 — Protect Decided Hypotheses from Evidence Addition is complete.
+CORE-088 — Remove Orphaned SQLite Evidence is complete.
 
-The story preserves the historical basis of terminal decisions by allowing
-evidence additions only while a hypothesis is pending.
+The story ensures that replacing an investigation's persisted hypotheses also
+removes evidence belonging to hypotheses removed from that investigation.
 
-CORE-087 validation passed 174 tests, Ruff lint, Ruff format, and mypy.
+CORE-088 validation passed 175 tests, Ruff lint, Ruff format, and mypy.
