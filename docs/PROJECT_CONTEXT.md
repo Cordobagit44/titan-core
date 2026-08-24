@@ -577,21 +577,28 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State at the start of CORE-077:
+State before CORE-084 documentation reconciliation:
 
-- last completed story: `CORE-076 — Update README for Evidence Relationships`;
-- `main` integration commit: `5801735 — CORE-076: update README for evidence relationships`;
-- current validated suite: 147 passing tests;
-- Ruff: passing;
-- mypy: passing on 60 source files;
+- last completed story: `CORE-083 — Add Safe Local Synchronization`;
+- current `main` commit: `5d52edc — CORE-082: validate investigation purpose`;
+- CORE-083 is also integrated into that history before CORE-082;
+- GitHub's configured default branch is `main`;
+- no pull request or CORE story was active when CORE-084 began;
+- current validated suite: 162 passing tests;
+- Ruff lint: passing;
+- Ruff format: passing on 164 files after adding the CORE-084 specification;
+- mypy: passing on 65 source files;
 - application composition, SQLite persistence, Unit of Work transaction
-  coordination, application lifecycle management, evidence provenance, and
-  evidence relationship classification are implemented;
+  coordination, application lifecycle management, evidence provenance,
+  evidence relationship classification, closed-investigation aggregate
+  protections, and non-empty investigation purpose validation are implemented;
+- guarded PowerShell synchronization and VS Code tasks are available for a
+  clean local `main` checkout;
 - no confidence scoring, assessment, claims, interpretations, thesis model,
   Event Bus, Outbox, CLI, HTTP API, or AI provider integration is implemented.
 
-CORE-077 refreshes this continuity document because it had remained frozen at
-CORE-042 and no longer represented the live repository.
+CORE-084 reconciles the repository documentation because the README, changelog,
+and this continuity section no longer represented the live repository.
 
 ---
 
@@ -639,7 +646,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-077 is complete, do not infer CORE-078 solely from the conceptual
+After CORE-084 is complete, do not infer CORE-085 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -649,7 +656,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-078 explicitly;
+5. define CORE-085 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
