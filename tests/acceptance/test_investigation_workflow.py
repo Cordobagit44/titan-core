@@ -110,10 +110,7 @@ def test_complete_investigation_workflow_is_persisted(
     restored_interpretation = restored_hypothesis.interpretations[0]
 
     assert restored_interpretation.id == interpretation.id
-    assert (
-        restored_interpretation.rationale
-        == "Seasonality makes a biological mechanism plausible"
-    )
+    assert restored_interpretation.rationale == "Seasonality makes a biological mechanism plausible"
     assert restored_interpretation.claim_id == claim.id
     assert restored_interpretation.hypothesis_id == hypothesis.id
 
