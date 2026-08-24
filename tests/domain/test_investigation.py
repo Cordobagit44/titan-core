@@ -5,6 +5,7 @@ import pytest
 from titan.core.claim import Claim
 from titan.core.evidence import Evidence, EvidenceRelationship
 from titan.core.hypothesis import Hypothesis
+from titan.core.interpretation import Interpretation
 from titan.core.investigation import (
     HypothesisAdded,
     Investigation,
@@ -548,6 +549,60 @@ def test_restore_rejects_claim_reused_across_hypotheses() -> None:
     with pytest.raises(
         ValueError,
         match="claim already belongs to another hypothesis",
+    ):
+        Investigation.restore(
+            investigation_id=InvestigationId.new(),
+            title="Mars anomaly",
+            purpose="Find evidence",
+            status=InvestigationStatus.DRAFT,
+            hypotheses=(first, second),
+        )
+
+
+def test_restore_rejects_interpretation_reused_across_hypotheses() -> None:
+    first = Hypothesis(statement="Artificial structure")
+    first_evidence = Evidence(
+        description="Orbital geometry",
+        source="Mars orbiter",
+        relationship=EvidenceRelationship.SUPPORTS,
+    )
+    first.add_evidence(first_evidence)
+    first_claim = Claim(
+        statement="Geometry is regular",
+        evidence_id=first_evidence.id,
+    )
+    first.add_claim(first_claim)
+    first_interpretation = Interpretation(
+        hypothesis_id=first.id,
+        claim_id=first_claim.id,
+        rationale="Regular geometry suggests deliberate construction.",
+    )
+    first.add_interpretation(first_interpretation)
+
+    second = Hypothesis(statement="Natural structure")
+    second_evidence = Evidence(
+        description="Erosion patterns",
+        source="Mars rover",
+        relationship=EvidenceRelationship.SUPPORTS,
+    )
+    second.add_evidence(second_evidence)
+    second_claim = Claim(
+        statement="Erosion explains the geometry",
+        evidence_id=second_evidence.id,
+    )
+    second.add_claim(second_claim)
+    second.add_interpretation(
+        Interpretation(
+            id=first_interpretation.id,
+            hypothesis_id=second.id,
+            claim_id=second_claim.id,
+            rationale="Known erosion patterns explain the observed shape.",
+        )
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="interpretation already belongs to another hypothesis",
     ):
         Investigation.restore(
             investigation_id=InvestigationId.new(),
