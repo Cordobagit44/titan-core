@@ -4,6 +4,32 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-127 — Attach Theses to Investigations
+
+### Added
+
+- Investigation ownership of provisional theses
+- Immutable tuple exposure through `Investigation.theses`
+- `ThesisAdded` domain event containing investigation and thesis identities
+- Duplicate thesis identity and closed-investigation mutation protection
+
+### Architectural Notes
+
+- Thesis ownership remains inside the investigation aggregate
+- Equal statements remain valid when thesis identities differ
+- Persistence and application APIs remain intentionally unchanged
+
+### Validation
+
+- Thesis ownership domain tests — 5 passed
+- pytest — 277 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
+
+---
+
 ## CORE-126 — Introduce Provisional Thesis
 
 ### Added
