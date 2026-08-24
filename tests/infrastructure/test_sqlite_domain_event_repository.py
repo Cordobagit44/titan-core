@@ -551,3 +551,86 @@ def test_incomplete_persisted_domain_event_is_rejected(
         match=f"incomplete persisted domain event {event_type}: missing {missing_field}",
     ):
         repository.list_all()
+
+
+@pytest.mark.parametrize(
+    (
+        "event_type",
+        "investigation_id",
+        "title",
+        "closed_at",
+        "hypothesis_id",
+        "evidence_id",
+        "malformed_field",
+    ),
+    [
+        (
+            "InvestigationCreated",
+            "not-a-uuid",
+            "Mars anomaly",
+            None,
+            None,
+            None,
+            "investigation_id",
+        ),
+        (
+            "InvestigationClosed",
+            str(InvestigationId.new().value),
+            None,
+            "not-a-datetime",
+            None,
+            None,
+            "closed_at",
+        ),
+        ("HypothesisConfirmed", None, None, None, "not-a-uuid", None, "hypothesis_id"),
+        (
+            "EvidenceAdded",
+            None,
+            None,
+            None,
+            str(InvestigationId.new().value),
+            "not-a-uuid",
+            "evidence_id",
+        ),
+    ],
+)
+def test_malformed_persisted_domain_event_payload_is_reported(
+    event_type: str,
+    investigation_id: str | None,
+    title: str | None,
+    closed_at: str | None,
+    hypothesis_id: str | None,
+    evidence_id: str | None,
+    malformed_field: str,
+) -> None:
+    connection = sqlite3.connect(":memory:")
+    repository = SqliteDomainEventRepository(
+        connection=connection,
+    )
+    connection.execute(
+        """
+        INSERT INTO domain_events (
+            event_type,
+            investigation_id,
+            title,
+            closed_at,
+            hypothesis_id,
+            evidence_id
+        )
+        VALUES (?, ?, ?, ?, ?, ?)
+        """,
+        (
+            event_type,
+            investigation_id,
+            title,
+            closed_at,
+            hypothesis_id,
+            evidence_id,
+        ),
+    )
+
+    with pytest.raises(
+        ValueError,
+        match=f"malformed persisted domain event {event_type}: invalid {malformed_field}",
+    ):
+        repository.list_all()
