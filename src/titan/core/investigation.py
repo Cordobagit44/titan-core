@@ -8,6 +8,7 @@ from titan.core.entity import Entity
 from titan.core.evidence import Evidence
 from titan.core.hypothesis import Hypothesis, HypothesisId, HypothesisStatus
 from titan.core.interpretation import Interpretation
+from titan.core.thesis import Thesis, ThesisId
 
 
 class InvestigationStatus(Enum):
@@ -59,6 +60,12 @@ class HypothesisRemoved:
     hypothesis_id: HypothesisId
 
 
+@dataclass(frozen=True)
+class ThesisAdded:
+    investigation_id: InvestigationId
+    thesis_id: ThesisId
+
+
 type DomainEvent = (
     InvestigationCreated
     | InvestigationActivated
@@ -66,6 +73,7 @@ type DomainEvent = (
     | InvestigationReopened
     | HypothesisAdded
     | HypothesisRemoved
+    | ThesisAdded
 )
 
 
@@ -84,6 +92,7 @@ class Investigation(Entity[DomainEvent]):
         self.status = InvestigationStatus.DRAFT
         self.closed_at: datetime | None = None
         self._hypotheses: list[Hypothesis] = []
+        self._theses: list[Thesis] = []
 
         self._record_event(
             InvestigationCreated(
@@ -162,6 +171,25 @@ class Investigation(Entity[DomainEvent]):
     @property
     def hypotheses(self) -> tuple[Hypothesis, ...]:
         return tuple(self._hypotheses)
+
+    @property
+    def theses(self) -> tuple[Thesis, ...]:
+        return tuple(self._theses)
+
+    def add_thesis(self, thesis: Thesis) -> None:
+        if self.status is InvestigationStatus.CLOSED:
+            raise ValueError("investigation is closed")
+
+        if any(existing.id == thesis.id for existing in self._theses):
+            raise ValueError("thesis already exists")
+
+        self._theses.append(thesis)
+        self._record_event(
+            ThesisAdded(
+                investigation_id=self.id,
+                thesis_id=thesis.id,
+            )
+        )
 
     def find_hypothesis(
         self,

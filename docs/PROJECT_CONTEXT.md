@@ -579,15 +579,15 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-126 implementation:
+State after CORE-127 implementation:
 
-- last completed story: `CORE-126 — Introduce Provisional Thesis`;
-- latest integrated baseline before CORE-126: `9b68321 — CORE-125: reject broken persisted interpretation references`;
+- last completed story: `CORE-127 — Attach Theses to Investigations`;
+- latest integrated baseline before CORE-127: `f98d48d — CORE-126: introduce provisional thesis`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 272 passing tests;
+- current validated suite: 277 passing tests;
 - Ruff lint: passing;
-- Ruff format: passing on 220 files;
-- mypy: passing on 79 source files;
+- Ruff format: passing;
+- mypy: passing;
 - application composition, SQLite persistence, Unit of Work transaction
   coordination, application lifecycle management, evidence provenance,
   evidence relationship classification, closed-investigation aggregate
@@ -638,16 +638,17 @@ State after CORE-126 implementation:
   interpretation reconstruction after a real SQLite-backed application restart;
   interpretation identities cannot be reused across hypotheses during aggregate
   mutation or restoration; an immutable provisional `Thesis` model with
-  explicit identity and non-blank statement is available without aggregate
-  ownership or persistence;
+  explicit identity and non-blank statement is available; open investigations
+  own theses, expose them as an immutable tuple, emit `ThesisAdded`, and reject
+  duplicate thesis identities or attachment while closed;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
-- no confidence scoring, assessment, thesis ownership or persistence, Event
-  Bus, Outbox, CLI,
+- no confidence scoring, assessment, thesis persistence, Event Bus, Outbox, CLI,
   HTTP API, or AI provider integration is implemented.
 
-CORE-126 introduces the minimum provisional thesis domain model without
-aggregate, persistence, event, or application integration.
+CORE-127 attaches provisional theses to the investigation aggregate and emits
+a domain event while deliberately leaving persistence and application APIs for
+later focused stories.
 
 ---
 
@@ -695,7 +696,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-126 is complete, do not infer CORE-127 solely from the conceptual
+After CORE-127 is complete, do not infer CORE-128 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -705,7 +706,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-127 explicitly;
+5. define CORE-128 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
