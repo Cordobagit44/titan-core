@@ -4,6 +4,30 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-131 — Cover Thesis Workflow Acceptance
+
+### Changed
+
+- Extended the composed investigation workflow with thesis creation
+- Verified thesis identity and statement after SQLite-backed restart
+- Verified listed investigations preserve the same reconstructed thesis
+
+### Architectural Notes
+
+- Coverage uses only the public `TitanApplication` surface
+- No production behavior, schema, API, or dependency changed
+
+### Validation
+
+- Thesis-enabled acceptance workflow — passed
+- pytest — 288 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
+
+---
+
 ## CORE-130 — Add Thesis Use Case
 
 ### Added
