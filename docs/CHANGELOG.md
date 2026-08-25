@@ -4,6 +4,29 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-132 — Cover Thesis Record Diagnostics
+
+### Changed
+
+- Covered malformed persisted thesis identity diagnostics
+- Covered blank persisted thesis statements with thesis and field context
+
+### Architectural Notes
+
+- Validation remains at the SQLite deserialization boundary
+- No production behavior, schema, API, or dependency changed
+
+### Validation
+
+- Thesis record diagnostic tests — 2 passed
+- pytest — 290 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
+
+---
+
 ## CORE-131 — Cover Thesis Workflow Acceptance
 
 ### Changed
