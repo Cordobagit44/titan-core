@@ -420,13 +420,19 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-133 | Reject Restored Duplicate Thesis Identities | Done |
 | CORE-134 | Refresh README for Thesis Workflow | Done          |
 
+## Epic 43 — Assessment
+
+| ID       | Story                         | Status |
+| -------- | ----------------------------- | ------ |
+| CORE-135 | Introduce Narrative Assessment | Done  |
+
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-134 — Refresh README for Thesis Workflow is complete.
+CORE-135 — Introduce Narrative Assessment is complete.
 
-The public README now reflects thesis domain ownership, SQLite and event
-persistence, application usage, restart reconstruction, and 292 passing tests.
+An immutable narrative `Assessment` now references one `ThesisId` with explicit
+identity and non-blank evaluation text, without scores or verdict labels.
 
-CORE-134 validation passed the complete GitHub Actions quality gate.
+CORE-135 validation passed 297 tests and the complete GitHub Actions quality gate.
