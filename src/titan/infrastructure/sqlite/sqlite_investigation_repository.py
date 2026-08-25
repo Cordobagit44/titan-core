@@ -484,8 +484,7 @@ class SqliteInvestigationRepository(
         for assessment in assessments:
             if assessment.thesis_id not in thesis_ids:
                 raise ValueError(
-                    f"malformed persisted assessment "
-                    f"{assessment.id.value}: thesis not found",
+                    f"malformed persisted assessment {assessment.id.value}: thesis not found",
                 )
 
         closed_at = self._parse_closed_at(row[0], row[4]) if row[4] is not None else None
