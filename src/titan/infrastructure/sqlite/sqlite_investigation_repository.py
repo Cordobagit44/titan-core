@@ -480,6 +480,13 @@ class SqliteInvestigationRepository(
         theses = self._get_theses(investigation_id)
         assessments = self._get_assessments(investigation_id)
 
+        thesis_ids = {thesis.id for thesis in theses}
+        for assessment in assessments:
+            if assessment.thesis_id not in thesis_ids:
+                raise ValueError(
+                    f"malformed persisted assessment {assessment.id.value}: thesis not found",
+                )
+
         closed_at = self._parse_closed_at(row[0], row[4]) if row[4] is not None else None
 
         return Investigation.restore(
