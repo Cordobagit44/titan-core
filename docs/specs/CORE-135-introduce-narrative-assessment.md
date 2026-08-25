@@ -36,3 +36,12 @@ to a provisional thesis.
 The narrative records explainable evaluation while `ThesisId` provides the
 minimum explicit subject reference. Ownership and lifecycle semantics remain
 for later focused stories.
+
+## Validation
+
+- Assessment domain tests — 5 passed
+- pytest — 297 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
