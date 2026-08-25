@@ -33,3 +33,12 @@ Persist and reconstruct investigation-owned narrative assessments.
 
 Assessments are stored directly beneath their investigation and reconstructed
 after theses so the aggregate reference invariant remains authoritative.
+
+## Validation
+
+- Assessment persistence tests — 3 passed
+- pytest — 307 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
