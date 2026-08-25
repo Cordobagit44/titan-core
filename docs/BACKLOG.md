@@ -425,14 +425,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | ID       | Story                         | Status |
 | -------- | ----------------------------- | ------ |
 | CORE-135 | Introduce Narrative Assessment | Done  |
+| CORE-136 | Attach Assessments to Investigations | Done |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-135 — Introduce Narrative Assessment is complete.
+CORE-136 — Attach Assessments to Investigations is complete.
 
-An immutable narrative `Assessment` now references one `ThesisId` with explicit
-identity and non-blank evaluation text, without scores or verdict labels.
+Open investigations now own narrative assessments for existing theses, emit
+`AssessmentAdded`, and enforce thesis reference, identity, and lifecycle rules.
 
-CORE-135 validation passed 297 tests and the complete GitHub Actions quality gate.
+CORE-136 validation passed 304 tests and the complete GitHub Actions quality gate.
