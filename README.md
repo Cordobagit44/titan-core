@@ -214,8 +214,7 @@ assessment = application.add_assessment(
     investigation_id=investigation.id,
     thesis_id=thesis.id,
     narrative=(
-        "The thesis is plausible but remains dependent on indirect "
-        "seasonal methane evidence"
+        "The thesis is plausible but remains dependent on indirect seasonal methane evidence"
     ),
 )
 ```
