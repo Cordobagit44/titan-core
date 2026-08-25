@@ -1,3 +1,4 @@
+from datetime import UTC
 from pathlib import Path
 
 from titan.bootstrap import bootstrap
@@ -141,6 +142,8 @@ def test_complete_investigation_workflow_is_persisted(
     restored_assessment = restored.assessments[0]
 
     assert restored_assessment.id == assessment.id
+    assert assessment.recorded_at.tzinfo is UTC
+    assert restored_assessment.recorded_at == assessment.recorded_at
     assert restored_assessment.thesis_id == thesis.id
     assert restored_assessment.narrative == (
         "The thesis is plausible but remains dependent on indirect seasonal methane evidence"
