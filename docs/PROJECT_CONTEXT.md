@@ -583,10 +583,10 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-144 implementation:
+State after CORE-145 implementation:
 
-- last completed story: `CORE-144 — Refresh README for Assessment Workflow`;
-- latest integrated baseline before CORE-144: `9d6b56c — CORE-143: reject broken persisted assessment references`;
+- last completed story: `CORE-145 — Record Assessment Timestamp`;
+- latest integrated baseline before CORE-145: `55b2c7d — CORE-144: refresh README for assessment workflow`;
 - GitHub's configured default branch is `main`;
 - current validated suite: 315 passing tests;
 - Ruff lint: passing;
@@ -646,7 +646,8 @@ State after CORE-144 implementation:
   regression coverage; restored investigations reject duplicate assessment
   identities while allowing distinct assessments for the same owned thesis;
   SQLite rejects well-formed assessment thesis references that are not owned by
-  the investigation with assessment-specific context; the composed acceptance workflow verifies claim
+  the investigation with assessment-specific context; each assessment records an
+  immutable UTC-aware formulation timestamp that SQLite preserves and validates; the composed acceptance workflow verifies claim
   reconstruction after a real SQLite-backed application restart;
   an immutable `Interpretation` model connects one claim to one hypothesis with
   an explicit rationale; pending hypotheses own interpretations and validate
@@ -674,8 +675,8 @@ State after CORE-144 implementation:
   Outbox, CLI,
   HTTP API, or AI provider integration is implemented.
 
-CORE-144 aligns the public README with the complete narrative assessment
-workflow and its explicitly non-scoring semantics.
+CORE-145 adds explicit assessment chronology for living research without
+introducing scoring or automated conclusions.
 
 ---
 
@@ -723,7 +724,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-144 is complete, do not infer CORE-145 solely from the conceptual
+After CORE-145 is complete, do not infer CORE-146 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -733,7 +734,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-145 explicitly;
+5. define CORE-146 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
