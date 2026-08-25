@@ -332,9 +332,7 @@ class SqliteDomainEventRepository(
             str(event.interpretation_id.value) if isinstance(event, InterpretationAdded) else None
         )
         thesis_id = (
-            str(event.thesis_id.value)
-            if isinstance(event, ThesisAdded | AssessmentAdded)
-            else None
+            str(event.thesis_id.value) if isinstance(event, ThesisAdded | AssessmentAdded) else None
         )
         assessment_id = (
             str(event.assessment_id.value) if isinstance(event, AssessmentAdded) else None
