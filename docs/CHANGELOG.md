@@ -4,6 +4,31 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-147 — Cover Assessment Chronology Acceptance
+
+### Changed
+
+- Public SQLite-backed acceptance workflow now verifies UTC assessment chronology
+- Restart reconstruction preserves the exact application-created timestamp
+- Listing continues to preserve the complete reconstructed assessment state
+
+### Architectural Notes
+
+- Coverage uses only the public `TitanApplication` surface
+- No production behavior, schema, API, or dependency changed
+- Assessment chronology remains descriptive rather than a scoring mechanism
+
+### Validation
+
+- Assessment chronology acceptance workflow — passed
+- pytest — 330 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
+
+---
+
 ## CORE-146 — Preserve Assessment Timestamp in Domain Event
 
 ### Added
