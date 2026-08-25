@@ -4,6 +4,31 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-143 — Reject Broken Persisted Assessment References
+
+### Added
+
+- Contextual SQLite rejection for assessments referencing unowned theses
+- Persistence diagnostic identifying the damaged assessment record
+- Focused regression coverage for well-formed but broken thesis references
+
+### Architectural Notes
+
+- The SQLite mapper translates aggregate referential integrity into record context
+- Aggregate restoration remains authoritative for assessment ownership
+- No schema, application API, domain event, or dependency changed
+
+### Validation
+
+- Broken assessment reference test — passed
+- pytest — 321 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
+
+---
+
 ## CORE-142 — Reject Restored Duplicate Assessment Identities
 
 ### Added
