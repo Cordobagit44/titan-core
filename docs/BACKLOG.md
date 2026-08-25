@@ -434,14 +434,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-142 | Reject Restored Duplicate Assessment Identities | Done |
 | CORE-143 | Reject Broken Persisted Assessment References | Done |
 | CORE-144 | Refresh README for Assessment Workflow | Done |
+| CORE-145 | Record Assessment Timestamp | Done |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-144 — Refresh README for Assessment Workflow is complete.
+CORE-145 — Record Assessment Timestamp is complete.
 
-The public README now documents narrative assessment creation, persistence,
-reconstruction, and its explicit non-scoring semantics.
+Narrative assessments now carry an immutable UTC timestamp that SQLite
+preserves, migrates safely for legacy rows, and validates contextually.
 
-CORE-144 validation passed 321 tests and the complete GitHub Actions quality gate.
+CORE-145 validation passed 325 tests and the complete GitHub Actions quality gate.
