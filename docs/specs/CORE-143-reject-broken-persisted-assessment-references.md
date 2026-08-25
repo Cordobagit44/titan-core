@@ -36,4 +36,9 @@ record-specific persistence diagnostic before constructing the investigation.
 
 ## Validation
 
-Pending implementation and CI.
+- Broken assessment reference test — passed
+- pytest — 321 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
