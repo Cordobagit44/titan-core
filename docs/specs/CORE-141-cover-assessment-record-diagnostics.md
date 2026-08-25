@@ -36,4 +36,9 @@ requirement concerns corrupted persisted records rather than public creation.
 
 ## Validation
 
-Pending implementation and CI.
+- Assessment record diagnostics tests — 3 passed
+- pytest — 318 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
