@@ -4,6 +4,32 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-139 — Add Assessment Use Case
+
+### Added
+
+- Transactional `AddAssessment` application use case
+- Atomic aggregate and `AssessmentAdded` persistence through Unit of Work
+- `add_assessment` exposure from `TitanApplication` and `bootstrap()`
+- Rollback coverage for missing investigation, unknown thesis, and event failure
+
+### Architectural Notes
+
+- The application creates assessments and coordinates persistence
+- The investigation remains authoritative for thesis ownership and lifecycle
+- Verdicts, scores, and interfaces remain unchanged
+
+### Validation
+
+- AddAssessment tests — 4 passed
+- pytest — 315 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
+
+---
+
 ## CORE-138 — Persist AssessmentAdded Domain Event
 
 ### Added
