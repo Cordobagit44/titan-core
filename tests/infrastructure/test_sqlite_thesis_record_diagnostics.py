@@ -1,5 +1,5 @@
 import sqlite3
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 import pytest
 
@@ -36,7 +36,7 @@ def test_malformed_persisted_thesis_id_is_reported() -> None:
         ValueError,
         match="malformed persisted thesis record: invalid id",
     ):
-        repository.get(InvestigationId(value=uuid4()))
+        repository.get(InvestigationId(value=UUID(investigation_id)))
 
 
 def test_blank_persisted_thesis_statement_is_reported() -> None:
@@ -57,4 +57,4 @@ def test_blank_persisted_thesis_statement_is_reported() -> None:
         ValueError,
         match=f"malformed persisted thesis {thesis_id}: invalid statement",
     ):
-        repository.get(InvestigationId(value=uuid4()))
+        repository.get(InvestigationId(value=UUID(investigation_id)))
