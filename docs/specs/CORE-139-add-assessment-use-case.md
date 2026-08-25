@@ -26,3 +26,12 @@ Expose transactional narrative assessment creation through the application layer
 
 The application creates the assessment and coordinates persistence. The
 investigation remains authoritative for thesis ownership and lifecycle rules.
+
+## Validation
+
+- AddAssessment tests — 4 passed
+- pytest — 315 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
