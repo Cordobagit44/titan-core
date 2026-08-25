@@ -29,3 +29,12 @@ Persist and reconstruct `AssessmentAdded` with investigation, assessment, and th
 
 Event history records identity transitions; aggregate persistence remains the
 source of narrative assessment content.
+
+## Validation
+
+- Assessment event persistence tests — 4 passed
+- pytest — 311 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
