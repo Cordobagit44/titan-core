@@ -38,4 +38,9 @@ marker.
 
 ## Validation
 
-Pending implementation and CI.
+- Assessment timestamp domain and SQLite tests — 4 passed
+- pytest — 325 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
