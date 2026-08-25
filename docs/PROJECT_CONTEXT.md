@@ -582,10 +582,10 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-133 implementation:
+State after CORE-134 documentation refresh:
 
-- last completed story: `CORE-133 — Reject Restored Duplicate Thesis Identities`;
-- latest integrated baseline before CORE-133: `c216f9f — CORE-132: cover thesis record diagnostics`;
+- last completed story: `CORE-134 — Refresh README for Thesis Workflow`;
+- latest integrated baseline before CORE-134: `2b3548d — CORE-133: reject restored duplicate thesis identities`;
 - GitHub's configured default branch is `main`;
 - current validated suite: 292 passing tests;
 - Ruff lint: passing;
@@ -657,8 +657,8 @@ State after CORE-133 implementation:
   Outbox, CLI,
   HTTP API, or AI provider integration is implemented.
 
-CORE-133 secures thesis identity uniqueness during aggregate restoration without
-introducing new production behavior.
+CORE-134 aligns the public README with the complete validated thesis workflow
+without introducing new production behavior.
 
 ---
 
@@ -706,7 +706,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-133 is complete, do not infer CORE-134 solely from the conceptual
+After CORE-134 is complete, do not infer CORE-135 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -716,7 +716,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-134 explicitly;
+5. define CORE-135 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
