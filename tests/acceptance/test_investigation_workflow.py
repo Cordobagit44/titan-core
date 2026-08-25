@@ -58,6 +58,11 @@ def test_complete_investigation_workflow_is_persisted(
         hypothesis_id=hypothesis.id,
     )
 
+    thesis = application.add_thesis(
+        investigation_id=investigation.id,
+        statement="Microbial activity is a plausible explanation for the anomaly",
+    )
+
     application.close_investigation(
         investigation.id,
     )
@@ -114,9 +119,19 @@ def test_complete_investigation_workflow_is_persisted(
     assert restored_interpretation.claim_id == claim.id
     assert restored_interpretation.hypothesis_id == hypothesis.id
 
+    assert len(restored.theses) == 1
+
+    restored_thesis = restored.theses[0]
+
+    assert restored_thesis.id == thesis.id
+    assert restored_thesis.statement == (
+        "Microbial activity is a plausible explanation for the anomaly"
+    )
+
     listed = restarted_application.list_investigations()
 
     assert len(listed) == 1
     assert listed[0].id == investigation.id
+    assert listed[0].theses == (restored_thesis,)
 
     restarted_application.close()

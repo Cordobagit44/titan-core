@@ -415,14 +415,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-128 | Persist Investigation Theses   | Done         |
 | CORE-129 | Persist ThesisAdded Domain Event | Done        |
 | CORE-130 | Add Thesis Use Case             | Done          |
+| CORE-131 | Cover Thesis Workflow Acceptance | Done         |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-130 — Add Thesis Use Case is complete.
+CORE-131 — Cover Thesis Workflow Acceptance is complete.
 
-The application layer now creates theses transactionally, persists aggregate
-state and `ThesisAdded`, and exposes `add_thesis` through `bootstrap()`.
+The composed SQLite-backed application now proves thesis creation and
+reconstruction through both get and list after a real restart.
 
-CORE-130 validation passed 288 tests and the complete GitHub Actions quality gate.
+CORE-131 validation passed 288 tests and the complete GitHub Actions quality gate.
