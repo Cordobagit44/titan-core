@@ -29,3 +29,12 @@ Prove that an investigation cannot be restored with duplicate thesis identities.
 
 Identity uniqueness is enforced inside one reconstructed investigation
 aggregate, matching the live mutation rule.
+
+## Validation
+
+- Restored thesis identity tests — 2 passed
+- pytest — 292 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
