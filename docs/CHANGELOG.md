@@ -4,6 +4,31 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-140 — Cover Assessment Workflow Acceptance
+
+### Added
+
+- Narrative assessment creation in the composed SQLite-backed acceptance workflow
+- Restart assertions for assessment identity, thesis reference, and narrative
+- Listing assertion for the reconstructed assessment collection
+
+### Architectural Notes
+
+- Coverage uses only the public `TitanApplication` surface
+- No production behavior, schema, API, or dependency changed
+- Assessments remain narrative evaluations without verdict or numeric confidence
+
+### Validation
+
+- Assessment-enabled acceptance workflow — passed
+- pytest — 315 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
+
+---
+
 ## CORE-139 — Add Assessment Use Case
 
 ### Added

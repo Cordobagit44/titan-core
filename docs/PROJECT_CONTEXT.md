@@ -583,10 +583,10 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-139 implementation:
+State after CORE-140 implementation:
 
-- last completed story: `CORE-139 — Add Assessment Use Case`;
-- latest integrated baseline before CORE-139: `dad972a — CORE-138: persist AssessmentAdded domain event`;
+- last completed story: `CORE-140 — Cover Assessment Workflow Acceptance`;
+- latest integrated baseline before CORE-140: `e430787 — CORE-139: add assessment use case`;
 - GitHub's configured default branch is `main`;
 - current validated suite: 315 passing tests;
 - Ruff lint: passing;
@@ -639,7 +639,9 @@ State after CORE-139 implementation:
   reference, narrative, insertion order, and event-clean reconstruction; the
   SQLite event store persists `AssessmentAdded` with investigation, assessment,
   and thesis identities; `AddAssessment` coordinates aggregate and event
-  persistence through Unit of Work and is exposed by `bootstrap()`; the composed acceptance workflow verifies claim
+  persistence through Unit of Work and is exposed by `bootstrap()`; the composed
+  acceptance workflow verifies assessment identity, thesis reference, narrative,
+  and listing after a real SQLite-backed application restart; the composed acceptance workflow verifies claim
   reconstruction after a real SQLite-backed application restart;
   an immutable `Interpretation` model connects one claim to one hypothesis with
   an explicit rationale; pending hypotheses own interpretations and validate
@@ -663,12 +665,12 @@ State after CORE-139 implementation:
   exposed by `bootstrap()`;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
-- no confidence scoring, assessment, thesis selection or synthesis, Event Bus,
+- no confidence scoring, assessment verdicts, thesis selection or synthesis, Event Bus,
   Outbox, CLI,
   HTTP API, or AI provider integration is implemented.
 
-CORE-139 exposes transactional narrative assessment creation through the
-application layer while leaving acceptance coverage for a later focused story.
+CORE-140 completes the public workflow proof for narrative assessments without
+adding production behavior or changing assessment semantics.
 
 ---
 
@@ -716,7 +718,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-139 is complete, do not infer CORE-140 solely from the conceptual
+After CORE-140 is complete, do not infer CORE-141 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -726,7 +728,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-140 explicitly;
+5. define CORE-141 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain

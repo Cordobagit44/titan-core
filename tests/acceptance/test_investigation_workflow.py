@@ -63,6 +63,14 @@ def test_complete_investigation_workflow_is_persisted(
         statement="Microbial activity is a plausible explanation for the anomaly",
     )
 
+    assessment = application.add_assessment(
+        investigation_id=investigation.id,
+        thesis_id=thesis.id,
+        narrative=(
+            "The thesis is plausible but remains dependent on indirect seasonal methane evidence"
+        ),
+    )
+
     application.close_investigation(
         investigation.id,
     )
@@ -128,10 +136,21 @@ def test_complete_investigation_workflow_is_persisted(
         "Microbial activity is a plausible explanation for the anomaly"
     )
 
+    assert len(restored.assessments) == 1
+
+    restored_assessment = restored.assessments[0]
+
+    assert restored_assessment.id == assessment.id
+    assert restored_assessment.thesis_id == thesis.id
+    assert restored_assessment.narrative == (
+        "The thesis is plausible but remains dependent on indirect seasonal methane evidence"
+    )
+
     listed = restarted_application.list_investigations()
 
     assert len(listed) == 1
     assert listed[0].id == investigation.id
     assert listed[0].theses == (restored_thesis,)
+    assert listed[0].assessments == (restored_assessment,)
 
     restarted_application.close()
