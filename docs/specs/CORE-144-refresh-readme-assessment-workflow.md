@@ -33,4 +33,9 @@ implemented assessment workflow.
 
 ## Validation
 
-Pending documentation update and CI.
+- README assessment workflow review — passed
+- pytest — 321 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
