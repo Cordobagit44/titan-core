@@ -29,4 +29,9 @@ preservation.
 
 ## Validation
 
-Pending implementation and CI.
+- Assessment chronology acceptance workflow — passed
+- pytest — 330 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
