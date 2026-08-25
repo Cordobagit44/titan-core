@@ -38,4 +38,9 @@ both sides of a real SQLite-backed restart.
 
 ## Validation
 
-Pending implementation and CI.
+- Assessment-enabled acceptance workflow — passed
+- pytest — 315 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
