@@ -4,6 +4,31 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-135 — Introduce Narrative Assessment
+
+### Added
+
+- Immutable UUID-backed `AssessmentId`
+- Immutable narrative `Assessment` linked to one `ThesisId`
+- Non-blank narrative validation and explicit identity reconstruction
+
+### Architectural Notes
+
+- Assessment begins as explainable narrative evaluation
+- Categorical verdicts and numeric confidence remain intentionally absent
+- Ownership, persistence, events, and application APIs remain undefined
+
+### Validation
+
+- Assessment domain tests — 5 passed
+- pytest — 297 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
+
+---
+
 ## CORE-134 — Refresh README for Thesis Workflow
 
 ### Changed
