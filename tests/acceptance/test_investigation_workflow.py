@@ -67,8 +67,7 @@ def test_complete_investigation_workflow_is_persisted(
         investigation_id=investigation.id,
         thesis_id=thesis.id,
         narrative=(
-            "The thesis is plausible but remains dependent on indirect "
-            "seasonal methane evidence"
+            "The thesis is plausible but remains dependent on indirect seasonal methane evidence"
         ),
     )
 
@@ -144,8 +143,7 @@ def test_complete_investigation_workflow_is_persisted(
     assert restored_assessment.id == assessment.id
     assert restored_assessment.thesis_id == thesis.id
     assert restored_assessment.narrative == (
-        "The thesis is plausible but remains dependent on indirect "
-        "seasonal methane evidence"
+        "The thesis is plausible but remains dependent on indirect seasonal methane evidence"
     )
 
     listed = restarted_application.list_investigations()
