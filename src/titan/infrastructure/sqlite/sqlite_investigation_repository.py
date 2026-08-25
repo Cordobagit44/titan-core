@@ -80,7 +80,8 @@ class SqliteInvestigationRepository(
                 investigation_id TEXT NOT NULL,
                 thesis_id TEXT NOT NULL,
                 narrative TEXT NOT NULL,
-                recorded_at TEXT NOT NULL,
+                recorded_at TEXT NOT NULL
+                    DEFAULT '1970-01-01T00:00:00+00:00',
                 FOREIGN KEY (investigation_id)
                     REFERENCES investigations (id),
                 FOREIGN KEY (thesis_id)
