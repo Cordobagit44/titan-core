@@ -60,7 +60,7 @@ def test_add_assessment_persists_state_event_and_commits() -> None:
 
     assert investigation.assessments == (assessment,)
     assert unit_of_work.domain_events.list_all() == [
-        AssessmentAdded(investigation.id, assessment.id, thesis.id)
+        AssessmentAdded(investigation.id, assessment.id, thesis.id, assessment.recorded_at)
     ]
     assert unit_of_work.committed is True
     assert unit_of_work.rolled_back is False

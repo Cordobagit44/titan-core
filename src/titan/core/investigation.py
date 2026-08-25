@@ -72,6 +72,7 @@ class AssessmentAdded:
     investigation_id: InvestigationId
     assessment_id: AssessmentId
     thesis_id: ThesisId
+    recorded_at: datetime
 
 
 type DomainEvent = (
@@ -223,6 +224,7 @@ class Investigation(Entity[DomainEvent]):
                 investigation_id=self.id,
                 assessment_id=assessment.id,
                 thesis_id=assessment.thesis_id,
+                recorded_at=assessment.recorded_at,
             )
         )
 

@@ -110,6 +110,7 @@ class SqliteDomainEventRepository(
             "interpretation_id",
             "thesis_id",
             "assessment_id",
+            "assessment_recorded_at",
         }
         columns_missing = bool(current_columns - columns.keys())
 
@@ -137,7 +138,9 @@ class SqliteDomainEventRepository(
                 claim_id TEXT,
                 interpretation_id TEXT,
                 thesis_id TEXT,
-                assessment_id TEXT
+                assessment_id TEXT,
+                assessment_recorded_at TEXT
+                    DEFAULT '1970-01-01T00:00:00+00:00'
             )
             """
         )
@@ -168,6 +171,14 @@ class SqliteDomainEventRepository(
         interpretation_id_expression = optional_column("interpretation_id")
         thesis_id_expression = optional_column("thesis_id")
         assessment_id_expression = optional_column("assessment_id")
+        assessment_recorded_at_expression = (
+            optional_column("assessment_recorded_at")
+            if "assessment_recorded_at" in existing_columns
+            else (
+                "CASE WHEN event_type = 'AssessmentAdded' "
+                "THEN '1970-01-01T00:00:00+00:00' ELSE NULL END"
+            )
+        )
 
         transaction = self._connection if self._manages_transaction else nullcontext()
 
@@ -196,7 +207,8 @@ class SqliteDomainEventRepository(
                     claim_id,
                     interpretation_id,
                     thesis_id,
-                    assessment_id
+                    assessment_id,
+                    assessment_recorded_at
                 )
                 SELECT
                     id,
@@ -210,7 +222,8 @@ class SqliteDomainEventRepository(
                     {claim_id_expression},
                     {interpretation_id_expression},
                     {thesis_id_expression},
-                    {assessment_id_expression}
+                    {assessment_id_expression},
+                    {assessment_recorded_at_expression}
                 FROM domain_events
                 ORDER BY id
                 """
@@ -337,6 +350,9 @@ class SqliteDomainEventRepository(
         assessment_id = (
             str(event.assessment_id.value) if isinstance(event, AssessmentAdded) else None
         )
+        assessment_recorded_at = (
+            event.recorded_at.isoformat() if isinstance(event, AssessmentAdded) else None
+        )
 
         transaction = self._connection if self._manages_transaction else nullcontext()
 
@@ -354,9 +370,10 @@ class SqliteDomainEventRepository(
                     claim_id,
                     interpretation_id,
                     thesis_id,
-                    assessment_id
+                    assessment_id,
+                    assessment_recorded_at
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     type(event).__name__,
@@ -370,6 +387,7 @@ class SqliteDomainEventRepository(
                     interpretation_id,
                     thesis_id,
                     assessment_id,
+                    assessment_recorded_at,
                 ),
             )
 
@@ -389,7 +407,8 @@ class SqliteDomainEventRepository(
                 claim_id,
                 interpretation_id,
                 thesis_id,
-                assessment_id
+                assessment_id,
+                assessment_recorded_at
             FROM domain_events
             ORDER BY id
             """
@@ -421,6 +440,7 @@ class SqliteDomainEventRepository(
                 (1, "investigation_id"),
                 (10, "assessment_id"),
                 (9, "thesis_id"),
+                (11, "assessment_recorded_at"),
             ),
         }
         uuid_fields = {
@@ -452,6 +472,7 @@ class SqliteDomainEventRepository(
         }
         datetime_fields = {
             "InvestigationClosed": ((3, "closed_at"),),
+            "AssessmentAdded": ((11, "assessment_recorded_at"),),
         }
 
         for row in cursor.fetchall():
@@ -594,6 +615,7 @@ class SqliteDomainEventRepository(
                         investigation_id=InvestigationId(value=parsed_uuids[1]),
                         assessment_id=AssessmentId(value=parsed_uuids[10]),
                         thesis_id=ThesisId(value=parsed_uuids[9]),
+                        recorded_at=parsed_datetimes[11],
                     )
                 )
             else:
