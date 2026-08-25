@@ -6,6 +6,7 @@ from uuid import UUID
 from titan.application.investigation_repository import (
     InvestigationRepository,
 )
+from titan.core.assessment import Assessment, AssessmentId
 from titan.core.claim import Claim, ClaimId
 from titan.core.evidence import (
     Evidence,
@@ -68,6 +69,21 @@ class SqliteInvestigationRepository(
                 statement TEXT NOT NULL,
                 FOREIGN KEY (investigation_id)
                     REFERENCES investigations (id)
+            )
+            """
+        )
+
+        self._connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS assessments (
+                id TEXT PRIMARY KEY,
+                investigation_id TEXT NOT NULL,
+                thesis_id TEXT NOT NULL,
+                narrative TEXT NOT NULL,
+                FOREIGN KEY (investigation_id)
+                    REFERENCES investigations (id),
+                FOREIGN KEY (thesis_id)
+                    REFERENCES theses (id)
             )
             """
         )
@@ -194,6 +210,14 @@ class SqliteInvestigationRepository(
         with transaction:
             self._connection.execute(
                 """
+                DELETE FROM assessments
+                WHERE investigation_id = ?
+                """,
+                (investigation_id,),
+            )
+
+            self._connection.execute(
+                """
                 DELETE FROM theses
                 WHERE investigation_id = ?
                 """,
@@ -284,6 +308,27 @@ class SqliteInvestigationRepository(
                         thesis.statement,
                     )
                     for thesis in investigation.theses
+                ),
+            )
+
+            self._connection.executemany(
+                """
+                INSERT INTO assessments (
+                    id,
+                    investigation_id,
+                    thesis_id,
+                    narrative
+                )
+                VALUES (?, ?, ?, ?)
+                """,
+                (
+                    (
+                        str(assessment.id.value),
+                        investigation_id,
+                        str(assessment.thesis_id.value),
+                        assessment.narrative,
+                    )
+                    for assessment in investigation.assessments
                 ),
             )
 
@@ -433,6 +478,7 @@ class SqliteInvestigationRepository(
             investigation_id,
         )
         theses = self._get_theses(investigation_id)
+        assessments = self._get_assessments(investigation_id)
 
         closed_at = self._parse_closed_at(row[0], row[4]) if row[4] is not None else None
 
@@ -443,6 +489,7 @@ class SqliteInvestigationRepository(
             status=self._parse_investigation_status(row[0], row[3]),
             hypotheses=hypotheses,
             theses=theses,
+            assessments=assessments,
             closed_at=closed_at,
         )
 
@@ -463,6 +510,25 @@ class SqliteInvestigationRepository(
         )
 
         return tuple(self._to_thesis(row) for row in cursor.fetchall())
+
+    def _get_assessments(
+        self,
+        investigation_id: InvestigationId,
+    ) -> tuple[Assessment, ...]:
+        cursor = self._connection.execute(
+            """
+            SELECT
+                id,
+                thesis_id,
+                narrative
+            FROM assessments
+            WHERE investigation_id = ?
+            ORDER BY rowid
+            """,
+            (str(investigation_id.value),),
+        )
+
+        return tuple(self._to_assessment(row) for row in cursor.fetchall())
 
     def _get_hypotheses(
         self,
@@ -540,6 +606,16 @@ class SqliteInvestigationRepository(
         )
 
         return tuple(self._to_interpretation(hypothesis_id, row) for row in cursor.fetchall())
+
+    def _to_assessment(
+        self,
+        row: tuple[str, str, str],
+    ) -> Assessment:
+        return Assessment(
+            id=AssessmentId(value=self._parse_assessment_id(row[0])),
+            thesis_id=ThesisId(value=self._parse_assessment_thesis_id(row[0], row[1])),
+            narrative=self._validate_required_text("assessment", row[0], "narrative", row[2]),
+        )
 
     def _to_thesis(
         self,
@@ -692,6 +768,29 @@ class SqliteInvestigationRepository(
         except ValueError as error:
             raise ValueError(
                 f"malformed persisted investigation {investigation_id}: invalid closed_at",
+            ) from error
+
+    @staticmethod
+    def _parse_assessment_id(
+        value: str,
+    ) -> UUID:
+        try:
+            return UUID(value)
+        except ValueError as error:
+            raise ValueError(
+                "malformed persisted assessment record: invalid id",
+            ) from error
+
+    @staticmethod
+    def _parse_assessment_thesis_id(
+        assessment_id: str,
+        value: str,
+    ) -> UUID:
+        try:
+            return UUID(value)
+        except ValueError as error:
+            raise ValueError(
+                f"malformed persisted assessment {assessment_id}: invalid thesis_id",
             ) from error
 
     @staticmethod
