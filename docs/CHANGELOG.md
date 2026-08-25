@@ -4,6 +4,29 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-133 — Reject Restored Duplicate Thesis Identities
+
+### Changed
+
+- Covered duplicate thesis identity rejection during aggregate restoration
+- Confirmed distinct thesis identities restore without pending events
+
+### Architectural Notes
+
+- Restored aggregate integrity matches live thesis mutation rules
+- No production behavior, schema, API, or dependency changed
+
+### Validation
+
+- Restored thesis identity tests — 2 passed
+- pytest — 292 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
+
+---
+
 ## CORE-132 — Cover Thesis Record Diagnostics
 
 ### Changed
