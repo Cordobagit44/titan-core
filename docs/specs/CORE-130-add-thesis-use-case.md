@@ -32,3 +32,12 @@ Introduce transactional thesis creation and expose it through the composition ro
 
 The application creates the thesis, the aggregate enforces lifecycle and
 identity rules, and Unit of Work coordinates aggregate and event persistence.
+
+## Validation
+
+- AddThesis tests — 4 passed
+- pytest — 288 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
