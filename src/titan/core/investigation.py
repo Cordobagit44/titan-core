@@ -3,6 +3,7 @@ from datetime import UTC, datetime
 from enum import Enum
 from uuid import UUID, uuid4
 
+from titan.core.assessment import Assessment, AssessmentId
 from titan.core.claim import Claim
 from titan.core.entity import Entity
 from titan.core.evidence import Evidence
@@ -66,6 +67,13 @@ class ThesisAdded:
     thesis_id: ThesisId
 
 
+@dataclass(frozen=True)
+class AssessmentAdded:
+    investigation_id: InvestigationId
+    assessment_id: AssessmentId
+    thesis_id: ThesisId
+
+
 type DomainEvent = (
     InvestigationCreated
     | InvestigationActivated
@@ -74,6 +82,7 @@ type DomainEvent = (
     | HypothesisAdded
     | HypothesisRemoved
     | ThesisAdded
+    | AssessmentAdded
 )
 
 
@@ -93,6 +102,7 @@ class Investigation(Entity[DomainEvent]):
         self.closed_at: datetime | None = None
         self._hypotheses: list[Hypothesis] = []
         self._theses: list[Thesis] = []
+        self._assessments: list[Assessment] = []
 
         self._record_event(
             InvestigationCreated(
@@ -182,6 +192,29 @@ class Investigation(Entity[DomainEvent]):
     @property
     def theses(self) -> tuple[Thesis, ...]:
         return tuple(self._theses)
+
+    @property
+    def assessments(self) -> tuple[Assessment, ...]:
+        return tuple(self._assessments)
+
+    def add_assessment(self, assessment: Assessment) -> None:
+        if self.status is InvestigationStatus.CLOSED:
+            raise ValueError("investigation is closed")
+
+        if not any(thesis.id == assessment.thesis_id for thesis in self._theses):
+            raise LookupError("thesis not found")
+
+        if any(existing.id == assessment.id for existing in self._assessments):
+            raise ValueError("assessment already exists")
+
+        self._assessments.append(assessment)
+        self._record_event(
+            AssessmentAdded(
+                investigation_id=self.id,
+                assessment_id=assessment.id,
+                thesis_id=assessment.thesis_id,
+            )
+        )
 
     def add_thesis(self, thesis: Thesis) -> None:
         if self.status is InvestigationStatus.CLOSED:
