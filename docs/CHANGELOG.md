@@ -4,6 +4,32 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-137 — Persist Investigation Assessments
+
+### Added
+
+- SQLite `assessments` table beneath investigations and theses
+- Assessment identity, ownership, thesis-reference, narrative, and order persistence
+- Event-clean reconstruction through `Investigation.restore()`
+- Safe replacement of assessment rows on aggregate re-save
+
+### Architectural Notes
+
+- Assessments reconstruct after theses to preserve reference validation
+- Aggregate restoration enforces assessment identity and thesis ownership
+- Event-store and application APIs remain unchanged
+
+### Validation
+
+- Assessment persistence tests — 3 passed
+- pytest — 307 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
+
+---
+
 ## CORE-136 — Attach Assessments to Investigations
 
 ### Added
