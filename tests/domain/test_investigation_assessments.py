@@ -43,6 +43,7 @@ def test_adding_assessment_emits_domain_event() -> None:
             investigation_id=investigation.id,
             assessment_id=assessment.id,
             thesis_id=thesis.id,
+            recorded_at=assessment.recorded_at,
         )
     ]
 
