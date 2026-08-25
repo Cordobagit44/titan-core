@@ -436,14 +436,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-144 | Refresh README for Assessment Workflow | Done |
 | CORE-145 | Record Assessment Timestamp | Done |
 | CORE-146 | Preserve Assessment Timestamp in Domain Event | Done |
+| CORE-147 | Cover Assessment Chronology Acceptance | Done |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-146 — Preserve Assessment Timestamp in Domain Event is complete.
+CORE-147 — Cover Assessment Chronology Acceptance is complete.
 
-`AssessmentAdded` and its SQLite representation now preserve the assessment's
-UTC timestamp, including legacy migration and malformed-payload diagnostics.
+The composed public workflow now proves exact assessment timestamp preservation
+through application shutdown, SQLite reconstruction, and listing.
 
-CORE-146 validation passed 330 tests and the complete GitHub Actions quality gate.
+CORE-147 validation passed 330 tests and the complete GitHub Actions quality gate.
