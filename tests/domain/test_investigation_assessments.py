@@ -49,6 +49,7 @@ def test_adding_assessment_emits_domain_event() -> None:
 
 def test_assessment_requires_owned_thesis() -> None:
     investigation = Investigation.create("Mars anomaly", "Evaluate evidence")
+    investigation.pull_events()
     assessment = Assessment(
         thesis_id=Thesis(statement="Unknown thesis").id,
         narrative="The available evidence is insufficient.",
@@ -58,7 +59,7 @@ def test_assessment_requires_owned_thesis() -> None:
         investigation.add_assessment(assessment)
 
     assert investigation.assessments == ()
-    assert len(investigation.pull_events()) == 1
+    assert investigation.pull_events() == []
 
 
 def test_investigation_rejects_duplicate_assessment_identity() -> None:
