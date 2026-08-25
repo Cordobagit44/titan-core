@@ -4,6 +4,32 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-130 — Add Thesis Use Case
+
+### Added
+
+- Transactional `AddThesis` application use case
+- Atomic aggregate and `ThesisAdded` persistence through Unit of Work
+- `add_thesis` exposure from `TitanApplication` and `bootstrap()`
+- Rollback coverage for missing, closed, and persistence-failure paths
+
+### Architectural Notes
+
+- The application creates the thesis and coordinates persistence
+- The investigation remains responsible for lifecycle and identity invariants
+- Selection, assessment, synthesis, and interfaces remain unchanged
+
+### Validation
+
+- AddThesis tests — 4 passed
+- pytest — 288 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
+
+---
+
 ## CORE-129 — Persist ThesisAdded Domain Event
 
 ### Added

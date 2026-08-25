@@ -7,6 +7,7 @@ from titan.application.add_claim import AddClaim
 from titan.application.add_evidence import AddEvidence
 from titan.application.add_hypothesis import AddHypothesis
 from titan.application.add_interpretation import AddInterpretation
+from titan.application.add_thesis import AddThesis
 from titan.application.close_investigation import CloseInvestigation
 from titan.application.confirm_hypothesis import ConfirmHypothesis
 from titan.application.create_investigation import CreateInvestigation
@@ -28,6 +29,7 @@ class TitanApplication:
     add_evidence: AddEvidence
     add_claim: AddClaim
     add_interpretation: AddInterpretation
+    add_thesis: AddThesis
     confirm_hypothesis: ConfirmHypothesis
     reject_hypothesis: RejectHypothesis
     remove_hypothesis: RemoveHypothesis
@@ -69,6 +71,9 @@ def bootstrap(
             unit_of_work,
         ),
         add_interpretation=AddInterpretation(
+            unit_of_work,
+        ),
+        add_thesis=AddThesis(
             unit_of_work,
         ),
         confirm_hypothesis=ConfirmHypothesis(

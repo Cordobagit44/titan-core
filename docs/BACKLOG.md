@@ -414,14 +414,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-127 | Attach Theses to Investigations | Done       |
 | CORE-128 | Persist Investigation Theses   | Done         |
 | CORE-129 | Persist ThesisAdded Domain Event | Done        |
+| CORE-130 | Add Thesis Use Case             | Done          |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-129 — Persist ThesisAdded Domain Event is complete.
+CORE-130 — Add Thesis Use Case is complete.
 
-The SQLite event store now migrates, saves, validates, and reconstructs
-`ThesisAdded` with investigation and thesis identities.
+The application layer now creates theses transactionally, persists aggregate
+state and `ThesisAdded`, and exposes `add_thesis` through `bootstrap()`.
 
-CORE-129 validation passed 284 tests and the complete GitHub Actions quality gate.
+CORE-130 validation passed 288 tests and the complete GitHub Actions quality gate.

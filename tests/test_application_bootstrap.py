@@ -58,6 +58,7 @@ def test_bootstrap_exposes_application_use_cases(
     assert callable(application.add_evidence)
     assert callable(application.add_claim)
     assert callable(application.add_interpretation)
+    assert callable(application.add_thesis)
     assert callable(application.confirm_hypothesis)
     assert callable(application.reject_hypothesis)
     assert callable(application.remove_hypothesis)
