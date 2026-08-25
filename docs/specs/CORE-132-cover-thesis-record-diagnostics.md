@@ -30,3 +30,12 @@ Verify contextual diagnostics for malformed persisted thesis records.
 
 Validation remains at the SQLite deserialization boundary. This story secures
 existing behavior with focused regression coverage.
+
+## Validation
+
+- Thesis record diagnostic tests — 2 passed
+- pytest — 290 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
