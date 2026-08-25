@@ -1,3 +1,4 @@
+from datetime import UTC, datetime
 from uuid import uuid4
 
 import pytest
@@ -16,6 +17,19 @@ def test_assessment_has_generated_identity_and_thesis_reference() -> None:
 
     assert isinstance(assessment.id, AssessmentId)
     assert assessment.thesis_id == thesis_id
+    assert assessment.recorded_at.tzinfo is UTC
+
+
+def test_assessment_supports_explicit_timestamp_reconstruction() -> None:
+    recorded_at = datetime(2026, 8, 25, 12, 30, tzinfo=UTC)
+
+    assessment = Assessment(
+        thesis_id=ThesisId.new(),
+        narrative="The thesis remains plausible.",
+        recorded_at=recorded_at,
+    )
+
+    assert assessment.recorded_at == recorded_at
 
 
 @pytest.mark.parametrize("invalid_narrative", ["", "   "])
