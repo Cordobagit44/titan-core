@@ -4,6 +4,31 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-141 — Cover Assessment Record Diagnostics
+
+### Added
+
+- Focused SQLite reconstruction tests for malformed assessment identifiers
+- Contextual diagnostic coverage for invalid assessment thesis references
+- Contextual diagnostic coverage for blank persisted assessment narratives
+
+### Architectural Notes
+
+- Existing persistence-boundary behavior is locked down without production changes
+- Diagnostics identify the damaged record and field where identity is available
+- Assessment semantics and public application APIs remain unchanged
+
+### Validation
+
+- Assessment record diagnostics tests — 3 passed
+- pytest — 318 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
+
+---
+
 ## CORE-140 — Cover Assessment Workflow Acceptance
 
 ### Added
