@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from titan.application.activate_investigation import ActivateInvestigation
+from titan.application.add_assessment import AddAssessment
 from titan.application.add_claim import AddClaim
 from titan.application.add_evidence import AddEvidence
 from titan.application.add_hypothesis import AddHypothesis
@@ -26,6 +27,7 @@ class TitanApplication:
     create_investigation: CreateInvestigation
     activate_investigation: ActivateInvestigation
     add_hypothesis: AddHypothesis
+    add_assessment: AddAssessment
     add_evidence: AddEvidence
     add_claim: AddClaim
     add_interpretation: AddInterpretation
@@ -62,6 +64,9 @@ def bootstrap(
             unit_of_work,
         ),
         add_hypothesis=AddHypothesis(
+            unit_of_work,
+        ),
+        add_assessment=AddAssessment(
             unit_of_work,
         ),
         add_evidence=AddEvidence(
