@@ -583,10 +583,10 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-140 implementation:
+State after CORE-141 implementation:
 
-- last completed story: `CORE-140 — Cover Assessment Workflow Acceptance`;
-- latest integrated baseline before CORE-140: `e430787 — CORE-139: add assessment use case`;
+- last completed story: `CORE-141 — Cover Assessment Record Diagnostics`;
+- latest integrated baseline before CORE-141: `fa2c6ee — CORE-140: cover assessment workflow acceptance`;
 - GitHub's configured default branch is `main`;
 - current validated suite: 315 passing tests;
 - Ruff lint: passing;
@@ -641,7 +641,9 @@ State after CORE-140 implementation:
   and thesis identities; `AddAssessment` coordinates aggregate and event
   persistence through Unit of Work and is exposed by `bootstrap()`; the composed
   acceptance workflow verifies assessment identity, thesis reference, narrative,
-  and listing after a real SQLite-backed application restart; the composed acceptance workflow verifies claim
+  and listing after a real SQLite-backed application restart; malformed persisted
+  assessment identities, thesis references, and blank narratives have contextual
+  regression coverage; the composed acceptance workflow verifies claim
   reconstruction after a real SQLite-backed application restart;
   an immutable `Interpretation` model connects one claim to one hypothesis with
   an explicit rationale; pending hypotheses own interpretations and validate
@@ -669,8 +671,8 @@ State after CORE-140 implementation:
   Outbox, CLI,
   HTTP API, or AI provider integration is implemented.
 
-CORE-140 completes the public workflow proof for narrative assessments without
-adding production behavior or changing assessment semantics.
+CORE-141 locks down assessment persistence diagnostics without adding
+production behavior or changing assessment semantics.
 
 ---
 
@@ -718,7 +720,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-140 is complete, do not infer CORE-141 solely from the conceptual
+After CORE-141 is complete, do not infer CORE-142 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -728,7 +730,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-141 explicitly;
+5. define CORE-142 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
