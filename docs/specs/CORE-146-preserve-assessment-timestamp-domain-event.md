@@ -30,4 +30,9 @@ Include the assessment's immutable `recorded_at` timestamp in
 
 ## Validation
 
-Pending implementation and CI.
+- Assessment event timestamp tests — 4 passed
+- pytest — 330 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
