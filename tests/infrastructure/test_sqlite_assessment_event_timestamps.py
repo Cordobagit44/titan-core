@@ -39,10 +39,7 @@ def test_missing_assessment_event_timestamp_is_reported() -> None:
 
     with pytest.raises(
         ValueError,
-        match=(
-            "incomplete persisted domain event AssessmentAdded: "
-            "missing assessment_recorded_at"
-        ),
+        match=("incomplete persisted domain event AssessmentAdded: missing assessment_recorded_at"),
     ):
         repository.list_all()
 
@@ -58,10 +55,7 @@ def test_malformed_assessment_event_timestamp_is_reported() -> None:
 
     with pytest.raises(
         ValueError,
-        match=(
-            "malformed persisted domain event AssessmentAdded: "
-            "invalid assessment_recorded_at"
-        ),
+        match=("malformed persisted domain event AssessmentAdded: invalid assessment_recorded_at"),
     ):
         repository.list_all()
 
