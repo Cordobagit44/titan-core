@@ -4,6 +4,32 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-145 — Record Assessment Timestamp
+
+### Added
+
+- Immutable UTC-aware `recorded_at` timestamp on narrative assessments
+- Exact SQLite timestamp persistence and reconstruction
+- Assessment-schema migration with an explicit Unix-epoch legacy marker
+- Contextual diagnostics for malformed or timezone-naive persisted timestamps
+
+### Architectural Notes
+
+- The timestamp records when an assessment was formulated
+- The public application call remains unchanged
+- No verdict, score, confidence value, or automatic decision was introduced
+
+### Validation
+
+- Assessment timestamp domain and SQLite tests — 4 passed
+- pytest — 325 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
+
+---
+
 ## CORE-144 — Refresh README for Assessment Workflow
 
 ### Changed
