@@ -345,7 +345,8 @@ Current application operations include:
 - rejecting hypotheses;
 - adding evidence;
 - adding claims;
-- adding interpretations.
+- adding interpretations;
+- adding provisional theses.
 
 Mutating use cases operate through `UnitOfWork`.
 
@@ -581,12 +582,12 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-129 implementation:
+State after CORE-130 implementation:
 
-- last completed story: `CORE-129 — Persist ThesisAdded Domain Event`;
-- latest integrated baseline before CORE-129: `3ed2e71 — CORE-128: persist investigation theses`;
+- last completed story: `CORE-130 — Add Thesis Use Case`;
+- latest integrated baseline before CORE-130: `8a57636 — CORE-129: persist ThesisAdded domain event`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 284 passing tests;
+- current validated suite: 288 passing tests;
 - Ruff lint: passing;
 - Ruff format: passing;
 - mypy: passing;
@@ -645,14 +646,17 @@ State after CORE-129 implementation:
   duplicate thesis identities or attachment while closed; SQLite saves and
   reconstructs those theses without replaying mutation events; the SQLite event
   store persists `ThesisAdded` with investigation and thesis identities;
+  `AddThesis` coordinates both persistence paths through Unit of Work and is
+  exposed by `bootstrap()`;
 - guarded PowerShell synchronization and VS Code tasks are available for a
   clean local `main` checkout;
-- no confidence scoring, assessment, thesis application API, Event Bus,
+- no confidence scoring, assessment, thesis selection or synthesis, Event Bus,
   Outbox, CLI,
   HTTP API, or AI provider integration is implemented.
 
-CORE-129 persists `ThesisAdded` in the SQLite event history while deliberately
-leaving application orchestration for a later focused story.
+CORE-130 exposes transactional thesis creation through the application layer
+while deliberately leaving acceptance workflow expansion and richer thesis
+semantics for later focused stories.
 
 ---
 
@@ -700,7 +704,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-129 is complete, do not infer CORE-130 solely from the conceptual
+After CORE-130 is complete, do not infer CORE-131 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -710,7 +714,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-130 explicitly;
+5. define CORE-131 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
