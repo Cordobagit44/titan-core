@@ -583,10 +583,10 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-143 implementation:
+State after CORE-144 implementation:
 
-- last completed story: `CORE-143 — Reject Broken Persisted Assessment References`;
-- latest integrated baseline before CORE-143: `db5840c — CORE-142: reject restored duplicate assessment identities`;
+- last completed story: `CORE-144 — Refresh README for Assessment Workflow`;
+- latest integrated baseline before CORE-144: `9d6b56c — CORE-143: reject broken persisted assessment references`;
 - GitHub's configured default branch is `main`;
 - current validated suite: 315 passing tests;
 - Ruff lint: passing;
@@ -674,8 +674,8 @@ State after CORE-143 implementation:
   Outbox, CLI,
   HTTP API, or AI provider integration is implemented.
 
-CORE-143 makes broken persisted assessment references diagnosable without
-changing assessment semantics or public application APIs.
+CORE-144 aligns the public README with the complete narrative assessment
+workflow and its explicitly non-scoring semantics.
 
 ---
 
@@ -723,7 +723,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-143 is complete, do not infer CORE-144 solely from the conceptual
+After CORE-144 is complete, do not infer CORE-145 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -733,7 +733,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-144 explicitly;
+5. define CORE-145 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
