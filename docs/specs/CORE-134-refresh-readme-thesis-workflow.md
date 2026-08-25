@@ -30,3 +30,11 @@ Align the public project README with the validated state after CORE-133.
 
 README examples remain concise and use only the public composed application
 surface already verified by acceptance coverage.
+
+## Validation
+
+- pytest — 292 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
