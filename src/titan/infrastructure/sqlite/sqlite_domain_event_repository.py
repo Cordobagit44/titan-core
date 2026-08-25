@@ -140,6 +140,7 @@ class SqliteDomainEventRepository(
                 thesis_id TEXT,
                 assessment_id TEXT,
                 assessment_recorded_at TEXT
+                    DEFAULT '1970-01-01T00:00:00+00:00'
             )
             """
         )
