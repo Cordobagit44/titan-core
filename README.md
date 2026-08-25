@@ -20,6 +20,7 @@ Implemented capabilities include:
 - SQLite-persisted evidence-grounded claims owned by pending hypotheses;
 - SQLite-persisted immutable interpretations owned by pending hypotheses with validated claim links;
 - investigation-owned provisional theses with SQLite state and domain-event persistence;
+- investigation-owned narrative assessments linked to theses, without verdicts or numeric confidence;
 - domain event emission and persistence;
 - SQLite persistence for investigations and domain events;
 - transaction coordination through Unit of Work;
@@ -27,7 +28,7 @@ Implemented capabilities include:
 - architecture guards for domain and application dependencies;
 - end-to-end acceptance coverage through the composed application.
 
-The current test suite contains 292 passing tests.
+The current test suite contains 321 passing tests.
 
 ## Architecture
 
@@ -76,6 +77,7 @@ Contains the business model:
 - `Claim`
 - `Interpretation`
 - `Thesis`
+- `Assessment`
 - identifiers and statuses;
 - domain events;
 - domain invariants and lifecycle behavior.
@@ -103,7 +105,7 @@ Contains concrete infrastructure implementations.
 The current implementation provides SQLite-backed:
 
 - investigation persistence;
-- hypothesis, evidence, claim, interpretation, and thesis persistence;
+- hypothesis, evidence, claim, interpretation, thesis, and assessment persistence;
 - domain event persistence;
 - Unit of Work.
 
@@ -205,6 +207,21 @@ thesis = application.add_thesis(
 )
 ```
 
+Add a narrative assessment of that thesis:
+
+```python
+assessment = application.add_assessment(
+    investigation_id=investigation.id,
+    thesis_id=thesis.id,
+    narrative=(
+        "The thesis is plausible but remains dependent on indirect seasonal methane evidence"
+    ),
+)
+```
+
+An assessment records an explicit evaluation in words. It does not assign a
+verdict, score, confidence percentage, or automatic investment decision.
+
 Close the investigation:
 
 ```python
@@ -235,8 +252,8 @@ application.close()
 
 The application can be reconstructed against the same SQLite database and the
 persisted investigation state, including evidence provenance, relationship
-classification, claims, interpretations, and provisional theses, will be
-restored.
+classification, claims, interpretations, provisional theses, and narrative
+assessments, will be restored.
 
 ## Application Use Cases
 
@@ -256,6 +273,7 @@ The composition root currently exposes:
 - `add_claim`
 - `add_interpretation`
 - `add_thesis`
+- `add_assessment`
 
 ## Requirements
 
