@@ -583,10 +583,10 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-146 implementation:
+State after CORE-147 implementation:
 
-- last completed story: `CORE-146 — Preserve Assessment Timestamp in Domain Event`;
-- latest integrated baseline before CORE-146: `83b43e7 — CORE-145: record assessment timestamp`;
+- last completed story: `CORE-147 — Cover Assessment Chronology Acceptance`;
+- latest integrated baseline before CORE-147: `8aa8aef — CORE-146: preserve assessment timestamp in domain event`;
 - GitHub's configured default branch is `main`;
 - current validated suite: 315 passing tests;
 - Ruff lint: passing;
@@ -649,7 +649,9 @@ State after CORE-146 implementation:
   the investigation with assessment-specific context; each assessment records an
   immutable UTC-aware formulation timestamp that SQLite preserves and validates;
   `AssessmentAdded` carries the same timestamp and the SQLite event store
-  preserves it with legacy migration and contextual payload diagnostics; the composed acceptance workflow verifies claim
+  preserves it with legacy migration and contextual payload diagnostics; the
+  composed application workflow proves exact timestamp preservation across a
+  real SQLite-backed restart and listing; the composed acceptance workflow verifies claim
   reconstruction after a real SQLite-backed application restart;
   an immutable `Interpretation` model connects one claim to one hypothesis with
   an explicit rationale; pending hypotheses own interpretations and validate
@@ -677,8 +679,8 @@ State after CORE-146 implementation:
   Outbox, CLI,
   HTTP API, or AI provider integration is implemented.
 
-CORE-146 extends assessment chronology into durable domain-event history
-without introducing scoring or automated conclusions.
+CORE-147 completes public workflow proof for assessment chronology without
+introducing production behavior, scoring, or automated conclusions.
 
 ---
 
@@ -726,7 +728,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-146 is complete, do not infer CORE-147 solely from the conceptual
+After CORE-147 is complete, do not infer CORE-148 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -736,7 +738,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-147 explicitly;
+5. define CORE-148 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
