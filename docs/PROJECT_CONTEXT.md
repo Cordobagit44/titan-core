@@ -582,10 +582,10 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-130 implementation:
+State after CORE-131 implementation:
 
-- last completed story: `CORE-130 — Add Thesis Use Case`;
-- latest integrated baseline before CORE-130: `8a57636 — CORE-129: persist ThesisAdded domain event`;
+- last completed story: `CORE-131 — Cover Thesis Workflow Acceptance`;
+- latest integrated baseline before CORE-131: `8156616 — CORE-130: add thesis use case`;
 - GitHub's configured default branch is `main`;
 - current validated suite: 288 passing tests;
 - Ruff lint: passing;
@@ -626,7 +626,8 @@ State after CORE-130 implementation:
   are saved and reconstructed by the SQLite investigation repository;
   `ClaimAdded` is serialized with hypothesis, claim, and evidence identities;
   `AddClaim` coordinates both persistence paths through Unit of Work and is
-  exposed by `bootstrap()`; the composed acceptance workflow verifies claim
+  exposed by `bootstrap()`; the composed acceptance workflow verifies thesis
+  reconstruction after a real SQLite-backed application restart; the composed acceptance workflow verifies claim
   reconstruction after a real SQLite-backed application restart;
   an immutable `Interpretation` model connects one claim to one hypothesis with
   an explicit rationale; pending hypotheses own interpretations and validate
@@ -654,9 +655,8 @@ State after CORE-130 implementation:
   Outbox, CLI,
   HTTP API, or AI provider integration is implemented.
 
-CORE-130 exposes transactional thesis creation through the application layer
-while deliberately leaving acceptance workflow expansion and richer thesis
-semantics for later focused stories.
+CORE-131 proves the complete composed thesis workflow across a real
+SQLite-backed application restart without introducing new production behavior.
 
 ---
 
@@ -704,7 +704,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-130 is complete, do not infer CORE-131 solely from the conceptual
+After CORE-131 is complete, do not infer CORE-132 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -714,7 +714,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-131 explicitly;
+5. define CORE-132 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
