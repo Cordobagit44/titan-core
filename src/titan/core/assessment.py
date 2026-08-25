@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from datetime import UTC, datetime
 from uuid import UUID, uuid4
 
 from titan.core.thesis import ThesisId
@@ -18,6 +19,7 @@ class Assessment:
     thesis_id: ThesisId
     narrative: str
     id: AssessmentId = field(default_factory=AssessmentId.new)
+    recorded_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 
     def __post_init__(self) -> None:
         if not self.narrative.strip():
