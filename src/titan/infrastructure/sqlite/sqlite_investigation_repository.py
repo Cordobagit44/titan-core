@@ -1,6 +1,6 @@
 import sqlite3
 from contextlib import nullcontext
-from datetime import datetime
+from datetime import UTC, datetime
 from uuid import UUID
 
 from titan.application.investigation_repository import (
@@ -80,6 +80,7 @@ class SqliteInvestigationRepository(
                 investigation_id TEXT NOT NULL,
                 thesis_id TEXT NOT NULL,
                 narrative TEXT NOT NULL,
+                recorded_at TEXT NOT NULL,
                 FOREIGN KEY (investigation_id)
                     REFERENCES investigations (id),
                 FOREIGN KEY (thesis_id)
@@ -147,6 +148,7 @@ class SqliteInvestigationRepository(
 
         self._migrate_investigation_schema()
         self._migrate_evidence_schema()
+        self._migrate_assessment_schema()
 
         if self._manages_transaction:
             self._connection.commit()
@@ -194,6 +196,25 @@ class SqliteInvestigationRepository(
                 ALTER TABLE evidences
                 ADD COLUMN relationship TEXT NOT NULL
                 DEFAULT 'unspecified'
+                """
+            )
+
+    def _migrate_assessment_schema(
+        self,
+    ) -> None:
+        columns = {
+            row[1]
+            for row in self._connection.execute(
+                "PRAGMA table_info(assessments)",
+            ).fetchall()
+        }
+
+        if "recorded_at" not in columns:
+            self._connection.execute(
+                """
+                ALTER TABLE assessments
+                ADD COLUMN recorded_at TEXT NOT NULL
+                DEFAULT '1970-01-01T00:00:00+00:00'
                 """
             )
 
@@ -317,9 +338,10 @@ class SqliteInvestigationRepository(
                     id,
                     investigation_id,
                     thesis_id,
-                    narrative
+                    narrative,
+                    recorded_at
                 )
-                VALUES (?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?)
                 """,
                 (
                     (
@@ -327,6 +349,7 @@ class SqliteInvestigationRepository(
                         investigation_id,
                         str(assessment.thesis_id.value),
                         assessment.narrative,
+                        assessment.recorded_at.isoformat(),
                     )
                     for assessment in investigation.assessments
                 ),
@@ -527,7 +550,8 @@ class SqliteInvestigationRepository(
             SELECT
                 id,
                 thesis_id,
-                narrative
+                narrative,
+                recorded_at
             FROM assessments
             WHERE investigation_id = ?
             ORDER BY rowid
@@ -616,12 +640,13 @@ class SqliteInvestigationRepository(
 
     def _to_assessment(
         self,
-        row: tuple[str, str, str],
+        row: tuple[str, str, str, str],
     ) -> Assessment:
         return Assessment(
             id=AssessmentId(value=self._parse_assessment_id(row[0])),
             thesis_id=ThesisId(value=self._parse_assessment_thesis_id(row[0], row[1])),
             narrative=self._validate_required_text("assessment", row[0], "narrative", row[2]),
+            recorded_at=self._parse_assessment_recorded_at(row[0], row[3]),
         )
 
     def _to_thesis(
@@ -799,6 +824,25 @@ class SqliteInvestigationRepository(
             raise ValueError(
                 f"malformed persisted assessment {assessment_id}: invalid thesis_id",
             ) from error
+
+    @staticmethod
+    def _parse_assessment_recorded_at(
+        assessment_id: str,
+        value: str,
+    ) -> datetime:
+        try:
+            recorded_at = datetime.fromisoformat(value)
+        except ValueError as error:
+            raise ValueError(
+                f"malformed persisted assessment {assessment_id}: invalid recorded_at",
+            ) from error
+
+        if recorded_at.tzinfo is None:
+            raise ValueError(
+                f"malformed persisted assessment {assessment_id}: invalid recorded_at",
+            )
+
+        return recorded_at.astimezone(UTC)
 
     @staticmethod
     def _parse_thesis_id(
