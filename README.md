@@ -19,6 +19,7 @@ Implemented capabilities include:
 - evidence attached to pending hypotheses with explicit provenance and relationship classification;
 - SQLite-persisted evidence-grounded claims owned by pending hypotheses;
 - SQLite-persisted immutable interpretations owned by pending hypotheses with validated claim links;
+- investigation-owned provisional theses with SQLite state and domain-event persistence;
 - domain event emission and persistence;
 - SQLite persistence for investigations and domain events;
 - transaction coordination through Unit of Work;
@@ -26,7 +27,7 @@ Implemented capabilities include:
 - architecture guards for domain and application dependencies;
 - end-to-end acceptance coverage through the composed application.
 
-The current test suite contains 256 passing tests.
+The current test suite contains 292 passing tests.
 
 ## Architecture
 
@@ -74,6 +75,7 @@ Contains the business model:
 - `Evidence`
 - `Claim`
 - `Interpretation`
+- `Thesis`
 - identifiers and statuses;
 - domain events;
 - domain invariants and lifecycle behavior.
@@ -101,7 +103,7 @@ Contains concrete infrastructure implementations.
 The current implementation provides SQLite-backed:
 
 - investigation persistence;
-- hypothesis, evidence, and claim persistence;
+- hypothesis, evidence, claim, interpretation, and thesis persistence;
 - domain event persistence;
 - Unit of Work.
 
@@ -194,6 +196,15 @@ application.confirm_hypothesis(
 )
 ```
 
+Add a provisional thesis:
+
+```python
+thesis = application.add_thesis(
+    investigation_id=investigation.id,
+    statement="Microbial activity is a plausible explanation for the anomaly",
+)
+```
+
 Close the investigation:
 
 ```python
@@ -223,8 +234,9 @@ application.close()
 ```
 
 The application can be reconstructed against the same SQLite database and the
-persisted investigation state, including evidence provenance and evidence
-relationship classification, will be restored.
+persisted investigation state, including evidence provenance, relationship
+classification, claims, interpretations, and provisional theses, will be
+restored.
 
 ## Application Use Cases
 
@@ -243,6 +255,7 @@ The composition root currently exposes:
 - `add_evidence`
 - `add_claim`
 - `add_interpretation`
+- `add_thesis`
 
 ## Requirements
 

@@ -418,14 +418,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-131 | Cover Thesis Workflow Acceptance | Done         |
 | CORE-132 | Cover Thesis Record Diagnostics  | Done          |
 | CORE-133 | Reject Restored Duplicate Thesis Identities | Done |
+| CORE-134 | Refresh README for Thesis Workflow | Done          |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-133 — Reject Restored Duplicate Thesis Identities is complete.
+CORE-134 — Refresh README for Thesis Workflow is complete.
 
-Aggregate restoration now has focused coverage proving duplicate thesis
-identities are rejected while distinct identities restore without events.
+The public README now reflects thesis domain ownership, SQLite and event
+persistence, application usage, restart reconstruction, and 292 passing tests.
 
-CORE-133 validation passed 292 tests and the complete GitHub Actions quality gate.
+CORE-134 validation passed the complete GitHub Actions quality gate.

@@ -4,6 +4,30 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-134 — Refresh README for Thesis Workflow
+
+### Changed
+
+- Documented investigation-owned provisional theses
+- Added `add_thesis` application usage and exposed-use-case listing
+- Expanded SQLite and restart reconstruction descriptions through theses
+- Updated the validated suite count to 292 tests
+
+### Architectural Notes
+
+- README examples use only the public composed application surface
+- No production behavior, schema, API, test, or dependency changed
+
+### Validation
+
+- pytest — 292 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
+
+---
+
 ## CORE-133 — Reject Restored Duplicate Thesis Identities
 
 ### Changed
