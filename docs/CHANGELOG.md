@@ -4,6 +4,32 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-144 — Refresh README for Assessment Workflow
+
+### Changed
+
+- Public capability overview now includes narrative assessments
+- End-to-end usage example now creates an assessment before investigation closure
+- Domain, SQLite persistence, reconstruction, and use-case summaries include assessments
+- Documented validated suite count updated to 321 tests
+
+### Architectural Notes
+
+- Assessments are documented as narrative evaluations without verdict or score
+- Human judgment remains authoritative
+- No production behavior, schema, API, or dependency changed
+
+### Validation
+
+- README assessment workflow review — passed
+- pytest — 321 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
+
+---
+
 ## CORE-143 — Reject Broken Persisted Assessment References
 
 ### Added
