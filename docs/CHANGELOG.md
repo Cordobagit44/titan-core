@@ -4,6 +4,30 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-146 — Preserve Assessment Timestamp in Domain Event
+
+### Added
+
+- Exact assessment `recorded_at` value on `AssessmentAdded`
+- SQLite event payload persistence and reconstruction for the timestamp
+- Legacy event migration with an explicit Unix-epoch timestamp marker
+- Missing and malformed timestamp diagnostics with event and field context
+
+### Changed
+
+- Reconciled the public validated test count with the complete CI result
+
+### Validation
+
+- Assessment event timestamp tests — 4 passed
+- pytest — 330 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
+
+---
+
 ## CORE-145 — Record Assessment Timestamp
 
 ### Added
@@ -22,7 +46,7 @@ It complements the Git history and the functional specifications by providing a 
 ### Validation
 
 - Assessment timestamp domain and SQLite tests — 4 passed
-- pytest — 325 passed
+- pytest — 326 passed
 - Ruff lint — passed
 - Ruff format — passed
 - mypy — passed
