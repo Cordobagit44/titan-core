@@ -96,9 +96,7 @@ def test_add_assessment_rolls_back_for_unknown_thesis() -> None:
 
 
 def test_add_assessment_rolls_back_when_event_persistence_fails() -> None:
-    unit_of_work, investigation, thesis = prepare_unit_of_work(
-        FailingDomainEventRepository()
-    )
+    unit_of_work, investigation, thesis = prepare_unit_of_work(FailingDomainEventRepository())
 
     with pytest.raises(RuntimeError, match="domain event persistence failed"):
         AddAssessment(unit_of_work)(
