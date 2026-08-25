@@ -32,3 +32,12 @@ and reconstruction.
 
 The acceptance test exercises only the public `TitanApplication` surface on
 both sides of a real SQLite-backed restart.
+
+## Validation
+
+- Thesis-enabled acceptance workflow — passed
+- pytest — 288 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
