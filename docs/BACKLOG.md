@@ -433,14 +433,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-141 | Cover Assessment Record Diagnostics | Done     |
 | CORE-142 | Reject Restored Duplicate Assessment Identities | Done |
 | CORE-143 | Reject Broken Persisted Assessment References | Done |
+| CORE-144 | Refresh README for Assessment Workflow | Done |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-143 — Reject Broken Persisted Assessment References is complete.
+CORE-144 — Refresh README for Assessment Workflow is complete.
 
-SQLite reconstruction now identifies the damaged assessment when its
-well-formed thesis reference does not belong to the investigation.
+The public README now documents narrative assessment creation, persistence,
+reconstruction, and its explicit non-scoring semantics.
 
-CORE-143 validation passed 321 tests and the complete GitHub Actions quality gate.
+CORE-144 validation passed 321 tests and the complete GitHub Actions quality gate.
