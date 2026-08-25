@@ -426,14 +426,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | -------- | ----------------------------- | ------ |
 | CORE-135 | Introduce Narrative Assessment | Done  |
 | CORE-136 | Attach Assessments to Investigations | Done |
+| CORE-137 | Persist Investigation Assessments | Done     |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-136 — Attach Assessments to Investigations is complete.
+CORE-137 — Persist Investigation Assessments is complete.
 
-Open investigations now own narrative assessments for existing theses, emit
-`AssessmentAdded`, and enforce thesis reference, identity, and lifecycle rules.
+SQLite now preserves assessment identity, investigation owner, thesis reference,
+narrative, insertion order, and clean aggregate reconstruction.
 
-CORE-136 validation passed 304 tests and the complete GitHub Actions quality gate.
+CORE-137 validation passed 307 tests and the complete GitHub Actions quality gate.
