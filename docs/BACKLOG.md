@@ -431,14 +431,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-139 | Add Assessment Use Case          | Done       |
 | CORE-140 | Cover Assessment Workflow Acceptance | Done   |
 | CORE-141 | Cover Assessment Record Diagnostics | Done     |
+| CORE-142 | Reject Restored Duplicate Assessment Identities | Done |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-141 — Cover Assessment Record Diagnostics is complete.
+CORE-142 — Reject Restored Duplicate Assessment Identities is complete.
 
-Focused SQLite reconstruction tests now protect contextual diagnostics for
-malformed assessment identities, thesis references, and blank narratives.
+Focused aggregate restoration tests now protect assessment identity uniqueness
+while preserving distinct assessments attached to the same owned thesis.
 
-CORE-141 validation passed 318 tests and the complete GitHub Actions quality gate.
+CORE-142 validation passed 320 tests and the complete GitHub Actions quality gate.
