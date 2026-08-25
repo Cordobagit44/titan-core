@@ -34,3 +34,12 @@ Allow open investigations to own narrative assessments for their existing theses
 
 The investigation is the narrowest stable boundary that owns both the evaluated
 thesis and its narrative assessment.
+
+## Validation
+
+- Assessment ownership domain tests — 7 passed
+- pytest — 304 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
