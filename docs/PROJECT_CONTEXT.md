@@ -582,12 +582,12 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-135 implementation:
+State after CORE-136 implementation:
 
-- last completed story: `CORE-135 — Introduce Narrative Assessment`;
-- latest integrated baseline before CORE-135: `3d471dd — CORE-134: refresh README for thesis workflow`;
+- last completed story: `CORE-136 — Attach Assessments to Investigations`;
+- latest integrated baseline before CORE-136: `51b59b4 — CORE-135: introduce narrative assessment`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 297 passing tests;
+- current validated suite: 304 passing tests;
 - Ruff lint: passing;
 - Ruff format: passing;
 - mypy: passing;
@@ -631,7 +631,10 @@ State after CORE-135 implementation:
   persisted thesis identities and blank statements have contextual regression
   coverage; restored investigations reject duplicate thesis identities; an
   immutable narrative `Assessment` references one thesis with explicit identity
-  and non-blank evaluation text, without verdict or numeric confidence; the composed acceptance workflow verifies claim
+  and non-blank evaluation text, without verdict or numeric confidence; open
+  investigations own assessments for existing theses, emit `AssessmentAdded`,
+  and reject unknown thesis references, duplicate identities, or closed
+  attachment; the composed acceptance workflow verifies claim
   reconstruction after a real SQLite-backed application restart;
   an immutable `Interpretation` model connects one claim to one hypothesis with
   an explicit rationale; pending hypotheses own interpretations and validate
@@ -659,8 +662,8 @@ State after CORE-135 implementation:
   Outbox, CLI,
   HTTP API, or AI provider integration is implemented.
 
-CORE-135 introduces the minimum explainable narrative assessment model linked
-to a thesis without aggregate, persistence, event, or application integration.
+CORE-136 attaches narrative assessments to the investigation aggregate while
+leaving persistence and application orchestration for later focused stories.
 
 ---
 
@@ -708,7 +711,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-135 is complete, do not infer CORE-136 solely from the conceptual
+After CORE-136 is complete, do not infer CORE-137 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -718,7 +721,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-136 explicitly;
+5. define CORE-137 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain

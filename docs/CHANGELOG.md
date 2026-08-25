@@ -4,6 +4,33 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-136 — Attach Assessments to Investigations
+
+### Added
+
+- Investigation ownership of narrative assessments
+- Owned-thesis reference validation
+- Immutable tuple exposure through `Investigation.assessments`
+- `AssessmentAdded` with investigation, assessment, and thesis identities
+- Duplicate identity and closed-investigation protections
+
+### Architectural Notes
+
+- The investigation owns both evaluated theses and their assessments
+- Equal narratives remain distinct through explicit identity
+- Persistence and application APIs remain intentionally unchanged
+
+### Validation
+
+- Assessment ownership domain tests — 7 passed
+- pytest — 304 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
+
+---
+
 ## CORE-135 — Introduce Narrative Assessment
 
 ### Added
