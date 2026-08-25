@@ -34,4 +34,9 @@ investigation remains the restoration boundary for aggregate-wide uniqueness.
 
 ## Validation
 
-Pending implementation and CI.
+- Restored assessment identity tests — 2 passed
+- pytest — 320 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
