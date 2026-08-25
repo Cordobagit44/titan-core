@@ -417,14 +417,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-130 | Add Thesis Use Case             | Done          |
 | CORE-131 | Cover Thesis Workflow Acceptance | Done         |
 | CORE-132 | Cover Thesis Record Diagnostics  | Done          |
+| CORE-133 | Reject Restored Duplicate Thesis Identities | Done |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-132 — Cover Thesis Record Diagnostics is complete.
+CORE-133 — Reject Restored Duplicate Thesis Identities is complete.
 
-Malformed persisted thesis identities and blank statements now have focused
-regression coverage for contextual SQLite deserialization errors.
+Aggregate restoration now has focused coverage proving duplicate thesis
+identities are rejected while distinct identities restore without events.
 
-CORE-132 validation passed 290 tests and the complete GitHub Actions quality gate.
+CORE-133 validation passed 292 tests and the complete GitHub Actions quality gate.
