@@ -4,6 +4,31 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-142 — Reject Restored Duplicate Assessment Identities
+
+### Added
+
+- Focused restoration coverage for duplicate assessment identities
+- Positive restoration coverage for distinct assessments on one owned thesis
+- Event-clean reconstruction assertion for restored assessment collections
+
+### Architectural Notes
+
+- Assessment identity, not narrative equality, defines duplication
+- Aggregate restoration remains the uniqueness enforcement boundary
+- No production behavior, persistence schema, or public API changed
+
+### Validation
+
+- Restored assessment identity tests — 2 passed
+- pytest — 320 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
+
+---
+
 ## CORE-141 — Cover Assessment Record Diagnostics
 
 ### Added
