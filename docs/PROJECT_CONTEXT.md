@@ -582,12 +582,12 @@ historical conversation is not automatically an accepted current requirement.
 
 ## Current Development State
 
-State after CORE-132 implementation:
+State after CORE-133 implementation:
 
-- last completed story: `CORE-132 — Cover Thesis Record Diagnostics`;
-- latest integrated baseline before CORE-132: `b79341c — CORE-131: cover thesis workflow acceptance`;
+- last completed story: `CORE-133 — Reject Restored Duplicate Thesis Identities`;
+- latest integrated baseline before CORE-133: `c216f9f — CORE-132: cover thesis record diagnostics`;
 - GitHub's configured default branch is `main`;
-- current validated suite: 290 passing tests;
+- current validated suite: 292 passing tests;
 - Ruff lint: passing;
 - Ruff format: passing;
 - mypy: passing;
@@ -629,7 +629,7 @@ State after CORE-132 implementation:
   exposed by `bootstrap()`; the composed acceptance workflow verifies thesis
   reconstruction after a real SQLite-backed application restart; malformed
   persisted thesis identities and blank statements have contextual regression
-  coverage; the composed acceptance workflow verifies claim
+  coverage; restored investigations reject duplicate thesis identities; the composed acceptance workflow verifies claim
   reconstruction after a real SQLite-backed application restart;
   an immutable `Interpretation` model connects one claim to one hypothesis with
   an explicit rationale; pending hypotheses own interpretations and validate
@@ -657,8 +657,8 @@ State after CORE-132 implementation:
   Outbox, CLI,
   HTTP API, or AI provider integration is implemented.
 
-CORE-132 secures contextual thesis-record diagnostics at the SQLite
-reconstruction boundary without introducing new production behavior.
+CORE-133 secures thesis identity uniqueness during aggregate restoration without
+introducing new production behavior.
 
 ---
 
@@ -706,7 +706,7 @@ must not be used to justify premature implementation.
 
 ## Next Development Step
 
-After CORE-132 is complete, do not infer CORE-133 solely from the conceptual
+After CORE-133 is complete, do not infer CORE-134 solely from the conceptual
 roadmap.
 
 Before defining the next story:
@@ -716,7 +716,7 @@ Before defining the next story:
 3. inspect the current domain, application, persistence, and acceptance tests;
 4. identify the smallest demonstrated reasoning capability that should come
    next;
-5. define CORE-133 explicitly;
+5. define CORE-134 explicitly;
 6. write its specification before production implementation.
 
 Potential future reasoning concepts remain candidates until a concrete domain
