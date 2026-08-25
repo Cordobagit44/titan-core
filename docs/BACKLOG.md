@@ -430,15 +430,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-138 | Persist AssessmentAdded Domain Event | Done  |
 | CORE-139 | Add Assessment Use Case          | Done       |
 | CORE-140 | Cover Assessment Workflow Acceptance | Done   |
+| CORE-141 | Cover Assessment Record Diagnostics | Done     |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-140 — Cover Assessment Workflow Acceptance is complete.
+CORE-141 — Cover Assessment Record Diagnostics is complete.
 
-The composed SQLite-backed application workflow now creates a narrative
-assessment and verifies its identity, thesis reference, narrative, and listing
-after a real application restart.
+Focused SQLite reconstruction tests now protect contextual diagnostics for
+malformed assessment identities, thesis references, and blank narratives.
 
-CORE-140 validation passed 315 tests and the complete GitHub Actions quality gate.
+CORE-141 validation passed 318 tests and the complete GitHub Actions quality gate.
