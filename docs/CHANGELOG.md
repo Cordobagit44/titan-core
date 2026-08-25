@@ -4,6 +4,31 @@ This document summarizes the functional evolution of TITAN Core.
 
 It complements the Git history and the functional specifications by providing a concise overview of completed stories.
 
+## CORE-138 — Persist AssessmentAdded Domain Event
+
+### Added
+
+- Nullable `assessment_id` event-schema storage and safe migration
+- SQLite serialization and reconstruction of `AssessmentAdded`
+- Contextual missing-field and malformed-UUID diagnostics
+
+### Architectural Notes
+
+- Event history stores investigation, assessment, and thesis identity only
+- Aggregate persistence remains the source of narrative content
+- Application orchestration remains unchanged
+
+### Validation
+
+- Assessment event persistence tests — 4 passed
+- pytest — 311 passed
+- Ruff lint — passed
+- Ruff format — passed
+- mypy — passed
+- GitHub Actions CI — passed
+
+---
+
 ## CORE-137 — Persist Investigation Assessments
 
 ### Added

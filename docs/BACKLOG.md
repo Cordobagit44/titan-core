@@ -427,14 +427,15 @@ Build a clean, test-driven Domain-Driven Design investment research engine.
 | CORE-135 | Introduce Narrative Assessment | Done  |
 | CORE-136 | Attach Assessments to Investigations | Done |
 | CORE-137 | Persist Investigation Assessments | Done     |
+| CORE-138 | Persist AssessmentAdded Domain Event | Done  |
 
 ## Current Story
 
 No CORE story is currently active.
 
-CORE-137 — Persist Investigation Assessments is complete.
+CORE-138 — Persist AssessmentAdded Domain Event is complete.
 
-SQLite now preserves assessment identity, investigation owner, thesis reference,
-narrative, insertion order, and clean aggregate reconstruction.
+The SQLite event store now migrates, saves, validates, and reconstructs
+`AssessmentAdded` with investigation, assessment, and thesis identities.
 
-CORE-137 validation passed 307 tests and the complete GitHub Actions quality gate.
+CORE-138 validation passed 311 tests and the complete GitHub Actions quality gate.

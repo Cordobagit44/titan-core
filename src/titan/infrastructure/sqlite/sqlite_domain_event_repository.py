@@ -6,6 +6,7 @@ from uuid import UUID
 from titan.application.domain_event_repository import (
     DomainEventRepository,
 )
+from titan.core.assessment import AssessmentId
 from titan.core.claim import ClaimId
 from titan.core.events import (
     ClaimAdded,
@@ -18,6 +19,7 @@ from titan.core.evidence import EvidenceId
 from titan.core.hypothesis import HypothesisId
 from titan.core.interpretation import InterpretationId
 from titan.core.investigation import (
+    AssessmentAdded,
     HypothesisAdded,
     HypothesisRemoved,
     InvestigationActivated,
@@ -107,6 +109,7 @@ class SqliteDomainEventRepository(
             "claim_id",
             "interpretation_id",
             "thesis_id",
+            "assessment_id",
         }
         columns_missing = bool(current_columns - columns.keys())
 
@@ -133,7 +136,8 @@ class SqliteDomainEventRepository(
                 evidence_id TEXT,
                 claim_id TEXT,
                 interpretation_id TEXT,
-                thesis_id TEXT
+                thesis_id TEXT,
+                assessment_id TEXT
             )
             """
         )
@@ -163,6 +167,7 @@ class SqliteDomainEventRepository(
         claim_id_expression = optional_column("claim_id")
         interpretation_id_expression = optional_column("interpretation_id")
         thesis_id_expression = optional_column("thesis_id")
+        assessment_id_expression = optional_column("assessment_id")
 
         transaction = self._connection if self._manages_transaction else nullcontext()
 
@@ -190,7 +195,8 @@ class SqliteDomainEventRepository(
                     evidence_id,
                     claim_id,
                     interpretation_id,
-                    thesis_id
+                    thesis_id,
+                    assessment_id
                 )
                 SELECT
                     id,
@@ -203,7 +209,8 @@ class SqliteDomainEventRepository(
                     {evidence_id_expression},
                     {claim_id_expression},
                     {interpretation_id_expression},
-                    {thesis_id_expression}
+                    {thesis_id_expression},
+                    {assessment_id_expression}
                 FROM domain_events
                 ORDER BY id
                 """
@@ -239,7 +246,8 @@ class SqliteDomainEventRepository(
             | EvidenceAdded
             | ClaimAdded
             | InterpretationAdded
-            | ThesisAdded,
+            | ThesisAdded
+            | AssessmentAdded,
         ):
             raise ValueError(
                 "unsupported domain event",
@@ -255,7 +263,8 @@ class SqliteDomainEventRepository(
                 | InvestigationReopened
                 | HypothesisAdded
                 | HypothesisRemoved
-                | ThesisAdded,
+                | ThesisAdded
+                | AssessmentAdded,
             )
             else None
         )
@@ -322,7 +331,12 @@ class SqliteDomainEventRepository(
         interpretation_id = (
             str(event.interpretation_id.value) if isinstance(event, InterpretationAdded) else None
         )
-        thesis_id = str(event.thesis_id.value) if isinstance(event, ThesisAdded) else None
+        thesis_id = (
+            str(event.thesis_id.value) if isinstance(event, ThesisAdded | AssessmentAdded) else None
+        )
+        assessment_id = (
+            str(event.assessment_id.value) if isinstance(event, AssessmentAdded) else None
+        )
 
         transaction = self._connection if self._manages_transaction else nullcontext()
 
@@ -339,9 +353,10 @@ class SqliteDomainEventRepository(
                     evidence_id,
                     claim_id,
                     interpretation_id,
-                    thesis_id
+                    thesis_id,
+                    assessment_id
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     type(event).__name__,
@@ -354,6 +369,7 @@ class SqliteDomainEventRepository(
                     claim_id,
                     interpretation_id,
                     thesis_id,
+                    assessment_id,
                 ),
             )
 
@@ -372,7 +388,8 @@ class SqliteDomainEventRepository(
                 evidence_id,
                 claim_id,
                 interpretation_id,
-                thesis_id
+                thesis_id,
+                assessment_id
             FROM domain_events
             ORDER BY id
             """
@@ -400,6 +417,11 @@ class SqliteDomainEventRepository(
                 (7, "claim_id"),
             ),
             "ThesisAdded": ((1, "investigation_id"), (9, "thesis_id")),
+            "AssessmentAdded": (
+                (1, "investigation_id"),
+                (10, "assessment_id"),
+                (9, "thesis_id"),
+            ),
         }
         uuid_fields = {
             "InvestigationCreated": ((1, "investigation_id"),),
@@ -422,6 +444,11 @@ class SqliteDomainEventRepository(
                 (7, "claim_id"),
             ),
             "ThesisAdded": ((1, "investigation_id"), (9, "thesis_id")),
+            "AssessmentAdded": (
+                (1, "investigation_id"),
+                (10, "assessment_id"),
+                (9, "thesis_id"),
+            ),
         }
         datetime_fields = {
             "InvestigationClosed": ((3, "closed_at"),),
@@ -558,6 +585,14 @@ class SqliteDomainEventRepository(
                 events.append(
                     ThesisAdded(
                         investigation_id=InvestigationId(value=parsed_uuids[1]),
+                        thesis_id=ThesisId(value=parsed_uuids[9]),
+                    )
+                )
+            elif event_type == "AssessmentAdded":
+                events.append(
+                    AssessmentAdded(
+                        investigation_id=InvestigationId(value=parsed_uuids[1]),
+                        assessment_id=AssessmentId(value=parsed_uuids[10]),
                         thesis_id=ThesisId(value=parsed_uuids[9]),
                     )
                 )
